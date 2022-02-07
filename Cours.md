@@ -45,3 +45,16 @@ and nat =
 |S of nat
 ```
 >prouteuh
+
+## 2.2. Preuves par induction
+
+### 2.2.1. Définition (ordre induit par une définition inductive)
+Soit E un ensemble inductif.
+
+On peut définir un ordre sur E par $x<=y$ ssi l'association $x\in E$ apparait dans une dérivation de taille minimale (en terme de nombre de règle utilisées) de l'association $y\in E$.
+
+**Démonstation :**
+
+* réfléxivité : $\forall x\in E, x<= x$ car $x\in E$ est la combinaison de la dérivation
+* transitivité : Soit $x, y, z\in E$ tel que $x<=y$ et $y<=z$, $y\in E$ apparaît dans une dérivation minimale de $z\in E$. Dans cette dérivation on utilise bien une dérivation minimale de $y\in E$ (sinon on pourrait réduire la taille de la dérivation de $z\in E$). Dans l'assertion $x\in E$, y apparaît. Donc $x<=z$
+* antisymétrique : Soit $x, y, z\in E$ tel que x<=y et $y<=x$. Si $x\not ={y}$, tous une dérivation minimale de $x\in E$, on trouve une dérivation minimale de $y\in E$ qui elle-même contient le $x\in E$, nécessairement strictement plus petite, ce qui est absurde.
