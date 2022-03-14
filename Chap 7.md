@@ -10,7 +10,7 @@ A la manière de la recherche d'un élément dans un ABR, on s'intéresse à la 
 **Nous étudierons :**
 - la méthode `diviser pour régner` ;
 - la programmation dynamique ;
-- les algorithmiques gloutons.
+- les algorithmes gloutons.
 
 # Diviser pour régner
 ## Méthode et premiers exemples
@@ -56,7 +56,7 @@ Calcul de $x^n$.
 
 **Algorithme :**
 - Diviser : on veut calculer $x^{\frac n 2}$ ;
-- Résoudre : appel récursif, ou si $\frac n 2 = 0$, on renvoit 1 ;
+- Résoudre : appel récursif, ou si $\frac n 2 = 0$, on renvoie 1 ;
 - Reconstruire : si $n \equiv 0\ [2]$, on calcule $x^{\frac n 2} \times x^{\frac n 2}$, sinon on calcule $x \times x^{\frac n 2} \times x^{\frac n 2}$.
 
 **Récurrence :**
@@ -87,7 +87,7 @@ Trier une liste.
 **Algorithme :**
 - Diviser : on choisit un élément `pivot` et a réparti la liste en 2 sous-listes (celles des éléments) $<$ au pivot et celle des éléments $>$ pivot) et on compte le nombre d'occurrences du pivot ;
 - Résoudre : appel réc sauf si la liste est de taille $\le 1$ ;
-- Reconstruction : on concatène les 2 sous-listes triées (dans le bon ordre) en plaçant entre les 2 le nb d'occurrence du pivot.
+- Reconstruction : on concatène les 2 sous-listes triées (dans le bon ordre) en plaçant entre les 2 le nombre d'occurrence du pivot.
 
 **Récurrence :**
 $\mathcal C(n) = \mathcal O(1) + \mathcal C(q) + \mathcal C(r) + \mathcal O(p + q)$
@@ -96,7 +96,7 @@ où
 $
    \left|
       \begin{array}{l}
-         \text{p est le  nombre d'occurences du pivot}
+         \text{p est le  nombre d'occurrences du pivot}
          \\
          \text{q est le nombre d'éléments < pivot}
          \\
@@ -111,7 +111,7 @@ Avec un choix déterministe en temps constant du pivot (ex : le premier élémen
 
 ## Application : Calcul de la médiane
 ### Problème
-On veut calculer la médiane d'une liste de  valeurs distinctes, c'est-à-dire l'élément de rang $\lfloor\frac{n}{2}\rfloor$ où le rang d'un élément est le nb d'élément qui lui sont stric inférieur.
+On veut calculer la médiane d'une liste de  valeurs distinctes, c'est-à-dire l'élément de rang $\lfloor\frac{n}{2}\rfloor$ où le rang d'un élément est le nombre d'éléments qui lui sont strictement inférieur.
 
 ### Solution naïve
 On trie la liste et on renvoie l'élément au milieu.
@@ -149,13 +149,17 @@ On s'inspire du tri rapide
       \right.
 $ selon la taille de $l_<$, avec les notations de 2.1.7.
 
-**Dans le pire cas :** comme pour le tri rapide $\mathcal O(n^2)$, par exemple si on choisit le $1^{er}$ élément comme pivot et si le tab est trié et $i=n-1$.
+**Dans le pire cas :** 
+Comme pour le tri rapide $\mathcal O(n^2)$, par exemple si on choisit le $1^{er}$ élément comme pivot et si le tab est trié et $i=n-1$.
 
-**Dans le meilleur cas :** le pivot est l'élément de rang i ~> $\mathcal O(n)$.
+**Dans le meilleur cas :** 
+Le pivot est l'élément de rang i ~> $\mathcal O(n)$.
 
-**Conclusion :** le choix du pivot est déterminant. On peut se rapprocher du meilleur cas de tri rapide en choisissant un pivot près de la médiane. On peut s'approcher de la médiane (que l'on cherche à calculer), à moindre coût à l'aide de l'algorithme de la médiane des médianes.
+**Conclusion :** 
+Le choix du pivot est déterminant. On peut se rapprocher du meilleur cas de tri rapide en choisissant un pivot près de la médiane. On peut s'approcher de la médiane (que l'on cherche à calculer), à moindre coût à l'aide de l'algorithme de la médiane des médianes.
 ### Algorithme de la médiane des médianes
-**Idée :** on regroupe les élément de la liste en petits paquets (de taille constante) dont on peut calculer les médianes naïvement, et on choisit comme pivot la médiane de ces médianes, calculée récursivement.
+**Idée :** 
+On regroupe les éléments de la liste en petits paquets (de taille constante) dont on peut calculer les médianes naïvement, et on choisit comme pivot la médiane de ces médianes, calculée récursivement.
 
 **Complexité :** $\mathcal C(n) = \underbrace{\mathcal O(n) + \mathcal C{\dfrac n 5}}_{\text{calcul du pivot}} + \underbrace{\mathcal O(n)}_{\text{division}} + \underbrace{f(n)}_{\text{éventuel appel récursif}}$
 
