@@ -75,6 +75,7 @@ On procède par analyse puis synthèse :
 
    Donc l'algorithme de la médiane des médianes permet de déterminer la médiane en temps linéaire.
 
+
 $\left\lfloor\dfrac{2}{3}\right\rfloor$
 $\lfloor\frac{2}{3}\rfloor$
 
