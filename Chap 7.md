@@ -1,5 +1,6 @@
-# **Chapitre 7 : Élément d'algorithmes**
-# Intro
+**Chapitre 7 : Élément d'algorithmes**
+===
+# Introduction
 A la manière de la recherche d'un élément dans un ABR, on s'intéresse à la décomposition d'un problème en un ou plusieurs sous-problèmes.
 
 **On distingue plusieurs méthodes selon :**
@@ -203,6 +204,158 @@ $
 
    $\forall n \ge N, \frac{n}{n-40}\le 2$ donc $\frac{10cn}{n-40}\le 20c = c'$
   
-   Donc un récurrente avec la même démonstration qu'une analyse conclut : $\mathcal C(n)\le c'n$.
+   Donc une récurrence avec la même démonstration qu'une analyse conclut : $\mathcal C(n)\le c'n$.
 
-   Donc l'algorithme de la médiane des médianes permet de déterminer la médiane en temps linéaire.
+Donc l'algorithme de la médiane des médianes permet de déterminer la médiane en temps linéaire.
+
+---
+> Mail prof à propos de l'avancée du TIPE
+## 2.3. Application  : couveture de points par des segments de même longueur
+### 2.3.1. Problème
+Étant donné $n$ points $x_1, ..., x_n$ sur la droite réelle et $k\in \mathbb{N}^*$, on veut déterminer la longueur l minimale tele qu'il exite une couverture de $x_1, ..., x_n$ par $k$ segments de longeur $l$.
+
+$k$ segments $[l_1;r_1] ... [l_k;r_k]$ forment une couverture de $x_1 ... x_n$ ssi $\forall i\in [|1, |], \exist j\in [|1;k|], x_i\in [|l_j;r_j|]$ ...
+
+### 2.3.2. Remarque
+Ceci est un problème d'optimisation : on cherche à minimiser/maximiser une certaine qunatité en respectant des contraintes. On peut en général associer à un problème d'optimisation un problème de décision, c'est-à-dire un problème où l'on se pose la question de l'existance d'un obet vérifiant des contraintes.
+
+**Ici :**
+Étant donné $x_1, ..., x_n$, $k$ et $l$ existe-t-il une coiverture  de $x_1, ..., x_n$ par $k$ segments de longueur $l$ ?
+
+### 2.3.3. Résolution par dichotomie de problème d'optimisation
+**Idée :**
+On suppose que l'on sait résoudre le problème de décision et on procède à une recherche dichotomoique du $l$ minimal pour lequel l'algorithme de résolution du problème de décision répond "oui".
+
+On sait que $L=\frac{max_{i; j} (x_i; x_j)}{k}$ permet de construire une couverture, donc on cherhce $l$ dans $[0; L]$.
+
+On procède à une recherche dichotomique dans un tableau virtuel (on ne le construit pas) qui à chaque $i\in [|0; L|]$ ... associe la réponse au problème de décision pour $l=i$.
+
+### 2.3.4. Résolution du problème de décision
+**Idée :**
+On s'intéresse au problème de décision dual suivant : étant donné $n$ segments $[l_1;r_1]...[l_n;r_n]$ et $k\in \mathbb{N}^*$, peut-on choisir $k$ points $x_1, ..., x_k$ tel que $\forall i\in [|1;n|]$ ..., $\exist j\in [|1:k|]$ tel que $x_j\in [l_i;r_i]$ ?
+
+Cela permet de résoudre le problème initial : si $\exist [l_1;r_1]...[l_r;r_r]$ couverture de $x_1, ..., x_n$ par des segments de longueur $l$, alors on a une solution au problème dual pour les intervalles $[x_1-l;x_1]...[x_n-l;x_n]$ ($x_i\in [l_j;r_j]$ ssi $l_j\in [x_i-l;x_i]$).
+
+**Résolution du problème dual :**
+Soit $[l_1;r_1]...[l_r;r_r]$ $n$ segments et $k\in \mathbb{N}^*$.
+
+On traite les segments par extrémité droite croissante :
+
+**Algorithme :**
+
+$P\leftarrow\empty$
+
+Trier et renuméroter les segments par $r_i$ croissant
+
+$P\leftarrow r_1$
+
+$P\leftarrow P$u{$p$} ...
+
+Pour $i$ de $2$ à $n$
+
+  Si $l_i > p$
+
+  $p\leftarrow r_i$
+
+  $P\leftarrow Pu{p}$ ...
+
+Si $\lvert P\rvert\le k$ succès, sinon échec.
+
+**Correction :**
+Tous les segments sony rencontrées par un points de P.
+
+Invariant de boucle : au début du tour indice $i$, tous les segments jusqu'à l'indice $i-1$ sont rencontrés et $p=max(P)=r_j$ pour un certain $j<i$.
+
+$\rightarrow$ Initialement : $P={r_1}={p}$ ... donc $p=max(P)=r_1$ avec $1<2$ et $r_1\in [l_1;r_1]$ donc $[l_1;r_1]$ est rencontré par un élément de P.
+
+$\rightarrow$ Conservation de l'invariant : on suppose l'invariant vrai au début du tour i, en particulier $p=max(P)=r_j$ pour $j<i$. 
+- Si $l_i\le p$, comme $j<i$,$r_j\le r_i$ donc $l_i\le p\le r_i$ et il est inutile de rajouter un points pour $[l_i;r_i]$. De plus, $p=max(P)=r_j$ avec $j<i+1$.
+- Si $l_i<p$, il faut un point supplémentaire : $Pu{r_i}$ ... rencontre bien $[l_i;r_i]$ et $p=r_i=max(Pu{r_i})$ ... avec $i<i+1$.
+
+**Optimalité :**
+En notant $P={p_1, p_2, ..., p_{f}}$ ... on montre par récurrence finie que $\forall i\in [|1;\lvert p\rvert|]$, il exite $P_{opt}$ optimal rencontrant tous les segments et contenant {$p_1, ..., p_i$}.
+
+**Initilalisation :**
+$i=1$ On considère $P_{opt}$ une solution optimale
+
+Si $p_1\notin P_{opt}$, on s'intéresse à min $P_{opt}$, qui est nécessaire pour rencontrer les segments $[l_1;r_1]...[l_j;r_j]$ pour un certain j.
+
+$\forall k\le j$, on remarque que $l_k\le min(P_{opt})\le r_1\le r_k$ donc $P_{opt}\ {min}(P_{opt}U{r_1}$ ... convient.
+
+**Hérédité :**
+...
+
+**Remarque :**
+On a utilisé un algorithme glouton pour résoudre le problème dual (cf.4.)
+
+### 2.3.5. Analyse de compléxité
+- Résolution du problème dual : $\mathcal O (n \log n)$ à cause du tri ;
+- Convertion du rpoblème de décison en son dual : $\mathcal O (n)$ pour la construction des $[x_i-l;x_i]$ ;
+- Recherche par dichotomie : calcul des diamètre $D=max_{i, j}(x_i-x_j)$ en $\mathcal O (n)$ puis $\mathcal O (\log(\frac{D}{k}))$ itérations ;
+- Au total : $\mathcal O (n \log (n) \log(\frac{D}{k}))$.
+
+# 3. Programmation dynamique
+## 3.1. Méthode
+### Introduction
+Si les sous-problèmes ne sont pas disjoints, la méthode `diviser pour régner` donne des algorithmes dont la complexité est mauvaise, parce que l'on est amené à résoudre plusieurs fois le même sous-problème.
+
+**Exemple :**
+Calcul des coefficients binomiaux avec le triangle de Pascal : ... l'implémentation naïve de cette formule donne une complexité $\mathcal C (n, p)=\mathcal C (n-1, p)+\mathcal C(n-1, p-1)=...=\mathcal O (...)\rightarrow$ exponentiel dans le pire cas $(p=\frac{n}{2})$.
+
+### Approche descandante de la programmation dynamique
+On stoque les valeurs calculées pour les retrouver en temps constant si on en a encore besoin. On parle de mémorisation.
+
+**Exemple**
+```OCaml
+let binom_memorised (n:int) (j:int):int=
+   let t = Array.make_matrix (n+1) (p+1) (-1) in
+   let rec aux (i:int) (j:int):int=
+      if t.(i).(j)<>-1 then t.(i).(j)
+   else
+      if j=0||i=j then begin
+         t.(i).(j)<-1;
+         1
+      end else begin
+         t.(i).(j)<- aux (i-1) j + aux (i-1) (j-1);
+         t.(i).(j)
+      end
+   in aux n p;;
+```
+**Complexité temporelle / spaciale :** 
+$\mathcal O (np)$
+
+### 3.1.3. Approche ascendante
+On adopte un point de vue impératif en inversant l'odre dans lequel es sous-problèmes sont considérés. On commence pour les cas de base et on construit progressivement la solution au problème global.
+
+**Remarque :**
+On doit faire attention aux dépendances entre les valeurs calculées car elles ne sont plus gérées par la pile d'exécution.
+
+**Exemple : Triangle de Pascal**
+... $\rightarrow$ on remplit la matrice ligne par ligne.
+
+```OCaml
+let binom_ascending (n:int) (p:int):int=
+   let t = Array.make_matrix (n+1) (p+1) 1 in
+   for i = 2 to n do
+      for j = 1 to min (i-1) p do
+         t.(i).(j)<-t.(i-1).(j)+t.(i-1).(j-1)
+      done
+   done
+   t.(m).(p)
+```
+
+**Comléxité spatiale / temporelle :**
+$\mathcal O (np)$
+
+On peut faire mieux en complexité spaciale : $\mathcal O (p)$ un seul tableau de taille $p$ suffit
+...
+on utilise la formule sur le tableau de la droite vers la gauche.
+
+### 3.1.4. Exemple : Nombres de Delannay
+Nombre de chemins distincts que peut prendre une dame sur un échiquier pour aller du coin inférieur gauche au coin supérieur droit en n'utilisant que des déplacements par rangée / colonne croissante, en fonction des dimentions de l'échiquier.
+
+$D(i,j)=D(i, j-1)+D(i-1,j)+D(i-1,j-1)$
+
+Si $i\not ={0}$ et $j\not ={0}$ : $D(i,j)=1$ si $i$ ou $j=0$.
+
+Par programmation dynamique, on calcul $D(n,p)$ en $\mathcal O (np)$ en temps et $\mathcal 0 (p)$ en espace (2 rangées suffisent).
