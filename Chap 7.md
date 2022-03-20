@@ -351,7 +351,7 @@ $
   \\
   =...
   \\
-  =\mathcal O (\binom{p}{n})\rightarrow$ exponentiel dans le pire cas $(p=\frac{n}{2})
+  =\mathcal O (\binom{n}{p})\rightarrow$ exponentiel dans le pire cas $(p=\frac{n}{2})
 $.
 
 ---
