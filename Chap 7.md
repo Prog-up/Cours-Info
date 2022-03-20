@@ -229,7 +229,7 @@ Donc l'algorithme de la médiane des médianes permet de déterminer la médiane
 ### 2.3.1. Problème
 Étant donné $n$ points $x_1, ..., x_n$ sur la droite réelle et $k\in \mathbb{N}^*$, on veut déterminer la longueur l minimale telle qu'il existe une couverture de $x_1, ..., x_n$ par $k$ segments de longueur $l$.
 
-$k$ segments $[l_1;r_1] ... [l_k;r_k]$ forment une couverture de $x_1, ..., x_n$ ssi $\forall i\in [\![1, n]\!], \exist j\in [\![1;k]\!], x_i\in [\![l_j;r_j]\!]$
+$k$ segments $[l_1;r_1] ... [l_k;r_k]$ forment une couverture de $x_1, ..., x_n$ ssi $\forall i\in [\![1; n]\!]$, $\exists j\in [\![1;k]\!]$, $x_i\in [\![l_j;r_j]\!]$
 
 ---
 ### 2.3.2. Remarque
@@ -250,9 +250,9 @@ On procède à une recherche dichotomique dans un tableau virtuel (on ne le cons
 ---
 ### 2.3.4. Résolution du problème de décision
 **Idée :**
-On s'intéresse au problème de décision dual suivant : étant donné $n$ segments $[l_1;r_1],...,[l_n;r_n]$ et $k\in \mathbb{N}^*$, peut-on choisir $k$ points $x_1, ..., x_k$ tel que $\forall i\in [\![1;n]\!]$, $\exist j\in [\![1:k]\!]$ tel que $x_j\in [l_i;r_i]$ ?
+On s'intéresse au problème de décision dual suivant : étant donné $n$ segments $[l_1;r_1],...,[l_n;r_n]$ et $k\in \mathbb{N}^*$, peut-on choisir $k$ points $x_1, ..., x_k$ tel que $\forall i\in [\![1;n]\!]$, $\exists j\in [\![1:k]\!]$ tel que $x_j\in [l_i;r_i]$ ?
 
-Cela permet de résoudre le problème initial : si $\exist [l_1;r_1],...,[l_r;r_r]$ couverture de $x_1, ..., x_n$ par des segments de longueur $l$, alors on a une solution au problème dual pour les intervalles $[x_1-l;x_1],...,[x_n-l;x_n]$ ($x_i\in [l_j;r_j]$ ssi $l_j\in [x_i-l;x_i]$).
+Cela permet de résoudre le problème initial : si $\exists [l_1;r_1],...,[l_r;r_r]$ couverture de $x_1, ..., x_n$ par des segments de longueur $l$, alors on a une solution au problème dual pour les intervalles $[x_1-l;x_1],...,[x_n-l;x_n]$ ($x_i\in [l_j;r_j]$ ssi $l_j\in [x_i-l;x_i]$).
 
 **Résolution du problème dual :**
 Soit $[l_1;r_1],...,[l_r;r_r]$ $n$ segments et $k\in \mathbb{N}^*$.
@@ -262,15 +262,17 @@ On traite les segments par extrémité droite croissante :
 **Algorithme :**
 
 $
-  P\leftarrow\empty
-  \\
-  \text{Trier et renuméroter les segments par }r_i\text{ croissant}
-  \\
-  P\leftarrow r_1
-  \\
-  P\leftarrow P\cup\{p\}
-  \\
-  \text{Pour }i\text{ de }2\text{ à } n
+  \begin{aligned}
+    &P\leftarrow\varnothing
+    \\
+    &\text{Trier et renuméroter les segments par }r_i\text{ croissant}
+    \\
+    &P\leftarrow r_1
+    \\
+    &P\leftarrow P\cup\{p\}
+    \\
+    &\text{Pour }i\text{ de }2\text{ à } n
+  \end{aligned}
 $
 
 $
@@ -312,7 +314,7 @@ Si $p_1\notin P_{opt}$, on s'intéresse à min $P_{opt}$, qui est nécessaire po
 $\forall k\le j$, on remarque que $l_k\le min(P_{opt})\le r_1\le r_k$ donc $P_{opt}\backslash\{min(P_{opt})\}\cup\{r_1\}$ convient.
 
 **Hérédité :**
-Par hypothèse de récurrence, $\exist P_{opt}$ qui rencontre $[l_1;r_1],...,[l_n;r_n]$ et qui contient $\{p_s|s\in[\![1;i]\!]\}$.
+Par hypothèse de récurrence, $\exists P_{opt}$ qui rencontre $[l_1;r_1],...,[l_n;r_n]$ et qui contient $\{p_s|s\in[\![1;i]\!]\}$.
 
 On numérote les éléments de $P_{opt}$ : $popt_1,...,popt_{\rvert P_{opt}\lvert}$, si $popt_{i+1}\not ={p_{i+1}}$, on utilise le même raisonnement que ci-dessous pour montrer que tous les intervalles pour lesquels $popt_{i+1}$ est nécessaire sont rencontrés par $p+1$.
 
