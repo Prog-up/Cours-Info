@@ -148,7 +148,7 @@ On s'inspire du tri rapide
   - si $\lvert l_<\rvert < i$, alors on cherche l'élément de rang $i-\lvert l_<\rvert -1$ dans $l_>$ ;
 - Reconstruire : l'élément de rang i est le résultat de la résolution du sous-problème.
 
-**Récurrence :** $\mathcal C(n) = \mathcal O(n) +C_{\text{choix du pivot}}(n) + \left|
+**Récurrence :** $\mathcal C(n) = \mathcal O(n) +C_{\text{choix du pivot}}(n) + \left\{
      \begin{array}{l}
         \mathcal C(q)
         \\
@@ -340,7 +340,7 @@ Si les sous-problèmes ne sont pas disjoints, la méthode `diviser pour régner`
 **Exemple :**
 Calcul des coefficients binomiaux avec le triangle de Pascal :
 
-$\dbinom{n}{p}=\dbinom{n-1}{p}+\dbinom{n-1}{p-1}$
+$$\dbinom{n}{p}=\dbinom{n-1}{p}+\dbinom{n-1}{p-1}$$
 
 l'implémentation naïve de cette formule donne une complexité
 
@@ -410,8 +410,117 @@ Un seul tableau de taille $p$ suffit, on utilise la formule sur le tableau de la
 ### 3.1.4. Exemple : Nombres de Delannay
 Nombre de chemins distincts que peut prendre une dame sur un échiquier pour aller du coin inférieur gauche au coin supérieur droit en n'utilisant que des déplacements par rangée / colonne croissante, en fonction des dimensions de l'échiquier.
 
-$D(i,j)=\underbrace{D(i, j-1)}_{\rightarrow}+\underbrace{D(i-1,j)}_{\uparrow}+\underbrace{D(i-1,j-1)}_{\nearrow}$
+$$D(i,j)=\underbrace{D(i, j-1)}_{\rightarrow}+\underbrace{D(i-1,j)}_{\uparrow}+\underbrace{D(i-1,j-1)}_{\nearrow}$$
 
 Si $i\not ={0}$ et $j\not ={0}$ : $D(i,j)=1$ si $i$ ou $j=0$.
 
 Par programmation dynamique, on calcul $D(n,p)$ en $\mathcal O (np)$ en temps et $\mathcal 0 (p)$ en espace (2 rangées suffisent).
+
+---
+## 3.2. Application aux problèmes d'optimisation
+
+---
+### Introduction
+Un problème d'optimisation est un problème dans lequel on veut maximiser ou minimiser une valeur sans certaines contraintes L'objectif est de déterminer les paramètres permettant d'atteindre l'optimum. La méthode de la programmation dynamique s'applique à de nombreux problèmes d'optimisation.Pour appliquer cette méthode, le problème doit avoir une certaine propriété, appelée propriété de sous-structure optimale : si l'on dispose d'une solution optimale au problème, alors cette solution induit une sloution optimale à une ou plusieurs sous-problèmes.
+
+Par exemple, si un plus court chemin de A à B passe par C, alors le sous-chemin de A à C est bien un plus court chemin de A à C.
+
+---
+### 3.2.2. Exemple : Chemin de poids maximum sur un échiquier
+On reprend le problème vu en 3.1.4. mais on ne cherche plus à déterminer le nombre de chemin, mais plutôt on suppose que les cases de l'échiquier contiennent des poids et on veut trouver un chemin qui maximise la somme des poids des cases parcourues.
+
+**On modélise le problème à l'aide d'une matrice de poids :**
+
+$\begin{bmatrix}
+  31 & 21 & 12 & 26 & 34
+  \\
+  37 & 21 & 34 & 26 & 10
+  \\
+  2 & 39 & 12 & 49 & 47
+\end{bmatrix}$chemin de poids max.
+
+Une recherche exhaustive n'est pas raisonnable : le nombre de chemins à tester pour une matrice $n\times p$ est le nombre de Delannay $D(n, p)$. Or, $D(n, p)\ge\binom{n+p}{p}$ 
+
+(en interdisant les pas diagonaux, il faut $n$ pas verticaux et $p$ pas horizontaux pour passer d'un coin à l'autre. Un chemin est donc caractérisé par l'emplacement de ses pas horizontaux).
+
+Vérifions que ce problème satifait la propriété de sous-structure optimale :
+- Si un chemin de poids max de $(0,0)\ge (n-1,p-1)$ passe par $(i,j)$, alors le sous-chemin de $(0,0)$ à $(i,j)$ est de poids max.
+- Sinon, on complète un chemin de poids max de $(0,0)$ à $(i,j)$ par le sous-chemin de $(0,0)$ à $(n-1,p-1)$ et on obtient un chemin valide de $(0,0)$ à $(n-1,p-1)$ qui contredit l'optimalité du chemin initial.
+
+La propriété de sous-chemin optimale correspond en fait à une récurrence sur le poids max $w_{i,j}$ d'un chemin de $(0,0)$ à $(i,j)$ : on note $M=(m_{i,j})_{i,j}$, la matrice définissant le problème.
+
+
+Alors : $w_{i,j}=(m_{i,j})_{i,j}+\left\{
+  \begin{array}{l}
+    0\text{ si }i=j=0
+    \\
+    w_{0,j-1}\text{ si }i=0\text{ et }j\not =0
+    \\
+    w_{i-1,0}\text{ si }i\not =0\text{ et }j=0
+    \\
+    max(w_{i,j-1},w_{i-1,j},w_{i-1,j-1})\text{ si }i\not =0\text{ et }j\not =0
+  \end{array}\right.
+$
+
+On peut calculer $w_{n-1,p-1}$ par programmation dynamique.
+
+On adopte l'approche ascendante de la programmation dynamique : on remplit la matrice $W=(m_{i,j})_{i,j}$, soit par :
+- ligne croissante (et colonnes croissantes)
+- colonnes croissantes (et lignes croissantes)
+- anti-digonales, i.e. par $i+j$ croissant
+
+**Exercice : Code**
+
+**Complexité :**
+$\mathcal O(n,p)$, en espace aussi, mais on peut optimiser l'espace requis car il suffit de connaître une ligne / colonne pour remplir la suivante ~> $\mathcal O(min(n,p))$ en espace.
+
+**Remarque :**
+On n'a calculé que le poids maximal, pas un chemin réalisant ce poids. Deux possibilités :
+1. Lors du remplissage de la matrice, on détermine en plus de $w_{i,j}$ un prédécesseur de $(i,j)$ sur un chemin de poids max de $(0,0)$ à $(i,j)$. On détermine un tel prédécesseur en gardant un couple qui réalise le maximum dans la formule de récurrence.
+2. On détermine la matrice $W$ puis on retrouve un chemin de poids max en partant de la case $(n-1,p-1)$, en déterminant un prédécesseur à  l'aide des valeurs de $N$ puis en calculant récursivement un chemin vers ce prédécesseur.
+
+---
+### 3.2.3. Exemple : Produit de matrices
+On cherche à minimiser le nombre de multiplications nécessaires au calcul du produit de matrices.
+
+- Si $A$ et $B$ sont de taille $n\times p$ et $p\times q$, on peut calculer $AB$ à l'aide de $npq$ multiplications à l'aide de la définition :
+
+$$(AB)_{i,j}=\sum_{k=1}^p a_{i,k}b_{k,j}$$
+
+- Si $A$, $B$ et $C$ sont de taille $2\times 5$, $5\times 8$ et $8\times 6$, on peut calculer $ABC$ de 2 façons :
+  - $(AB)C$ ~> 176 multiplications ($2\times5\times8+2\times8\times6$)
+  - $A(BC)$ ~> 300 multiplications ($5\times8\times6+2\times5\times6$)
+
+On veut donc trouver un parenthésage optimal du produit $A_0,...,A_{n-1}$ où $\forall i\in[\![0;n-1]\!], A_i$ est de taille $t_i\times t_{i+1}$
+
+Ce problème vérifie la propriété de sous-structures optimale : si $(A_0,...,A_k)(A_{k+1},...,A_{n-1})$ est un parenthésage optimal, on a bien des parenthéges optimaux des produits $A_0,...,A_k$ et $A_{k+1},...,A_{n-1}$.
+
+On observe qu'il faudra résoudre les sous-problèmes suivants : optimisation du parenthésage des produits $A_i,...,A_j$.
+
+$\forall O\le i\le j\le n-1$, on note $m_{i,j}$ le nombre minimal de multiplication nécessaires au calcul de $A_i,...,A_j$.
+
+Si $\underbrace{(A_i,...,A_k)}_{\text{matrice de taille }t_i\times t_{k+1}}\times\underbrace{(A_{k+1},...,A_j)}_{\text{matrice de taille }t_{k+1}\times t_{j+1}}$ est un parenthésage optimal, alors $m_{i,j}=m_{i,k}+m_{k+1,j}+t_i+t_{k+1}t_{j+1}$.
+
+On retrouve alors la relation de récurrence : $m_{i,j}\left\{\begin{array}{l}
+  0\text{ si }i=j
+  \\
+  min
+  \\
+  k\in[\![i;j-1]\!]
+\end{array}\right.(m_{i,k}+m_{k+1,j}+t_i+t_{k+1}t_{j+1})$ si $i<j$.
+
+Comment remplir la matrice $M=(m_{i,j})_{i,j}$ ?
+
+On peut remplir la matrice par diagonales, i.e. par $j-1$ croissant
+
+**Exercice : Code**
+
+**Complexité :**
+$\mathcal O(n^3)$ en temps, $\mathcal O(n^2)$ en espace.
+
+Comment représenter un parenthésage optimal $\pi_{i,j}$ de $A_i,...,A_j$ ?
+
+Si le parenthésage s'écrit $(A_i,...,A_k)(A_{k+1},...,A_j)$, il suffit de retenir $k$ et les parenthésages $\pi_{i,k} et \pi_{k+1,j}$.
+
+**Remarque :**
+C'est un ABR.
