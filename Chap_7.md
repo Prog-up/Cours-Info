@@ -421,7 +421,7 @@ Par programmation dynamique, on calcul $D(n,p)$ en $\mathcal O (np)$ en temps et
 
 ---
 ### Introduction
-Un problème d'optimisation est un problème dans lequel on veut maximiser ou minimiser une valeur sans certaines contraintes L'objectif est de déterminer les paramètres permettant d'atteindre l'optimum. La méthode de la programmation dynamique s'applique à de nombreux problèmes d'optimisation.Pour appliquer cette méthode, le problème doit avoir une certaine propriété, appelée propriété de sous-structure optimale : si l'on dispose d'une solution optimale au problème, alors cette solution induit une sloution optimale à une ou plusieurs sous-problèmes.
+Un problème d'optimisation est un problème dans lequel on veut maximiser ou minimiser une valeur sans certaines contraintes L'objectif est de déterminer les paramètres permettant d'atteindre l'optimum. La méthode de la programmation dynamique s'applique à de nombreux problèmes d'optimisation.Pour appliquer cette méthode, le problème doit avoir une certaine propriété, appelée propriété de sous-structure optimale : si l'on dispose d'une solution optimale au problème, alors cette solution induit une solution optimale à une ou plusieurs sous-problèmes.
 
 Par exemple, si un plus court chemin de A à B passe par C, alors le sous-chemin de A à C est bien un plus court chemin de A à C.
 
@@ -432,18 +432,18 @@ On reprend le problème vu en 3.1.4. mais on ne cherche plus à déterminer le n
 **On modélise le problème à l'aide d'une matrice de poids :**
 
 $\begin{bmatrix}
-  31 & 21 & 12 & 26 & 34
-  \\
-  37 & 21 & 34 & 26 & 10
-  \\
-  2 & 39 & 12 & 49 & 47
+ 31 & 21 & 12 & 26 & 34
+ \\
+ 37 & 21 & 34 & 26 & 10
+ \\
+ 2 & 39 & 12 & 49 & 47
 \end{bmatrix}$chemin de poids max.
 
-Une recherche exhaustive n'est pas raisonnable : le nombre de chemins à tester pour une matrice $n\times p$ est le nombre de Delannay $D(n, p)$. Or, $D(n, p)\ge\binom{n+p}{p}$ 
+Une recherche exhaustive n'est pas raisonnable : le nombre de chemins à tester pour une matrice $n\times p$ est le nombre de Delannay $D(n, p)$. Or, $D(n, p)\ge\binom{n+p}{p}$
 
 (en interdisant les pas diagonaux, il faut $n$ pas verticaux et $p$ pas horizontaux pour passer d'un coin à l'autre. Un chemin est donc caractérisé par l'emplacement de ses pas horizontaux).
 
-Vérifions que ce problème satifait la propriété de sous-structure optimale :
+Vérifions que ce problème satisfait la propriété de sous-structure optimale :
 - Si un chemin de poids max de $(0,0)\ge (n-1,p-1)$ passe par $(i,j)$, alors le sous-chemin de $(0,0)$ à $(i,j)$ est de poids max.
 - Sinon, on complète un chemin de poids max de $(0,0)$ à $(i,j)$ par le sous-chemin de $(0,0)$ à $(n-1,p-1)$ et on obtient un chemin valide de $(0,0)$ à $(n-1,p-1)$ qui contredit l'optimalité du chemin initial.
 
@@ -451,15 +451,15 @@ La propriété de sous-chemin optimale correspond en fait à une récurrence sur
 
 
 Alors : $w_{i,j}=(m_{i,j})_{i,j}+\left\{
-  \begin{array}{l}
-    0\text{ si }i=j=0
-    \\
-    w_{0,j-1}\text{ si }i=0\text{ et }j\not =0
-    \\
-    w_{i-1,0}\text{ si }i\not =0\text{ et }j=0
-    \\
-    max(w_{i,j-1},w_{i-1,j},w_{i-1,j-1})\text{ si }i\not =0\text{ et }j\not =0
-  \end{array}\right.
+ \begin{array}{l}
+   0\text{ si }i=j=0
+   \\
+   w_{0,j-1}\text{ si }i=0\text{ et }j\not =0
+   \\
+   w_{i-1,0}\text{ si }i\not =0\text{ et }j=0
+   \\
+   max(w_{i,j-1},w_{i-1,j},w_{i-1,j-1})\text{ si }i\not =0\text{ et }j\not =0
+ \end{array}\right.
 $
 
 On peut calculer $w_{n-1,p-1}$ par programmation dynamique.
@@ -488,12 +488,12 @@ On cherche à minimiser le nombre de multiplications nécessaires au calcul du p
 $$(AB)_{i,j}=\sum_{k=1}^p a_{i,k}b_{k,j}$$
 
 - Si $A$, $B$ et $C$ sont de taille $2\times 5$, $5\times 8$ et $8\times 6$, on peut calculer $ABC$ de 2 façons :
-  - $(AB)C$ ~> 176 multiplications ($2\times5\times8+2\times8\times6$)
-  - $A(BC)$ ~> 300 multiplications ($5\times8\times6+2\times5\times6$)
+ - $(AB)C$ ~> 176 multiplications ($2\times5\times8+2\times8\times6$)
+ - $A(BC)$ ~> 300 multiplications ($5\times8\times6+2\times5\times6$)
 
 On veut donc trouver un parenthésage optimal du produit $A_0,...,A_{n-1}$ où $\forall i\in[\![0;n-1]\!], A_i$ est de taille $t_i\times t_{i+1}$
 
-Ce problème vérifie la propriété de sous-structures optimale : si $(A_0,...,A_k)(A_{k+1},...,A_{n-1})$ est un parenthésage optimal, on a bien des parenthéges optimaux des produits $A_0,...,A_k$ et $A_{k+1},...,A_{n-1}$.
+Ce problème vérifie la propriété de sous-structures optimale : si $(A_0,...,A_k)(A_{k+1},...,A_{n-1})$ est un parenthésage optimal, on a bien des parenthésages optimaux des produits $A_0,...,A_k$ et $A_{k+1},...,A_{n-1}$.
 
 On observe qu'il faudra résoudre les sous-problèmes suivants : optimisation du parenthésage des produits $A_i,...,A_j$.
 
@@ -502,11 +502,11 @@ $\forall O\le i\le j\le n-1$, on note $m_{i,j}$ le nombre minimal de multiplicat
 Si $\underbrace{(A_i,...,A_k)}_{\text{matrice de taille }t_i\times t_{k+1}}\times\underbrace{(A_{k+1},...,A_j)}_{\text{matrice de taille }t_{k+1}\times t_{j+1}}$ est un parenthésage optimal, alors $m_{i,j}=m_{i,k}+m_{k+1,j}+t_i+t_{k+1}t_{j+1}$.
 
 On retrouve alors la relation de récurrence : $m_{i,j}\left\{\begin{array}{l}
-  0\text{ si }i=j
-  \\
-  min
-  \\
-  k\in[\![i;j-1]\!]
+ 0\text{ si }i=j
+ \\
+ min
+ \\
+ k\in[\![i;j-1]\!]
 \end{array}\right.(m_{i,k}+m_{k+1,j}+t_i+t_{k+1}t_{j+1})$ si $i<j$.
 
 Comment remplir la matrice $M=(m_{i,j})_{i,j}$ ?
