@@ -529,57 +529,54 @@ C'est un ABR.
 
 ---
 ### 4.1.1. Introduction
-La programmation dynamique est une méthode utilise pour résoudre de nombreux problèmes, mais les implémentations nécessites en général d'allouer une grande quantité de mémoire. L'approche des algorithmes gloutons est similaire à celle de la programmation dunamique dans sa version descendante. La différence principale dans le fait qu'on ne résout pas plusieurs sous-problèmes poiur garder ensuite la meilleure solution : on choisit à l'avance le sous problème à résoudre. Le choix du sous-problème se fait à l'aide d'une heuristique, i.e. d'une stratégie de décision locale permettent de faire un choix rapide.
+La programmation dynamique est une méthode utilisée pour résoudre de nombreux problèmes, mais les implémentations nécessitent en général d'allouer une grande quantité de mémoire. L'approche des algorithmes gloutons est similaire à celle de la programmation dynamique dans sa version descendante. La différence principale dans le fait qu'on ne résout pas plusieurs sous-problèmes pour garder ensuite la meilleure solution : on choisit à l'avance le sous-problème à résoudre. Le choix du sous-problème se fait à l'aide d'une heuristique, i.e. d'une stratégie de décision locale permettent de faire un choix rapide.
 
 ---
 ### 4.1.2. Exemple : Problème du rendu de monnaie
-On doit rendre une somme $n$ à l'aide de pièces / billets dont la valueyr appartient à une ensemble $S$.
+On doit rendre une somme $n$ à l'aide de pièces / billets dont la valeur appartient à une ensemble $S$.
 
 **Objectif :**
-Minimiser le nombre de pièces / billets utilisées.
+Minimiser le nombre de pièces / billets utilisés.
 
 - **Résolution par prog dynamique :** on va noter $f(n,S)$ le nombre minimal de pièces / billets nécessaires pour atteindre $n$ avec des pièces / billets de valeur prise dans $S$ et on note $S=\{c_1,...,c_k\}$.
-  
-  On remarque que $\forall i\in \llbracket 1,k\rrbracket,f(n,S)\le \min(\underbrace{f(n,S)\\{c_i}}_{\text{on utilise pas }c_i},1+f(n-c_i,S))$...
+  On remarque que $\forall i\in \llbracket 1;k\rrbracket,f(n,S)\le \min(\underbrace{f(n,S)\setminus\{c_i\}}_{\text{on utilise pas }c_i},1+f(n-c_i,S))$
 
-  On peut remplir la matrice $F=(f_{i,j})_{i,j}$, où $\forall i,j, f_{i,j}=f(i,\{c_1,...,c_j\})$ 
-  
+ On peut remplir la matrice $F=(f_{i,j})_{i,j}$, où $\forall i,j, f_{i,j}=f(i,\{c_1,...,c_j\})$
   ~> algo en $\mathcal O(nk)\rightarrow$ complexité exponentielle
 
-  **Explication :**
-  - paramètres du problème : $n$ et $S=\{c_1,...,c_k\}$
-  - taille des paramètres : $\mathcal O(\log n)$ et $k$
-  - $\mathcal O(nk)=\mathcal O(\underbrace{2^{\log_2 n}}_{\text{exponentiel en }\log n}k)$
+ **Explication :**
+ - paramètres du problème : $n$ et $S=\{c_1,...,c_k\}$
+ - taille des paramètres : $\mathcal O(\log n)$ et $k$
+ - $\mathcal O(nk)=\mathcal O(\underbrace{2^{\log_2 n}}_{\text{exponentiel en }\log n}k)$
 
 - **Algo glouton :**
-  
-  **Idée :** on utilise autant que possible la plus grosse prièce $\le n$ dans l'idée qu'il faudrait utiliser plusieurs petites prièces pour compenser l'absence d'une telle prièce.
+  **Idée :** on utilise autant que possible la plus grosse pièce $\le n$ dans l'idée qu'il faudrait utiliser plusieurs petites pièces pour compenser l'absence d'une telle pièce.
 
-  **Algo :** Trier $S$ par ordre d'écroissant et renuméroter en $\{c_1',...,c_k'$
+ **Algo :** Trié $S$ par ordre décroissant et renuméroter en $\{c_1',...,c_k'$
 
 
-  $\begin{aligned}{}
-  \text{Pour }i\text{ de 1 à }k :
-  \\
-  &\text{Utiliser }c_i\text{ autant que possible, i.e. }\lfloor\frac{n}{c_i'}\rfloor\text{ fois}
-  \\
-  &n\leftarrow n-c_i'\times\lfloor\frac{n}{c_i'}\rfloor
-  \\
-  \text{Si }n\not = 0\text{, échec }
+ $\begin{aligned}{}
+ \text{Pour }i\text{ de 1 à }k :
+ \\
+ &\text{Utiliser }c_i\text{ autant que possible, i.e. }\lfloor\frac{n}{c_i'}\rfloor\text{ fois}
+ \\
+ &n\leftarrow n-c_i'\times\lfloor\frac{n}{c_i'}\rfloor
+ \\
+ \text{Si }n\not = 0\text{, échec }
 \end{aligned}$
 
-  **Complexité :** $\mathcal O(k\log k)$
+ **Complexité :** $\mathcal O(k\log k)$
 
-  **Exemple : n = 48**
-  - dans le système européen, $S=\{1,2,5,10,20\}\rightarrow$ solution $2\times 20+5\times 2+1$
-   
-    on peut démontrer que l'algo est optimal et qu'il réussi toujours dans ce système
+ **Exemple : n = 48**
+ - dans le système européen, $S=\{1,2,5,10,20\}\rightarrow$ solution $2\times 20+5\times 2+1$
+ 
+   on peut démontrer que l'algo est optimal et qu'il réussi toujours dans ce système
 
-  - dans le système britanique antérieur à 1971 : $S=\{1,3,6,12,24,30\}\rightarrow$ solution : $30+12+6$, optimum : $2\times 24$
+ - dans le système britannique antérieur à 1971 : $S=\{1,3,6,12,24,30\}\rightarrow$ solution : $30+12+6$, optimum : $2\times 24$
 
 ---
 ### Remarque
-Cet exemple démontre qu'un algo glouton ne fournit pas forcazment toujours une solution optimale. Il faut donc pouvoir démontrer l'optimalité d'un algo glouton lorsque l'on souhaite l'utiliser. Il existe un cadre théorique donnant une condition suffisante d'optimalité, appelé théorie des matroïdes (**H.P.**). Nous avons vu en **2.3.4.** une autre méthode de démonstration : on montre par récurrence qu'il existe une solution optimale qui fait les mêmes choix que l'algo glouton et on montre aussi que l'algo glouton fournit uen solution, ce qui implique que toute solution optimale faisant les mêmes choix donne la même solution.
+Cet exemple démontre qu'un algo glouton ne fournit pas forcément toujours une solution optimale. Il faut donc pouvoir démontrer l'optimalité d'un algo glouton lorsque l'on souhaite l'utiliser. Il existe un cadre théorique donnant une condition suffisante d'optimalité, appelé théorie des matroïdes (**H.P.**). Nous avons vu en **2.3.4.** une autre méthode de démonstration : on montre par récurrence qu'il existe une solution optimale qui fait les mêmes choix que l'algo glouton et on montre aussi que l'algo glouton fournit une solution, ce qui implique que toute solution optimale faisant les mêmes choix donne la même solution.
 
 ---
 ## 4.2. Application
@@ -592,8 +589,8 @@ On considère un ensemble de $n$ tâches $T=\{t_s,...,t_{n-1}\}$ qui nécessiten
 On appelle ordonnancement des tâches une fonction $d$ : $T\rightarrow\llbracket O,n-1\rrbracket$ qui associe à chaque $t\in T$ la date limite $d(t)$ à laquelle la date est réalisée. $d$ doit être une bijection (on n'effectue qu'une tâche à chaque instant et toutes les tâches sont traitées).
 
 Un ordonnancement $d$ définit 2 ensembles :
-- $T^+=\{t\in T,d(t)\le f(t)\}$ l'ensemle des tâches réalisées à temps
-- $T^-=\{t\in T,d(t)>f(t)\}$ l'ensemle des tâches réalisées en retard.
+- $T^+=\{t\in T,d(t)\le f(t)\}$ l'ensemble des tâches réalisées à temps
+- $T^-=\{t\in T,d(t)>f(t)\}$ l'ensemble des tâches réalisées en retard.
 
 La pénalité associée à d est $P(d)=\displaystyle\sum_{t\in T} p(t)$
 
@@ -601,15 +598,17 @@ La pénalité associée à d est $P(d)=\displaystyle\sum_{t\in T} p(t)$
 Déterminer $d$ minimisant $P(d)$
 
 **Exemple :**
-$ | 1 | 2 | 3 | 4 | 5 | 6
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| f |$...
+|   | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| f | 0 | 1 | 2 | 3 | 3 | 3 | 5 |
+| p | 3 | 6 | 4 | 2 | 5 | 7 | 1 |
+| d | 6 | 0 | 1 | 4 | 3 | 2 | 5 |
 
 donne $P(d)(t_0)+p(t_3)=3+2=5$
 
 ---
 ### 4.2.2. Algo glouton
-On remarque que les pénalités de retard ne dépendant pas de la durée du retard. Ce qui compte est donc l'ordonancement des tâches de $T^+$. On cherche donc à construire $T^+ ... T$ tq on peut trouver un ordonencement qui traite dans les délais les éléments de $T^+$ et tq $P(T^+)=\displaystyle\sum_{t\in T^+} p(t)$ est maximal.
+On remarque que les pénalités de retard ne dépendent pas de la durée du retard. Ce qui compte est donc l'ordonnancement des tâches de $T^+$. On cherche donc à construire $T^+\subseteq{T}$ tq on peut trouver un ordonnancement qui traite dans les délais les éléments de $T^+$ et tq $P(T^+)=\displaystyle\sum_{t\in T^+} p(t)$ est maximal.
 
 **Heuristique :**
 On sélectionne en priorité les tâches de pénalité maximale que l'on planifie le plus tard possible.
@@ -623,13 +622,13 @@ Marquer toutes les dates de $\llbracket 0,n-1\rrbracket$ comme disponibles
 
 $
 \begin{aligned}
-  \text{Pour }i\text{ de 0 à }n-1
-  \\
-  &\text{S'il existe une date}j\le f(t_i)\text{ disponible}
-  \\
-  &&\text{Ajouter }t_i\text{ à }T^+
-  \\
-  &&\text{Marquer le plus grand }j\le f(t_i)\text{disponible comme occupé par }t_i
+ \text{Pour }i\text{ de 0 à }n-1
+ \\
+ &\text{S'il existe une date}j\le f(t_i)\text{ disponible}
+ \\
+ &&\text{Ajouter }t_i\text{ à }T^+
+ \\
+ &&\text{Marquer le plus grand }j\le f(t_i)\text{disponible comme occupé par }t_i
 \end{aligned}
 $
 
@@ -641,7 +640,7 @@ $
 
 Avec un tableau de booléens, on parcourt les dates jusqu'à en trouver une disponible ou jusqu'à exhaustion des dates ~> recherche linéaire $\rightarrow\mathcal O(n^2)$ au total
 
-Avec un ABR équilbré contenant les dates disponibles : Exo : étant donné une date $d$, on peut trouver le plus grand élément de l'ABR inférieur ou égal à $d$ $\rightarrow\mathcal O(n\log n)$ au total
+Avec un ABR équilibré contenant les dates disponibles : Exo : étant donné une date $d$, on peut trouver le plus grand élément de l'ABR inférieur ou égal à $d$ $\rightarrow\mathcal O(n\log n)$ au total
 
 ---
 ### Preuve d'optimalité
@@ -649,7 +648,7 @@ Avec un ABR équilbré contenant les dates disponibles : Exo : étant donné une
 **Lemme 1 :**
 Soit $T$ un ensemble de tâches et $t$ une tâche $\in T$ de pénalité maximale
 
-Alors $\exists T^+ ... T$ dont on peut planifier les éléments dans les délais, tq $P(T^+)$ est maximal et tq $t\in T^+$
+Alors $\exists T^+\subseteq{T}$ dont on peut planifier les éléments dans les délais, tq $P(T^+)$ est maximal et tq $t\in T^+$
 
 **Démonstration :**
 On considère $T^+$ optimal.
@@ -658,29 +657,35 @@ Si $t\notin T^+$. S'il reste une date $d\le f(t)$ non occupée par des tâches d
 
 Donc il existe une tâche $t'\in T^+$ planifiée à une date $d\le f(t)$.
 
-Or, $p(t')\le p(t)$ donc $T'=(T^+...\{t'\})\cup \{t\}$ est aussi une solution optimale.
+Or, $p(t')\le p(t)$ donc $T'=(T^+\setminus\{t'\})\cup \{t\}$ est aussi une solution optimale.
 
 En effet, on peut traiter toutes les tâches de $T'$ dans les délais et $P(T')=P(T^+)-p(t')+p(t)\ge P(T^+)$
 
 **Lemme 2 :**
-On considère $T^+ ... T$ optimal contenant une tâche $t$ de pénalité maximale associée à la date $j$.
+On considère $T^+\subseteq{T}$ optimal contenant une tâche $t$ de pénalité maximale associée à la date $j$.
 
-On construit le sous-prolème sans $t$ ni date $j$ ainsi :
+On construit le sous-problème sans $t$ ni date $j$ ainsi :
 
-$T'=T ... \{t\}$
+$$T'=T\setminus\{t\}$$
 
-$\forall t'\in T', f'(t')=\left\{\begin{array}
-  f(t')\text{ si } f(t')<j
-  \\
-  f(t')-1\text{ sinon}
-\end{array}\right.$
+$$\forall t'\in T', f'(t')=\left\{\begin{array}{ll}
+ f(t') & \text{ si } f(t')<j
+ \\
+ f(t')-1 & \text{ sinon}
+\end{array}\right.$$
 
-Alors $T^+ ... \{t\}$ est optimal pour $T'$
+Alors $T^+\setminus\{t\}$ est optimal pour $T'$
 
 **Démonstration :**
-Tout ordonnancement de $T'$ corresopnd à ordonnancement de $T$ et réciproquement en décalant les temps postérieurs à $j$ pour insérer la tâche de $t$. Si on dispose de $d'$ pour $T'$, alors $d$, définie par $d(t')=...$ donne un ordonnancement de même pénalité.
+Tout ordonnancement de $T'$ correspond à ordonnancement de $T$ et réciproquement en décalant les temps postérieurs à $j$ pour insérer la tâche de $t$. Si on dispose de $d'$ pour $T'$, alors $d$, définie par $d(t')=\left\{
+\begin{array}{ll}
+ d'(t') & \text{si }d'(t') < j
+ \\
+ d'(t') + 1 & \text{sinon}
+\end{array}
+\right.$ donne un ordonnancement de même pénalité.
 
-S'il existait $T^{++}$ optimal pour $T'$ avec $P(t^{++}>P(T^+ ... \{t\}=P(T^+)-p(t)$ alors $T^{++}\cup \{t\}$ donnerait une solution optimale pou rT qui contredit l'optimalité de $T^+$.
+S'il existait $T^{++}$ optimal pour $T'$ avec $P(t^{++}>P(T^+\setminus\{t\}=P(T^+)-p(t)$ alors $T^{++}\cup \{t\}$ donnerait une solution optimale pour qui contredit l'optimalité de $T^+$.
 
 **Théorème :**
 L'algo glouton donne une solution optimale
@@ -690,26 +695,11 @@ Par récurrence sur $n$ :
 - $n=1$, trivial
 - hérédité : on note $T=\{t_0,...,t_n\}$ ordonné par pénalité décroissante
 
-  Par le lemme 1, il existe une solution optimale $T^-+$ contenant $t_0$
-  
-  Par le lemme 2, $T^=+ ... \{t_0\}$ est optimale pour $T ... \{t_0\}$ avec les délais décalés
+ Par le lemme 1, il existe une solution optimale $T^-+$ contenant $t_0$
+  Par le lemme 2, $T^=+\setminus\{t_0\}$ est optimale pour $T\setminus\{t_0\}$ avec les délais décalés
 
-  Par hypothèse de récurrence, l'algo glouton est optiml pour $T ... \{t_0\}$ avce les délais décalés $\rightarrow$ ensemble $T$
+ Par hypothèse de récurrence, l'algo glouton est optimal pour $T\setminus\{t_0\}$ avec les délais décalés $\rightarrow$ ensemble $T$
 
-  On peut décaler l'odonnancement pour insérer $t_0$ et obtenir une solution pour $T$
-  ...
+ On peut décaler l'ordonnancement pour insérer $t_0$ et obtenir une solution pour $T$
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-> Aide exos prof
+ $P(T'\cup\{t_0\}) = P(T') + p(t_0) = P(T^+ \setminus\{t_0\}) + p(t_0) = P(T^+)$ optimal
