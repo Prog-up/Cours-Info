@@ -356,7 +356,7 @@ $.
 
 ---
 ### 3.1.2. Approche descendante de la programmation dynamique
-On stocke les valeurs calculées pour les retrouver en temps constant si on en a encore besoin. On parle de mémorisation.
+On stocke les valeurs calculées pour les retrouver en temps constant si on en a encore besoin. On parle de mémoïsation.
 
 **Exemple**
 ```OCaml
