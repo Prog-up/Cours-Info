@@ -352,7 +352,7 @@ Ici, on a inséré des colonnes supplémentaires pour des sous-formules pour sim
 
 ---
 ### 3.1.8. Remarque
-Construire une table de vérité est un algo simple pour déterminer si une formule est satisfaisante / une tautologie / une antilogie.
+Construire une table de vérité est un algo simple pour déterminer si une formule est satisfiable / une tautologie / une antilogie.
 
 Cependant, si $\varphi$ a $n$ variables distinctes, alors il y a $2^n$ lignes dans sa table de vérité.
 
