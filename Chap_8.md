@@ -145,7 +145,7 @@ $\exists!x,P(x)\equiv\exists x(P(x)\wedge\forall y.(P(y)\rightarrow y=x))$
 On parle de logique du 1er ordre car on ne peut quantifier que sur des variables représentant des termes. Si l'on peut quantifier sur des variables représentant des formules, on parle de logique du second ordre.
 
 ---
-### Exemple
+### 2.2.4. Exemple
 En théorie des ensemble, la formule $(\forall A.\forall B.A\cap B\subseteq A)\wedge\empty\subseteq A$ est représentée de manière arborescente par :
 
 <p align="center">
@@ -153,7 +153,7 @@ En théorie des ensemble, la formule $(\forall A.\forall B.A\cap B\subseteq A)\w
 </p>
 
 ---
-### Remarque
+### 2.2.5. Remarque
 - La logique du premier ordre est aussi appelée calcul des prédicats
 - Dans une formule du premier ordre, les variables peuvent être "capturées" par un quantificateur ou indépendantes de toute quantification
 
@@ -165,12 +165,12 @@ En théorie des ensemble, la formule $(\forall A.\forall B.A\cap B\subseteq A)\w
 
 ---
 ### 2.2.6. Définition : variables libres / liées
-Les variables libres d'une formule $\varphi$ sont les variables qui ne sont pas "capturées" par un quantificateur. On les définit inductivelent par :
+Les variables libres d'une formule $\varphi$ sont les variables qui ne sont pas "capturées" par un quantificateur. On les définit inductivement par :
 
 $$FV(p(t_1,...,t_p))=\displaystyle\bigcup_{i=1}\mathrm{Vars}(t_i)\text{ où }\left\{\begin{array}{ll}
-  \mathrm{Vars}(x)=\{x\}
-  \\
-  \mathrm{Vars}(f(t_i,...,t_n))=\displaystyle\bigcup_{i=1}\mathrm{Vars}(t_i)
+ \mathrm{Vars}(x)=\{x\}
+ \\
+ \mathrm{Vars}(f(t_i,...,t_n))=\displaystyle\bigcup_{i=1}\mathrm{Vars}(t_i)
 \end{array}\right.$$
 
 $FV(\neg\varphi)=FV(\varphi)$
@@ -182,41 +182,43 @@ $FV(Qx\varphi)=FV(\varphi)\setminus\{x\},\forall Q\in\{\exists,\forall\}$
 **Exemple :**
 $FV(\forall x,x+Sy>0)=\{y\}$
 
-> Insert image
+<p align="center">
+<img src="Pictures/Screenshot_20220330_193335.png" alt="drawing" width="300">
+</p>
 
 $FV((\forall x,x+y=1)\wedge(\forall y,x+y=1))=\{x;y\}$
 
-Une variable est dite liée si elle n'est pas libre. Un même nom de variable peut avoir des occurrences libres et des occurences liées. Dans une formule de la forme $Qx\varphi$ où $Q\in\{\exists,\forall\}$, on dit que $\varphi$ est la portée de la liaison pour x. Une variable est donc 
-- libre si elle admet une occurence hors de la portée de toutes les liaisons pour cette variable
-- liée si toutes ses occurences sont dans la portée d'une liaison pour cette variable.
+Une variable est dite liée si elle n'est pas libre. Un même nom de variable peut avoir des occurrences libres et des occurrences liées. Dans une formule de la forme $Qx\varphi$ où $Q\in\{\exists,\forall\}$, on dit que $\varphi$ est la portée de la liaison pour x. Une variable est donc
+- libre si elle admet une occurrence hors de la portée de toutes les liaisons pour cette variable
+- liée si toutes ses occurrences sont dans la portée d'une liaison pour cette variable.
 
-Une formule dont toute les variables sont liées est dite close.
+Une formule dont toutes les variables sont liées est dite close.
 
 ---
 ### 2.2.7. Remarque
-Le nom des varaibles liées n'est pas important (exemple : $\forall x, x=x$ et $\forall y, y=y$ expriment la même propriété) donc on identifiera les formules au renomage près de leurs variables liées.
+Le nom des variables liées n'est pas important (exemple : $\forall x, x=x$ et $\forall y, y=y$ expriment la même propriété) donc on identifiera les formules au renommage près de leurs variables liées.
 
-On appelle cela l'$\alpha$-équivalence. Lors du rennomage de variables liées, il faut faire attention au phénomène de capture de variables, par exemple $\forall y,x+y=1$ n'est pas la même formule que $\forall x,x+x=1$.
+On appelle cela l'$\alpha$-équivalence. Lors du renommage de variables liées, il faut faire attention au phénomène de capture de variables, par exemple $\forall y,x+y=1$ n'est pas la même formule que $\forall x,x+x=1$.
 
 ---
 ### 2.2.8. Définition : substitution
 $\begin{array}{lll}
-  \text{Soit } & \varphi\text{ une formule}
-  \\
-  & x\text{ une variable}
-  \\
-  & t\text{ un terme}
+ \text{Soit } & \varphi\text{ une formule}
+ \\
+ & x\text{ une variable}
+ \\
+ & t\text{ un terme}
 \end{array}$
 
-La substitution de $t$ à $x$ dans $\varphi$, notée $\varphi[x:=t]$, est définit inductivement par :
+La substitution de $t$ à $x$ dans $\varphi$, notée $\varphi[x:=t]$, est définie inductivement par :
 
 $$p(t_1,...,t_n)[x:=t]=(t_1[x:=t],...,t_n[x:=t])$$
 $$\text{où }\left\{\begin{array}{ll}
-  x[x:=t]=t
-  \\
-  y[x:=t]=y,\forall y\in\vee\setminus\{x\}
-  \\
-  f(t_1,...,t_n)[x:=t]=f(t_1[x:=t],...,t_n[x:=t])
+ x[x:=t]=t
+ \\
+ y[x:=t]=y,\forall y\in\vee\setminus\{x\}
+ \\
+ f(t_1,...,t_n)[x:=t]=f(t_1[x:=t],...,t_n[x:=t])
 \end{array}\right.$$
 
 $(\neg\varphi)[x:=t]=\neg(\varphi[x:=t])$
@@ -228,11 +230,11 @@ $\forall Q\in\{\exists;\forall\},(Qx\varphi)[x:=t]=Qx\varphi$
 $(Qy\varphi)[x:=t]=Qy(\varphi[x:=t]),\forall y\not =x$ et $y\notin\mathrm{Vars}(t)$
 
 **Exemple :**
-$(\forall y,y=y+x)[x:=1+y]\not =\forall y(y=y+1+1)$ mais plutôt $\forall z,z=z+1+y\\$ ~> on renomme les occurrences liées dans $\varphi$ des variables de $t$ avant de substituter.
+$(\forall y,y=y+x)[x:=1+y]\not =\forall y(y=y+1+1)$ mais plutôt $\forall z,z=z+1+y\\$ ~> on renomme les occurrences liées dans $\varphi$ des variables de $t$ avant de substituer.
 
 ---
 ### 2.2.9 Remarque
-Le principe de l'$\alpha$-équivalence et les restrictions de la substitution sont liés aux questions de sémantique : l'$\alpha$-équivalence et la susbtitution doivent en quelque sorte conserver la signification logique des formules.
+Le principe de l'$\alpha$-équivalence et les restrictions de la substitution sont liés aux questions de sémantique : l'$\alpha$-équivalence et la substitution doivent en quelque sorte conserver la signification logique des formules.
 
 ---
 # 3. Sémantique de la logique proportionnelle
@@ -240,15 +242,15 @@ Le principe de l'$\alpha$-équivalence et les restrictions de la substitution so
 
 ---
 ### 3.1.1. Introduction
-Définir une sémantique revient à donner du sens aux symboles utilisés dans la syntaxe abstraite. On doit donc choisir un ensemble de valeurs qui servent d'interprétation aux termes construit à l'aide de la syntaxe et on doit décrire l'effet des symboles sur cet ensemble de valeurs.
+Définir une sémantique revient à donner du sens aux symboles utilisés dans la syntaxe abstraite. On doit donc choisir un ensemble de valeurs qui servent d'interprétation aux termes construits à l'aide de la syntaxe et on doit décrire l'effet des symboles sur cet ensemble de valeurs.
 
 **Exemple :**
 On considère des termes arithmétiques définis pas :
 
-$t::=x|c|t_1+t_2|t_1-t_2|t_1\times t_2$ où $x$ parcours un ensemble $V$ de variables et $c$ parcours $\mathbb{N}$, l'ensemble des constantes.
+$t::=x|c|t_1+t_2|t_1-t_2|t_1\times t_2$ où $x$ parcourt un ensemble $V$ de variables et $c$ parcours $\mathbb{N}$, l'ensemble des constantes.
 
 On peut définir une sémantique en choisissant $\mathbb{N}$ pour l'ensemble des valeurs :
-- $c+1$ comme interprétation de $c$ 
+- $c+1$ comme interprétation de $c$
 - la fonction $\min$ comme interprétation de $+$
 - la fonction $\max$ pour $-$
 - l'addition pour $X$
@@ -257,14 +259,14 @@ On peut bien-sûr donner une autre sémantique à ces termes, plus en cohérence
 
 
 **Problème :**
-L'interprétation des variables ~> elle dépend d'un contexte qui donne une valeur à chaque variable. 
+L'interprétation des variables ~> elle dépend d'un contexte qui donne une valeur à chaque variable.
 
-Les sémantiques sont donc paramétrés par son environnement.
+Les sémantiques sont donc paramétrées par son environnement.
 
 ---
 ### 3.1.2. Définition : valuation
-Une valuation est une fonction de l'ensemble $\mathcal{V}$ des variables dans l'ensemble des valeurs choisi pour définir la sémantique. On parle également d'environnement ou, dans le cadre de la logique proportionnelle, de distribution de vérité. L'ensemble des valeurs de vérité est noté $\{V;F\}$ où :
-- $V$ est la value vraie
+Une évaluation est une fonction de l'ensemble $\mathcal{V}$ des variables dans l'ensemble des valeurs choisies pour définir la sémantique. On parle également d'environnement ou, dans le cadre de la logique proportionnelle, de distribution de vérité. L'ensemble des valeurs de vérité est noté $\{V;F\}$ où :
+- $V$ est la valeur vraie
 - $F$ est la valeur fausse
 
 ---
@@ -276,45 +278,45 @@ On définit inductivement l'interprétation de $\varphi$ pour $\mathrm{v}$, not�
 $[\![x]\!]_v=\mathrm{v}(x), \forall x$ variable propositionnelle
 
 $[\![\neg\varphi]\!]_v=\left\{\begin{array}{ll}
-  V\text{ si }[\![\varphi]\!]_v=F
-  \\
-  F\text{ sinon}  
-\end{array}\rght.$
+ V\text{ si }[\![\varphi]\!]_v=F
+ \\
+ F\text{ sinon} 
+\end{array}\right.$
 
 $[\![\varphi_1\vee\varphi_2]\!]_v=\left\{\begin{array}{ll}
-  F\text{ si }[\![\varphi_1]\!]_v=[\![\varphi_2]\!]_v=F
-  \\
-  V\text{ sinon}
+ F\text{ si }[\![\varphi_1]\!]_v=[\![\varphi_2]\!]_v=F
+ \\
+ V\text{ sinon}
 \end{array}\right.$
 
 $[\![\varphi_1\wedge\varphi_2]\!]_v=\left\{\begin{array}{ll}
-  V\text{ si }[\![\varphi_1]\!]_v=[\![\varphi_2]\!]_v=V
-  \\
-  F\text{ sinon}
+ V\text{ si }[\![\varphi_1]\!]_v=[\![\varphi_2]\!]_v=V
+ \\
+ F\text{ sinon}
 \end{array}\right.$
 
 $[\![\varphi_1\rightarrow\varphi_2]\!]_v=\left\{\begin{array}{ll}
-  F\text{ si }[\![\varphi_1]\!]_v=V\text{ et }[\![\varphi_2]\!]_v=F
-  \\
-  V\text{ sinon}
+ F\text{ si }[\![\varphi_1]\!]_v=V\text{ et }[\![\varphi_2]\!]_v=F
+ \\
+ V\text{ sinon}
 \end{array}\right.$
 
-On dit que $\mathrm{v}$ est un modèle de $\varphi$ sii $[\![\varphi_]\!]_v=V$
+On dit que $\mathrm{v}$ est un modèle de $\varphi$ si $[\![\varphi_]\!]_v=V$
 
 ---
-### 3.1.4. Définition : tautologie / antoligie / satisfiabilité
+### 3.1.4. Définition : tautologique / anthologie / satisfiabilité
 Soit $\varphi$ une formule. On dit que $\varphi$ est :
-- une tautologie ssi toute valuation est un modèle de $\varphi$. On note alors $\models\varphi$
+- une tautologie sii toute valuation est un modèle de $\varphi$. On note alors $\models\varphi$
 - une antilogie ssi elle n'admet aucun modèle
 - satisfiable ssi elle admet un modèle
 
 ---
 ### Remarque
-On ajoute parfois à la syntaxe une tautologie notée $T$ et une antologie notée $\bot$.
+On ajoute parfois à la syntaxe une tautologie notée $T$ et une anthologie notée $\bot$.
 
 On peut toutefois les encoder : $T=x\vee\neg x$ et $\bot=x\wedge\neg x$
 
-La tautologie $\varphi\vee\neg\varphi$ est appelée loi du tiers éxclu.
+La tautologie $\varphi\vee\neg\varphi$ est appelée loi du tiers exclu.
 
 **Exercice :**
 Montrer que les formules suivantes sont des tautologies :
@@ -350,7 +352,7 @@ Ici, on a inséré des colonnes supplémentaires pour des sous-formules pour sim
 
 ---
 ### 3.1.8. Remarque
-Construire une table de vétité est un algo simple pour déterminer si une formule est satisfiable / une tautologie / une antilogie.
+Construire une table de vérité est un algo simple pour déterminer si une formule est satisfaisante / une tautologie / une antilogie.
 
 Cependant, si $\varphi$ a $n$ variables distinctes, alors il y a $2^n$ lignes dans sa table de vérité.
 
