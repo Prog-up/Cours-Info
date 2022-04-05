@@ -736,7 +736,7 @@ On test toutes les valuations, d'où une complexité exponentielle
 On peut représenter les clauses par des listes de littéraux et les FNC par des listes de clauses.
 
 ```OCaml
-type littéral = Var of string |NVar of string
+type litteral = Var of string |NVar of string
 type clause = literal list
 type fnc = clause list
 
