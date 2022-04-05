@@ -18,9 +18,9 @@ Soit $V$ un ensemble de variables propositionnelles. On définit inductivement l
 
 $\dfrac{x\in V}{x\in\mathcal{F}}$
 $\dfrac{\varphi\in\mathcal{F}}{\neg\varphi\in\mathcal{F}}$
-$\dfrac{\varphi_1\in\mathcal{F}\;\varphi_2\in\mathcal{F}}{\varphi_1\vee\varphi_2\in\mathcal{F}}$
-$\dfrac{\varphi_1\in\mathcal{F}\;\varphi_2\in\mathcal{F}}{\varphi_1\wedge\varphi_2\in\mathcal{F}}$
-$\dfrac{\varphi_1\in\mathcal{F}\;\varphi_2\in\mathcal{F}}{\varphi_1\rightarrow\varphi_2\in\mathcal{F}}$
+$\dfrac{\varphi_1\in\mathcal{F}\quad\varphi_2\in\mathcal{F}}{\varphi_1\vee\varphi_2\in\mathcal{F}}$
+$\dfrac{\varphi_1\in\mathcal{F}\quad\varphi_2\in\mathcal{F}}{\varphi_1\wedge\varphi_2\in\mathcal{F}}$
+$\dfrac{\varphi_1\in\mathcal{F}\quad\varphi_2\in\mathcal{F}}{\varphi_1\rightarrow\varphi_2\in\mathcal{F}}$
 
 On appelle :
 - $\neg$ la négation
@@ -87,7 +87,7 @@ On pourrait envisager d'utiliser les parcours préfixe / postfixe pour représen
 
  **Démonstration :**
  L'arbre $A_\varphi$ contient au moins une feuille donc $|\varphi|\le|A_\varphi|-1$
-  (cas d'égalité pour $\varphi$ de taille $n$ : $\varphi=\underbrace{\neg\neg...\neg}_{\text{n fois}} p$)
+  (cas d'égalité pour $\varphi$ de taille $n$ : $\varphi=\underbrace{\neg\neg\dots\neg}_{\text{n fois}} p$)
 
  $A_\varphi$ est un arbre binaire ayant |\varphi| noeuds internes, donc il a au plus $|\varphi|+1$ feuilles (Chap 6 1.1.10.) donc $A_\varphi\le|\varphi|+|\varphi|+1=2|\varphi|+1$.
 
@@ -118,7 +118,7 @@ Le langage de la théorie des ensembles est défini par la signature suivante :
 ---
 ### 2.2.3. Définition : termes et formules de la logique du premier ordre
 Soit $\Sigma$ une signature et $\vee$ un ensemble de variables. $\Sigma$ et $\vee$ définissent des ensembles de termes et de formules via grammaires suivantes :
-- Terme : $t::=x|f(t_1,...,t_k)$
+- Terme : $t::=x|f(t_1,\dots,t_k)$
   où
  $\left\{\begin{array}{ll}
    x\text{ parcours }\vee
@@ -126,7 +126,7 @@ Soit $\Sigma$ une signature et $\vee$ un ensemble de variables. $\Sigma$ et $\ve
    (f,k)\text{ parcourt les symboles de fonction et leur arité}
  \end{array}\right.$
 
-- Formules : $\varphi::=p(t_1,...,t_k)|\neg\varphi|\varphi_1\vee\varphi_2|\varphi_1\wedge\varphi_2|\varphi_1\rightarrow\varphi_2|\forall x.\varphi|\exists x.\varphi$
+- Formules : $\varphi::=p(t_1,\dots t_k)|\neg\varphi|\varphi_1\vee\varphi_2|\varphi_1\wedge\varphi_2|\varphi_1\rightarrow\varphi_2|\forall x.\varphi|\exists x.\varphi$
   où
  $\left\{\begin{array}{ll}
    x\text{ parcours }\vee
@@ -138,7 +138,7 @@ On appelle :
 - $\forall$ le qualificateur universel
 - $\exists$ le quantificateur existentiel
 
-Les atomes de cette logique sont les formules de la forme $p(t_1,...,t_k)$.
+Les atomes de cette logique sont les formules de la forme $p(t_1,\dots,t_k)$.
 
 $\exists!x,P(x)\equiv\exists x(P(x)\wedge\forall y.(P(y)\rightarrow y=x))$
 
@@ -167,10 +167,10 @@ En théorie des ensemble, la formule $(\forall A.\forall B.A\cap B\subseteq A)\w
 ### 2.2.6. Définition : variables libres / liées
 Les variables libres d'une formule $\varphi$ sont les variables qui ne sont pas "capturées" par un quantificateur. On les définit inductivement par :
 
-$$FV(p(t_1,...,t_p))=\displaystyle\bigcup_{i=1}\mathrm{Vars}(t_i)\text{ où }\left\{\begin{array}{ll}
+$$FV(p(t_1,\dots,t_p))=\displaystyle\bigcup_{i=1}\mathrm{Vars}(t_i)\text{ où }\left\{\begin{array}{ll}
  \mathrm{Vars}(x)=\{x\}
  \\
- \mathrm{Vars}(f(t_i,...,t_n))=\displaystyle\bigcup_{i=1}\mathrm{Vars}(t_i)
+ \mathrm{Vars}(f(t_i,\dots,t_n))=\displaystyle\bigcup_{i=1}\mathrm{Vars}(t_i)
 \end{array}\right.$$
 
 $FV(\neg\varphi)=FV(\varphi)$
@@ -212,13 +212,13 @@ $\begin{array}{lll}
 
 La substitution de $t$ à $x$ dans $\varphi$, notée $\varphi[x:=t]$, est définie inductivement par :
 
-$$p(t_1,...,t_n)[x:=t]=(t_1[x:=t],...,t_n[x:=t])$$
+$$p(t_1\dots,t_n)[x:=t]=(t_1[x:=t],\dots,t_n[x:=t])$$
 $$\text{où }\left\{\begin{array}{ll}
  x[x:=t]=t
  \\
  y[x:=t]=y,\forall y\in\vee\setminus\{x\}
  \\
- f(t_1,...,t_n)[x:=t]=f(t_1[x:=t],...,t_n[x:=t])
+ f(t_1,\dots,t_n)[x:=t]=f(t_1[x:=t],\dots,t_n[x:=t])
 \end{array}\right.$$
 
 $(\neg\varphi)[x:=t]=\neg(\varphi[x:=t])$
@@ -271,11 +271,11 @@ Une évaluation est une fonction de l'ensemble $\mathcal{V}$ des variables dans 
 
 ---
 ### 3.1.3. Définition : valeur de vérité d'une formule
-Soit $\varphi$ une formule et $\mathrm{v}$ une valuation.
+Soit $\varphi$ une formule et $v$ une valuation.
 
-On définit inductivement l'interprétation de $\varphi$ pour $\mathrm{v}$, notée $[\![\varphi]\!]_v$ par :
+On définit inductivement l'interprétation de $\varphi$ pour $v$, notée $[\![\varphi]\!]_v$ par :
 
-$[\![x]\!]_v=\mathrm{v}(x), \forall x$ variable propositionnelle
+$[\![x]\!]_v=v(x), \forall x$ variable propositionnelle
 
 $[\![\neg\varphi]\!]_v=\left\{\begin{array}{ll}
  V\text{ si }[\![\varphi]\!]_v=F
@@ -301,7 +301,7 @@ $[\![\varphi_1\rightarrow\varphi_2]\!]_v=\left\{\begin{array}{ll}
  V\text{ sinon}
 \end{array}\right.$
 
-On dit que $\mathrm{v}$ est un modèle de $\varphi$ si $[\![\varphi_]\!]_v=V$
+On dit que $v$ est un modèle de $\varphi$ si $[\![\varphi_]\!]_v=V$
 
 ---
 ### 3.1.4. Définition : tautologique / anthologie / satisfiabilité
@@ -328,15 +328,14 @@ Montrer que les formules suivantes sont des tautologies :
 ### 3.1.6. Définition : table de vérité
 Soit $\varphi$ une formule.
 
-La table de vérité de $\varphi$ est la table indexée par les valuations des variables de $\varphi$ et qui contient comme entrée correspondant à une valuation $\mathrm{v}$ la valeur $[\![\varphi]\!]_v$.
+La table de vérité de $\varphi$ est la table indexée par les valuations des variables de $\varphi$ et qui contient comme entrée correspondant à une valuation $v$ la valeur $[\![\varphi]\!]_v$.
 
-On représente la table de $\varphi$, de variable $x_1...x_n$, en plaçant une colonne pour chaque $x_i$ et une colonne pour $\varphi$.
+On représente la table de $\varphi$, de variable $x_1\dotsx_n$, en plaçant une colonne pour chaque $x_i$ et une colonne pour $\varphi$.
 
-Pour chaque valuation de $\mathrm{v}$ l'entrée correspondant à $x_i$ est $\mathrm{v}(x_i)$ et l'entrée correspondant à $\varphi$ est $[\![\varphi]\!]_v$.
+Pour chaque valuation de $v$ l'entrée correspondant à $x_i$ est $v(x_i)$ et l'entrée correspondant à $\varphi$ est $[\![\varphi]\!]_v$.
 
 ---
 ### 3.1.7. Exemple : table de vérité de $p\longleftrightarrow q$
-> Tab à recopier
 
 | $p$ | $q$ | $p\rightarrow q$ | $q\rightarrow p$ | $p\leftrightarrow q$
 |:---:|:---:|:---:|:---:|:---:|
@@ -366,3 +365,406 @@ Il y a $2^{(2^n)}$ tables de vérités distinctes pour des formules à $n$ varia
 
 **Démonstration :**
 Il y a $2^n$ lignes dans une table et pour chaque ligne on a le choix entre 2 valeurs de vérité.
+
+---
+## 3.2. Conséquence et équivalence
+
+---
+### 3.2.1. Définition : conséquence
+Soit $\varphi$ et $\psi$ deux formules.
+
+On dit que $\psi$ est une conéquence logique de $\varphi$, noté $\varphi\models\psi$, si tout modèle de $\varphi$ est un modèle de $\psi$.
+
+---
+### 3.2.2. Proposition
+Soit $\varphi$ et $\psi$ deux formules.
+$\varphi\models\psi$ ssi $\models\varphi\rightarrow\psi$
+
+**Démonstration :**
+$\varphi\models\psi$ sii tout modèle de $\varphi$ est une modèle de $\psi$
+
+ssi $\forall$ valuations $v$, soit $[\![\varphi]\!]_v=V=[\![\psi]\!]$, soit $[\![\varphi]\!]=F$
+
+ssi $\forall$ valuations $v$, $[\![\varphi\rightarrow\psi]\!]_v=V$
+
+ssi $\models\varphi\rightarrow\psi$.
+
+---
+### 3.2.3. Généralisation aux ensembles de formules
+- modèle : un modèle d'un ensemble $\Gamma$ de formules est une valuations $v$ tel que $\forall\varphi\in\Gamma,[\![\varphi]\!]_v=V$
+- satisfiabilité : un ensemble $\Gamma$ de formules est dit :
+  - satifiable si $\Gamma$ admet un modèle
+  - contradictoire si $\Gamma$ n'admet aucun modèle
+- conséquence logique : une formule $\varphi$ est conséquence logique d'un ensemble $\Gamma$ de formules si tout modèle de $\Gamma$ est modèle de $\varphi$. On note alors $\Gamma\models\varphi$.
+
+**Remarque :**
+- $\varphi\models\psi$ ssi $\{\varphi\}\models\psi$
+- l'intuition est la suivante : un ensemble de formules $\Gamma$ définit une théorie (un ensemble d'axiomes) et on s'intéresse aux formules vraies dans cette théorie (les conséquences logiques de $\Gamma$)
+
+---
+### 3.2.4. Proposition
+Soit $\Gamma$ un ensemble de formules et $\varphi$ une formule
+
+$\Gamma=\varphi$ ssi $\Gamma\cup\{\neg\varphi\}$ est contradictoire.
+
+**Démonstration :**
+$\Gamma\models\varphi$ ssi tout modèle de $\Gamma$ est un modèle de $\varphi$
+
+ssi $\forall$ valuations $v$, soit $v$ n'est pas ne modèle de $\Gamma$, soit $v$ est un modèle de $\Gamma$ et $[\![\varphi]\!]_v=V$
+
+ssi $\forall$ valuations $v$, soit $v$ n'est pas ne modèle de $\Gamma$, soit $v$ est un modèle de $\Gamma$ et $[\![\neg\varphi]\!]_v=F$
+
+ssi $\Gamma\cup\{\neg\varphi\}$ n'admet aucun modèle
+
+ssi $\Gamma=\varphi$ ssi $\Gamma\cup\{\neg\varphi\}$ est contradictoire.
+
+---
+### 3.2.5. Proposition
+Soit $\varphi_1\dots\varphi_n$ et $\psi$ des formules
+$\{\varphi_1\dots\varphi_n\}\models\psi$ ssi $\models(\varphi_1\wedge\dots\wedge\varphi_n)\rightarrow\psi$
+
+**Démonstration :**
+Lemme : Soit $\Gamma$ un ensemble de formules et $\varphi$ et $\psi$ deux formules
+
+$\Gamma\cup\{\varphi\}\models\psi$ ssi $\Gamma\models\varphi\rightarrow\psi$
+
+- **Démonstration :**
+  $\Gamma\models\varphi\rightarrow\psi$ ssi $\forall$ valuation $v$ n'est pas un modèle de $\Gamma\cup\{\varphi\}$, soit $[\![\psi]\!]_v=V$
+
+  ssi $\forall$ valuation $v$ n'est pas un modèle de $\Gamma$, soit $[\![\varphi]\!]_v=F$, soit $[\![\varphi]\!]_v=V=[\![\psi]\!]_v$
+
+  ssi $\forall$ valuation $v$ n'est pas un modèle de $\Gamma$, soit $[\![\varphi]\!]_v=F$, soit $[\![\varphi\rightarrow\psi]\!]_v=V$
+  
+  ssi $\Gamma\models\varphi\rightarrow\psi$.
+
+On procède alors par récurrence en remarquant que $\forall\varphi_1,\varphi_2,\psi,(\varphi_1\wedge\varphi_2)\rightarrow\psi$ et $\varphi_1\rightarrow(\varphi_2\rightarrow\psi)$ ont les mêmes modèles.
+
+**Remarque :**
+Cela ne s'exprime que pour les ensembles finis de formules, car les formules sont des objets finis.
+
+Le théorème de compacité (`H.P`) permet toujours de se ramenenr à un ensemble finis de formules.
+
+---
+### 3.2.6. Définition : équivalence
+Soit $\varphi$ et $\psi$ deux formules.
+
+On dit que $\varphi$ et $\psi$ sont équivalentes, noté $\varphi\equiv\psi$, si $\varphi$ et $\psi$ ont les mêmes modèles.
+
+---
+### 3.2.7. Remarque
+$\varphi\equiv\psi$ ssi $(\varphi\models\psi$ et $\psi\models\varphi)$ ssi $\models\varphi\leftrightarrow\psi$ (d'après 3.2.1.)
+- $\models\equiv$ est une relation d'équivalence
+- deux formules sont équivalentes si elles ont la même table de vérité onc il y a au plus $2^{(2^n)}$ classes d'équivalence pour des formules à $n$ variables.
+
+On verra comment construire une formule associée à chaque table de vérité possible.
+
+---
+### 3.2.8. Équivalence classique
+- Élément neutre :
+  - $\varphi\wedge\top\equiv\varphi$
+  - $\varphi\vee\bot\equiv\varphi$
+- Élémént absorbant :
+  - $\varphi\wedge\top\equiv\bot$
+  - $\varphi\vee\top\equiv\top$
+- Commutativité :
+  - $\varphi_1\wedge\varphi_2\equiv\varphi_2\wedge\varphi_1$
+  - $\varphi_1\vee\varphi_2\equiv\varphi_2\vee\varphi_1$
+- Associativité : 
+  - $\varphi_1\wedge(\varphi_2\wedge\varphi_3)\equiv(\varphi_1\wedge\varphi_2)\wedge\varphi_3$
+  - $\varphi_1\vee(\varphi_2\vee\varphi_3)\equiv(\varphi_1\vee\varphi_2)\vee\varphi_3$
+- Distributivité :
+  - $\varphi_1\wedge(\varphi_2\vee\varphi_3)\equiv(\varphi_1\wedge\varphi_2)\vee(\varphi_1\wedge\varphi_3)$
+  - $\varphi_1\vee(\varphi_2\wedge\varphi_3)\equiv(\varphi_1\vee\varphi_2)\wedge(\varphi_1\vee\varphi_3)$
+- Idempotence : 
+  - $\varphi \wedge \varphi \equiv \varphi$
+  - $\varphi \vee \varphi \equiv \varphi$
+- Involutivité : 
+  - $\neg \neg \varphi \equiv \varphi$
+- Règles de complément (tiers exclu) : 
+  - $\varphi \wedge \neg \varphi \equiv \bot$
+  - $\varphi \vee \neg \varphi \equiv \top$
+- Lois de De Morgan : 
+  - $\neg (\varphi \wedge \psi) \equiv \neg \varphi \vee \neg \psi$
+  - $\neg (\varphi \vee \psi) \equiv \neg \varphi \wedge \neg \psi$
+- Décomposition de l'implication : 
+  - $\varphi \rightarrow \psi \equiv \neg (\varphi \wedge \neg \psi) \equiv \neg \varphi \vee \psi$
+- Contraposition : 
+  - $\varphi \rightarrow \psi \equiv \neg \psi \rightarrow \neg \varphi$
+- Currification : 
+  - $(\varphi_1 \wedge \varphi_2) \rightarrow \varphi_3 \equiv \varphi_1 \rightarrow (\varphi_2 \rightarrow \varphi_3)$
+
+---
+### 3.2.9. Remarque
+Ces équivalences définissent des rèles de simplification qui préservent la valeur logique des formules. Ces règles peuvent aussi s'appliquer aux sous-formules d'une formules donnée. On dit que l'équivalence passe au contexte et que c'est une relation de congruence.
+
+Ces règles permettent de donner une formule particulière aux formules afin de simplifier l'études de leur stabilité.
+
+---
+## 3.3. Formes normales
+
+---
+### 3.3.1. Définiton : littéraux, clauses, formes normales
+- Un littéral est une formule qui suit une variable, soit la négation d'une variable.
+- Une clause est conjonctive (resp. disjonctive) est une conjonction (resp. disjonction) de littéraux.
+- Une formule sous forme normale disjointe (resp. conjonctive) est une disjonction (resp. conjonction) de classes conjonctives (resp. disjonctives).
+
+---
+### 3.2.2. Exemple
+- $(\neg x\wedge\neg y)\vee(\neg x\wedge\neg z\wedge t)$ est une FND
+- $(x\vee y)\wedge(\neg x\vee\neg y)$ est une FNC (c'est le XOR)
+
+---
+### 3.3.3. Théorème
+Toute formule est équivalente à une forme normale conjonctive (resp. disjonctive).
+
+**Démonstration :**
+- Il suffit de montrer le théorème pour les FND : 
+
+  Soit $\varphi$ une formule. Alors $\neg\varphi$ est équivalente à une FND.
+  
+  Cette FND, $\displaystyle\bigvee_{i=1}^m c_i$ où $\forall i\in[\![a;n]\!]$ la classe $c_i$ s'écrit $\displaystyle\bigwedge_{j=1}^{m_i} l_{i,j}$ avec les $l_{i,j}$ des littéraux.
+
+  Donc
+
+  $
+  \begin{array}{rcl}
+      \varphi
+      &\equiv& \neg \neg \varphi
+      \ \equiv\ \displaystyle \neg (\bigvee_{i = 1}^n c_i)
+      \ \equiv\ \displaystyle \bigwedge_{i = 1}^n \neg c_i
+      \\
+      &\equiv& \displaystyle \bigwedge_{i = 1}^n \neg (\bigwedge_{j = 1}^{m_i} l_{i, j})
+      \ \equiv\ \displaystyle \bigwedge_{i = 1}^n \bigvee_{j = 1}^{m_i} \neg l_{i, j}
+      \\
+      &\equiv& \displaystyle \underbrace{\bigwedge_{i = 1}^n \bigvee_{j = 1}^{m_i} \widetilde{l_{i, j}}}_{\text{FNC}}
+  \end{array}
+  $
+  où
+  $
+  \forall (i, j),\ \widetilde{l_{i, j}} =
+  \left\{
+  \begin{array}{ll}
+      \neg x_{i, j} & \text{si }l_{i ,j} = x_{i ,j} \in \mathcal{V}
+      \\
+      x_{i ,j} & \text{si }l_{i ,j} = \neg \underbrace{x_{i, j}}_{\in \mathcal{V}}
+  \end{array}
+  \right.
+  $
+
+- Soit $\varphi$ une formule. Montrons que $\varphi$ est équivalent à une FND.
+
+Soit $v$ une valuation. On construit la classe $c_v=\displaystyle\bigwedge_{\substack{x\in V\\\text{tq }v(x)=V}}x\wedge\bigwedge_{\substack{x\in V\\\text{tq }v(x)=F}}\neg x$ (clause conjonctive).
+
+  (**Exercice :**
+$v$ est l'unique modèle de $c_v$)
+
+  Alors $\varphi\equiv\displaystyle\bigvee_{\substack{v\\\text{tq }[\![\varphi]\!]_v=V}}x$ (FND).
+
+---
+### 3.3.4. Remarque
+On a démontré qu'il existe une formule associée à toute table de vérité.
+- la normalisation d'une formule peut résulter en une formule de taille exponnentielle en la taille de la formule initiale.
+
+  **Exemple :**
+  $\varphi=(x_1\vee y_1)\vee\dots\vee(x_n\vee y_n)$ est une FNC dont la FND est de taille exponnentielle en $n$
+
+  **Exercice :**
+  Cette formule admet $3^n$ modèles.
+
+- si on ne s'intéresse qu'à la satifiabilité d'une formule, il est inutile de préserver l'équivalence : il suffit de considérer une formule qui lui est équisatisfiable, i.e. satifiable ssi la formule initiliale est satifiable.
+
+---
+### 3.3.5. Transformation de Tseitin (`H.P`)
+**Idée :**
+On ajoute de nouvelles variables qui seront "équivalentes" aux sous-formules.
+
+Soit $\varphi$ une formule. $\forall\psi\in\mathrm{SF}(\varphi)$ on ajoute une variable $p_\psi$ et on construit une FNC $f_\psi$ définie inductivement par :
+- $f_x~~~~~~=(\neg p_x\vee x)\wedge(p_x\vee\neg x)$
+- $f_{\neg\psi}~~~~=(\neg p_{\neg\psi}\vee\neg p_\psi)\wedge(p_{\neg\psi}\vee p_\psi)$
+- $f_{\psi_1 \vee \psi_2} = (\neg p_{\psi_1 \vee \psi_2} \wedge p_{\psi_1} \vee p_{\psi_2}) \wedge (p_{\psi_1 \vee \psi_2} \vee \neg p_{\psi_1}) \wedge (p_{\psi_1 \vee \psi_2} \vee \neg p_{\psi_2})$
+- $f_{\psi_1 \wedge \psi_2} = (\neg p_{\psi_1 \wedge \psi_2} \vee p_{\psi_1}) \wedge (\neg p_{\psi_1 \wedge \psi_2} \vee p_{\psi_2}) \wedge (p_{\psi_1 \wedge \psi_2} \vee \neg p_{\psi_1} \vee \neg p_{\psi_2})$
+
+On suppose avoir éliminé les simplifications ce qui ne fait que doubler la taille de la formule dans le pire cas.
+
+La transformée de Tseitin de $\varphi$ est alors $p_\varphi \wedge \bigwedge_{\psi \in SF(\varphi)} f_\psi$, qui est une FNC.
+
+**Remarque :**
+La traqnfmorm.ee de Tsentin se clacule en taille linéaire en la taille de la formule
+
+**Prop (admise) :**
+$\varphi$ et $p_\varphi \wedge \displaystyle \bigwedge_{\psi \in SF(\varphi)} f_\psi$ sont équisatisfiable.
+
+**Idée :**
+$f_\psi$ exprime $\psi \leftrightarrow p_\psi$.
+
+---
+# 4. Problème de la satifiabilité des formules proportionnelles
+
+## 4.1 Représentation du problème
+
+---
+### 4.1.1. Définition : problème SAT
+Le problème SAT est le problème de décision suivant : étant donné une formule $\varphi$ de la logique proportionnelle, $\varphi$ est-elle satisfiable ?
+
+---
+### 4.1.2. Remarque
+Il existe un algorithme pour répondre à ce problème (on dit que SAT est décidable), mais l'algorithme vu 3.1.8. est de complexité exponnentielle.
+
+**Question :**
+Peut-on faire mieux ?
+
+---
+### 4.1.3. Proposition
+Une clause conjonctive est une antilogie / antinomie ssi elle contient une variable et sa négation.
+
+**Démonstration :**
+- $\Leftarrow$ : Si la clause s'écrit $x\wedge\neg x\wedge c$ (à l'ordre près des littéraux), alors $\forall v,[\![x\wedge\neg\wedge c]\!]_v=F$ car $[\![x\wedge\neg x]\!]_v=F$
+- $\Rightarrow$ : Par contraposée, on suppose que la clause ne contient pas une variable et sa négation. On montre qu'elle est satisfiable.
+
+  On peut supposer que les littéraux portent sur des variables 2 à 2 distinctes
+
+  $x\wedge x=x$ et $\neg x\wedge\neg x=\neg x$
+
+  On note alors :
+  - $l_1\dots l_n$ les littéraux ;
+  - $x_1\dots x_n$ les variables associées.
+
+  On définit une valuation $v$ par $\forall i\in[\![1;n]\!], v(x_i) = \left\{\begin{array}{ll}
+    V\text{ si }l_i=x_i
+    \\
+    F\text{ si } l_i=\neg x_i
+  \end{array}\right.$
+
+  Alors $\displaystyle[\![\bigwedge_{i=1}^n l_i]\!]_v=V$
+  > Modif
+
+  Donc la clause est satifiable.
+
+---
+### 4.1.4. Corollaire
+On peut résoudre SAT en temps polynomial pour les FND.
+
+**Démonstration :**
+Une FND est satifiable ssi l'une de ses clauses est satisfiable ssi l'une de ses clauses ne contient pas une variable et sa négation.
+
+Vérifier si une clause ne contient pas une variable et sa négation se fait en temps $\mathcal{O}(n^2)$ si la clause contient $n$ littéraux voire $\mathcal{O}(n)$ si les variables sont représentées par des entiers.
+
+On applique cette vérification à chaque clause.
+
+---
+### 4.1.5. Remarque
+- On ne sait pas s'il est possible de résoudre SAT en temps polynomial (cf. cours sur la classe NP) ;
+- C'est déjà le cas pour certains cas particuliers de SAT.
+
+---
+### 4.1.6. Définition : $k$-SAT
+Étant donné $k\in\mathbb{N}^*$, $k$-SAT est le problème de décision suivant : étant donné une formule $\varphi$ sous FNC telle que chaque clause contient au plus $k$ littéraux, $\varphi$ est-elle satisfiable ?
+
+---
+### 4.1.7. Remarque
+- $1$-SAT est résoluble en temps polynomial (cf. 4.1.3.) ;
+- on verra que $2$-SAT est résoluble en temps polynomial (cf. cours en théorie des graphes) ;
+- la transformation de Tseitin fournit pour toute formule $\varphi$ une instance de $3$-SAT qui est de taille linéaire en la taille de $\varphi$ et qui est équisatisfiable à $\varphi$, donc on ne sait pas résoudre $k$-SAT en temps polynomial pour $k\ge 3$ ;
+- SAT et ses restrictions sont des problèmes importants car ils servent à modéliser de nombreux problèmes. On parle de réduction de ces problèmes à SAT.
+
+---
+### 4.1.8. Exemple de réduction à SAT : Le problème du Sudoku
+- Rappel des règles : on dispose d'une grille $n\times n$ qu'on veut remplir avec des entiers de $[\![1;n]\!]$ de telle sorte que chaque ligne / colonne / bloc de taille $l\times l$ où $n=l^2$ contienne chaque entier exactement une fois.
+
+  Une grille peut être partiellement pré-remplie afin qu'il n'existe qu'une seule solution.
+
+- Réduction à SAT :
+
+  On introduit $n^3$ variables propositionnelles $(x_{i,j}^k)_{i,j,k\in[\![1;n]\!]}$.
+
+**Idée :**
+$x_{i,j}^k$ signifie "la case $(i,j)$ contient l'entier $k$"
+
+On peut représenter les règles à l'aide de formules :
+- chaque case contient un unique chiffre : $\displaystyle\bigwedge_{i=1}^n\bigwedge_{j=1}^n\bigvee_{k=1}^n(x_{i,j}^k\wedge\bigwedge_{k'\not =k}\neg x_{i,j}^{k'})$
+- chaque ligne contient au moins une fois chaque chiffre : $\displaystyle\bigwedge_{k=1}^n\bigwedge_{i=1}^n\bigvee_{j=1}^nx_{i,j}^k$
+- chaque ligne contient au plus une fois chaque chiffre : $\displaystyle\bigwedge_{i=1}^n\bigwedge_{j=1}^n\bigwedge_{k=1}^n(x_{i,j}^k\rightarrow\bigwedge_{j'\not =j}\neg x_{i,j'}^{k})$
+- etc...
+
+On peut représenter les cases pré-remplies par des clauses unitaires $x_{i,j}^{k}$ (si la case $(i,j)$ est pré-remplie avec $k$)
+
+La conjonction de toutes ces formules donne une instance de SAT telle que tout modèle de cette conjonction représente une solution.
+
+---
+## 4.2. Résolution du problème SAT 
+
+---
+### 4.2.1. Algorithme de Quine
+L'algorithme de Quine est un algorithme de résolution de SAT pour les FNC.
+
+**Idée :**
+On teste toutes les valuations possibles, mais en construisant de manière incrémentale les valuations en simplifiant la formule lors de la construction.
+
+Si $v(x)=V$ et si une clause $c$ contient $x$, alors $[\![c]\!]_v=V$ donc on peut retirer $c$ de a formule.
+
+Si $v(x)=V$ et si une clause $c$ contient $\neg x$, alors $[\![c]\!]_v=[\![c\setminus\{\neg x\}]\!]_v$ donc on peut retirer $\neg x$ de $c$
+
+Cas symétrique si $v(x)=F$
+
+Si on parvient à retirer toutes les clauses, alors la formule est satisfiable
+
+Si on retire tous les littéraux d'une clause, alors elle n'est pas satisfiable dans la valuation partielle $\rightarrow$ il faut changer de valuation partielle en revenant sur les choix précédents
+
+**Algorithme :**
+
+Entrée : ensemble de clauses disjointes $C$
+
+Algo :
+- Si $C=\empty$ :
+  - alors renvoyer vraie
+- Si la clause vide $\in C$ :
+  - alors renvoyer faux
+- Choisir $x$, une variable apparaissant dans une clause de $C$
+- $C'\leftarrow C$ où :
+  - toute clausse contenant $x$ a été supprimée
+  - $\neg x$ a été retiré de toutes les clauses
+- Si $\mathrm{Quine}(C')$ :
+  - alors renvoyer vraie
+- Sinon :
+  - $C''\leftarrow C$ où :
+    - toute clausse contenant $\neg x$ a été supprimée
+    - $x$ a été retiré de toutes les clauses
+- Renvoyer $\mathrm{Quine}(C'')$
+
+**Dans le pire cas :**
+On test toutes les valuations, d'où une complexité exponnentielle
+
+---
+### 4.2.2. Implémentation de l'algorithme de Quine
+On peut représenter les clauses par des listes de littéraux et les FNC par des listes de clauses.
+
+```OCaml
+type litteral = Var of string |NVar of string
+type clause = litteral list
+type fnc = clause list
+
+let rec quine (f : fnc) : bool =
+  match f with
+  |[] -> true
+  |_ when List.mem [] f -> false (*si f contient une liste vide*)
+  |(Var x::_)::_ |(NVar x::_)::_ ->
+  if quine (List.map (List.filter (fun l -> l <> NVar x)) (List.filter(fun c -> not(List.mem(Var x) c)) f))
+  then true
+  else quine (List.map (List.filter (fun l -> l <> Var x)) (List.filter (fun c -> not(List.mem (NVar x) c)) f))
+```
+
+---
+### 4.2.3. Optimisation
+On peut utiliser plusieurs techniques afin de rendre cet algorithme plus efficace :
+- Propagation des clauses unitaires : si une clause ne contient plus qu'un seul littéral, la valeur de ce littéral est imposée. On peut donc effectuer les simplifications associées à cette valeur sans avoir besoin de revenir sur un choix.
+
+  Cela donne l'algorithme DPPL (Davis Putnan Logemaw Loveland) (`H.P`)
+
+- On peut utiliser des heuristiques pour le choix du littéral, par exemple, le littéral le plus fréquant, celui qui apparaît dans une clause la plus courte possible, ou un littéral choisi au hasard.
+- On peut ajouter des clauses à la formule pour tenir compte des échecs : une valuation partielle correspond à un ensemble de choix.
+
+  On peut "apprendre" une clause pour ne pas refaire de choix similaire dans un autre appel récursif.
+
+  Cela donne l'algorithme CDCL (Conflict Driver Clause Learning) (`H.P`)
+
+  DPPLL et CDCL sont à la base des SAT-solvers modernes.
