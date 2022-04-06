@@ -58,7 +58,7 @@ En raison de leur définition inductive, les formules ont une représentation ar
 $p\rightarrow(\neg q\vee r)$ est représentée par :
 
 <p align="center">
-<img src="Pictures/Screenshot_20220328-165927__02.jpg" alt="drawing" width="300">
+<img src="Pictures/Graphe1.png" alt="drawing" width="300">
 </p>
 
 **Remarque :**
@@ -149,7 +149,7 @@ On parle de logique du 1er ordre car on ne peut quantifier que sur des variables
 En théorie des ensemble, la formule $(\forall A.\forall B.A\cap B\subseteq A)\wedge\empty\subseteq A$ est représentée de manière arborescente par :
 
 <p align="center">
-<img src="Pictures/Screenshot_20220328-171237__01.jpg" alt="drawing" width="300">
+<img src="Pictures/Graphe2.png" alt="drawing" width="300">
 </p>
 
 ---
@@ -183,7 +183,7 @@ $FV(Qx\varphi)=FV(\varphi)\setminus\{x\},\forall Q\in\{\exists,\forall\}$
 $FV(\forall x,x+Sy>0)=\{y\}$
 
 <p align="center">
-<img src="Pictures/Screenshot_20220330_193335.png" alt="drawing" width="300">
+<img src="Pictures/Graphe3.png" alt="drawing" width="300">
 </p>
 
 $FV((\forall x,x+y=1)\wedge(\forall y,x+y=1))=\{x;y\}$
@@ -713,19 +713,19 @@ Entrée : ensemble de clauses disjointes $C$
 
 Algo :
 - Si $C=\empty$ :
- - alors renvoyer vraie
+  - alors renvoyer vraie
 - Si la clause vide $\in C$ :
- - alors renvoyer faux
+  - alors renvoyer faux
 - Choisir $x$, une variable apparaissant dans une clause de $C$
 - $C'\leftarrow C$ où :
- - toute clause contenant $x$ a été supprimée
- - $\neg x$ a été retiré de toutes les clauses
+  - toute clause contenant $x$ a été supprimée
+  - $\neg x$ a été retiré de toutes les clauses
 - Si $\mathrm{Quine}(C')$ :
- - alors renvoyer vraie
+  - alors renvoyer vraie
 - Sinon :
- - $C''\leftarrow C$ où :
-   - toute clause contenant $\neg x$ a été supprimée
-   - $x$ a été retiré de toutes les clauses
+  - $C''\leftarrow C$ où :
+    - toute clause contenant $\neg x$ a été supprimée
+    - $x$ a été retiré de toutes les clauses
 - Renvoyer $\mathrm{Quine}(C'')$
 
 **Dans le pire cas :**
@@ -765,3 +765,173 @@ On peut utiliser plusieurs techniques afin de rendre cet algorithme plus efficac
  Cela donne l'algorithme CDCL (Conflict Driven Clause Learning) (`H.P`)
 
  DPPLL et CDCL sont à la base des SAT-solvers modernes.
+
+---
+## 4.3. Compléments d'algorithme
+
+---
+### 4.3.1. Introduction
+L'algorithme de Quine est un cas particulier de l'algorithme de recherche par force brute. Le principe de la recherche par force brute, ou exploration exhaustive, est de tester toutes les valeurs possibles pour en trouver une qui réponde au problème que l'on se pose.
+
+On peut appliquer cette méthode pour résoudre des problèmes de :
+- décision (existe-t-il une valeur qui satisfait des contraintes données ?)
+- optimisation (trouver une valeur qui satisfait certaines contraintes tout en maximisant / minimisant une certaine quantité).
+
+|Avantages|Inconvénients|
+|:---:|:---:|
+|Méthode complète : on trouve nécessairement une solution (optimale) si elle existe|Complexité élévée : par ex, trouver la clé secrète d'un schéma cryptographique, encodée sur $n$ bits, nécessite $2^n$ essais|
+|Souplesse : on peut aisément modifier l'algorithme à l'aide d'heuristiques pour le rendre plus efficace dans certains cas||
+|Méthode simple : implémentation aisé et simple à débuguer||
+|On peut trouver toutes les solutions possibles, si c'est ce que l'on cherche||
+
+---
+### 4.3.2. Modalités d'implémentations
+Un algorithme de recherche par brute force s'écrit simplement ainsi :
+- Pour toute les valeurs de $v$
+ - Si $v$ satisfait les contraintes
+   - alors s'arrêter avec $v$ comme solution
+- Échec de la recherche
+
+**Version "toutes solutions" :**
+- $S\leftarrow\empty$
+- Pour toute valeur $v$
+ - Si $v$ satisfait les contraintes
+   - alors $S\leftarrow S\cup\{v\}$
+- Renvoyer S
+
+Pour l'implémentation d'un algo, le paradigme de programmation et la manière dont on parcours les valeurs contraignent la façon dont on écrit le code.
+
+Pour une implémentation récursive, on peut manipuler l'ensemble des valeurs à traiter en en retirant une à chaque appel récursif (coûteux en espace) ou, si l'on suppose d'une manière d'énumérer les valeurs en choisissant la valeur qui suit une valeur donnée, on peut partir d'une valeur initiale et faire un appel récursif sur la suivante jusqu'à exhaustion des valeurs (exmple : liste chaînés ou parcours des indices d'un tableau par une fonction récursive).
+
+Si on dispose d'une telle manière d'énumérer les valeurs, on peut facilement traduire l'algo récursif en boucle while (tant qu'on n'a pas trouvé de solution et qu'on n'a pas parcouru toutes les valeurs, poser à la valeur suivante) ou une boucle for (pour $i$ de $1$ au nombre de valeurs, tester la valeur n°$i$).
+
+**Exemple :**
+On veut savoir si $x$ apparaît dans $t$ de taille $n$
+
+**Boucle while :**
+```C
+bool trouve = false;
+int i = _1;
+while (i < n-1 && !trouve) {
+ i++;
+ trouve = t[i]==x;
+}
+// test de trouve
+```
+**Boucle for :**
+```C
+int i;
+for (i=0; i<n; i++) {
+ if (t[i]==x) break;
+}
+// test de i
+```
+
+**Remarque :**
+- On peut aussi simplifier la boucle while avec l'usage de break ;
+- Il n'y a pas d'instruction "break" en OCaml, mais on peut contrôler l'exécution à l'aide d'une exception.
+
+**Exemple :**
+```OCaml
+exception Trouve of int
+try
+ for i = 0 to n-1 do
+   if t.(i) = x then raise (Trouve i)
+ done;
+ raise Not.found
+with
+ |Trouve i -> i;;
+```
+
+---
+### 4.3.3. Retour sur trace
+L'algo de Quine correspond à une autre manière de parcourir l'ensemble des valeurs : on construit de manière incrémentale des valeurs partielles (valuation d'un sous-ensemble des variables), en passant d'une valeur partielle à une autre en effectuant un choix (choix de la valeur d'une variable) sur lequel on reviendra pour tester d'autres choix si celui-ci permet pas de trouver une solution. On appelle cette méthode le retour en trace (ou backtracking).
+
+La caractère incrémental impose de ne pas pouvoir boucler sur un ensemble de valeurs partielles et peut permettre d'éliminer des choix avant d'avoir construit une valeur complète.
+
+**Pseudo-code :**
+- Recherche ($v_\text{init}$) :
+ - Si $v_\text{init}$ est complète et satisfait les contraintes
+   - S'arrêter avec $v_\text{init}$ comme solution
+ - Si $v_\text{init}$ est partielle
+   - Pour chaque choix valide à partir de $v_\text{init}$
+     - $v_\text{next}\leftarrow$ résultat du choix
+     - Recherche ($v_\text{next}$)
+
+**Exemple :**
+Sudoku
+
+- Valeur : remplissage de la grille (pas forcément selon les règles)
+- Valeur partielle : remplissage partiel de la grille : il peut y avoir des cases vides
+- $v_\textsf{init}$ : problème posé
+- Choix : écriture d'un chiffre dans une case vide
+- Choix valide : choix qui respecte les règles du jeu vis-à-vis des chiffres déjà inscrits
+
+Avec ces définitions, une valeur complète construite à l'aide d'une succession de choix valides est récursivement une solution.
+
+---
+### 4.3.4. Optimisation
+- Comme pour l'algo DPLL par rapport à l'algo de Quine, certains choix peuvent contraindre la complétion des valeurs partielles de telle sorte qu'il n'est pas nécessaire de revenir sur les choix "imposés"
+- On peut également utiliser des heuristiques pour parcourir l'ensemble des valeurs dans un ordre précis, voire pour ne parcourir qu'un sous-ensemble des valeurs possibles.
+
+C'est un procédé classique en géométrie algorithmique : l'ensemble des valeurs à parcourir est en général construit à partir d'un ensemble de points du plan / de l'espace. Parcourir l'ensemble des points selon une direction permet de ne considérer que certaines valeurs. On appelle cela un algorithme par droite de balayage?
+
+**Idée :**
+Une droite / un plan perpendiculaire à la direction choisie balaye l'ensemble des points et, à chaque point rencontré, on effectue des opérations visant à construire une solution.
+
+**Exemple : retour sur le TP_12**
+- Problème : Étant donné un ensemble de points du plan, trouver une paire de points qui minimise la distance euclidienne entre ces points.
+- Ensemble des valeurs : l'ensemble des paires de points ~> algo force brute en $\mathcal{O}(n^2)$
+- Rappel : algo `diviser pour régner' en $\mathcal{O}(n\log n)$ vu en TP
+- Idée d'algo par droite de balayage : on parcours les points par abscisse croissante en conservant la distance minimale courante $d$
+
+On note $(x_0,y_0)\dots(x_{n-1},y_{n-1})$ les points triés par abscisse.
+
+Si la distance minimale vaut d'après le parcours des $k$ premiers points, il est inutile de considérer les points d'abscisse $<x_k-d$ par la mise à jour de $d$.
+
+De même, il est inutile de considérer les points d'ordonnée $<y_k-d$ ou $>y_k+d$
+
+**Attention :**
+Si les points d'abscisse $<x_k-d$ peuvent être définitivement oubliés, ceux de l'abscisse $\ge x_k-d$ doivent être conservés même s'ils sont hors du rectangle dans l'éventualité d'un usage avec $(x_{k+1},y_{k+1})$.
+
+**Remarque :**
+Le rectangle autour du point courant contient au plus 5 points en plus du point courant.
+
+<p align="center">
+<img src="Pictures/Graphe4.png" alt="drawing" width="300">
+</p>
+
+S'il y avait plus, l'un des rectangles de dimension $\dfrac{2d}{3}\times\dfrac{d}{2}$ contiendrait deux points.
+
+<p align="center">
+<img src="Pictures/Graphe5.png" alt="drawing" width="300">
+</p>
+
+La distance maximale entre 2 points dans un tel rectangle est :
+
+$$\sqrt{\left(\dfrac{2d}{3}\right)^2+\left(\dfrac{d}{2}\right)^2}=\sqrt{\dfrac{4d^2}{9}+\dfrac{d^2}{4}}=\sqrt{\dfrac{25}{36}}d=\dfrac{5}{6}d<d\textsf{ : impossible}$$
+
+**On en déduit l'algo suivant :**
+- Trier les points par abscisse croissante, les nommer $(x_0,y_0)\dots(x_{n-1},y_{n-1})$
+- $E\leftarrow\{(x_0,y_0),(x_1,y_1)\}$
+- $d\leftarrow\mathrm{dist}((x_0,y_0),(x_1,y_1))$
+- Pour $k$ de 2 à $n-1$ :
+ - Retirer de $E$ les points d'abscisse $<r_k-d$ `(1)`
+ - Pour chaque point actif $(x,y)$ tq $y_k-d\le y\le y_k+d$ `(2)`
+   - $d\leftarrow\min d~\mathrm{dist}((x_k,y_k),(x,y))$
+ - $E\leftarrow E\cup\{(x_k,y_k)\}$
+- Renvoyer $d$
+
+**Complexité :**
+- $\mathcal{O}(n\log n)$ pour le tri
+- manipulations de $E$ : cela dépend de la structure de données
+  `(1)` inutile de faire un parcours de $E$ : il suffit de parcourir la liste des points triés en se souvenant du dernier point retiré.
+
+ ~> coût total de cette ligne : coût de $n$ suppressions dans $E$
+
+ on aura aussi le coût de $n$ insertions dans $E$
+
+ `(2)` nécessite une structure organisée selon les ordonnées $\rightarrow$ on peut choisir pour $E$ une structure d'ABR équilibré :
+ - coût d'une insertion / suppression en $\mathcal{O}(\log n)$
+ - coût de la recherche des (au plus) 5 éléments en `(2)` : $\mathcal{O}(\log n)$ (exercice)
+  Au total : $\mathcal{O}(n\log n)$.
