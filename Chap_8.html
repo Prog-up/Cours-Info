@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chap_8.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="chapitre-8--logique">Chapitre 8 : Logique</h1>
+<h1 id="1-introduction">1. Introduction</h1>
+<p>La logique est un domaine mathématique dont l'objet d'étude est l'ensemble des propriétés que l'on peut exprimer, leur valeur de vérité et la notion de démonstration. La logique propose un cadre formel pour manipuler ces notions, où l'on distingue la syntaxe, i.e. la manière d'exprimer les propriétés de la sémantique,i.e. des interprétations que l'on peut donner à la syntaxe.</p>
+<p>Les démonstrations, vues en tant qu'objets mathématiques, ne seront étudiées qu'en MPI.</p>
+<h1 id="2-syntaxe-des-formules-logiques">2. Syntaxe des formules logiques</h1>
+<h2 id="21-logique-propositionnelle">2.1. Logique propositionnelle</h2>
+<hr>
+<h3 id="211-introduction">2.1.1. Introduction</h3>
+<p>On décompose les propriétés que l'on cherche à exprimer pour faire ressortir leur structure logique. Les énoncés que l'on ne peut pas décomposer sont appelés atomes. En logique propositionnelle, on abstrait les atomes en des variables dites propositionnelles.</p>
+<hr>
+<h3 id="212-d%C3%A9finition--formules-de-la-logique-propositionnelle">2.1.2. Définition : formules de la logique propositionnelle</h3>
+<p>Soit $V$ un ensemble de variables propositionnelles. On définit inductivement l'ensemble $\mathcal{F}$ des formules de la logique proportionnelle par :</p>
+<p>$\dfrac{x\in V}{x\in\mathcal{F}}$
+$\dfrac{\varphi\in\mathcal{F}}{\neg\varphi\in\mathcal{F}}$
+$\dfrac{\varphi_1\in\mathcal{F}\quad\varphi_2\in\mathcal{F}}{\varphi_1\vee\varphi_2\in\mathcal{F}}$
+$\dfrac{\varphi_1\in\mathcal{F}\quad\varphi_2\in\mathcal{F}}{\varphi_1\wedge\varphi_2\in\mathcal{F}}$
+$\dfrac{\varphi_1\in\mathcal{F}\quad\varphi_2\in\mathcal{F}}{\varphi_1\rightarrow\varphi_2\in\mathcal{F}}$</p>
+<p>On appelle :</p>
+<ul>
+<li>$\neg$ la négation</li>
+<li>$\vee$ la disjonction</li>
+<li>$\wedge$ la conjonction</li>
+<li>$\rightarrow$ l'implication</li>
+</ul>
+<p>On appelle aussi équivalence le symbole $\leftrightarrow$ définit par $\varphi_1\leftrightarrow\varphi_2=(\varphi_1\rightarrow\varphi_2)\wedge(\varphi_2\rightarrow\varphi_1)$</p>
+<hr>
+<h3 id="213-remarque">2.1.3. Remarque</h3>
+<p>Malgré leur nom, les symboles de la définition précédente n'ont aucune signification. Le sens des symboles tient du domaine de la sémantique. On parle ici de syntaxe abstraite. On peut utiliser une autre représentation pour les syntaxes abstraites, appelée grammaire, qui s'écrit comme suit :</p>
+<p>$\varphi::=x|\neg\varphi|\varphi_1\vee\varphi_2|\varphi_1\wedge\varphi_2|\varphi_1\rightarrow\varphi_2$ où x parcourt $\vee$.</p>
+<p>L'étude précise des grammaires relève du programme de MPI.</p>
+<hr>
+<h3 id="214-vocabulaire">2.1.4. Vocabulaire</h3>
+<p>Les symboles $\neg,\vee,\wedge,\rightarrow$ et $\leftrightarrow$ sont appelés connecteurs logiques. Ce sont eux qui définissent la structure logique des énoncés. Le nombre d'arguments d'un connecteur logique est appelé son arité.</p>
+<hr>
+<h3 id="215-repr%C3%A9sentation-des-formules">2.1.5. Représentation des formules</h3>
+<p>On représente généralement les formules de manière linéaire en ajoutant des parenthèses pour désambiguïser la lecture.</p>
+<p>Par exemple, $p\vee q\wedge r$ peut se lire :</p>
+<ul>
+<li>$p\vee (q\wedge r)$</li>
+<li>$(p\vee q)\wedge r$</li>
+</ul>
+<p>Par convention, la négation est prioritaire sur les autres connecteurs, donc $\neg p\vee q$ se lit $(\neg p)\vee q$ et pas $\neg(p\vee q)$.</p>
+<p>En raison de leur définition inductive, les formules ont une représentation arborescente naturelle : chaque règle d'inférence utilisée définit un symbole de tête / connecteur principal qui est la racine du sous-arbre correspondant.</p>
+<p><strong>Exemple :</strong>
+$p\rightarrow(\neg q\vee r)$ est représentée par :</p>
+<p align="center">
+<img src="Pictures/Graphe1.png" alt="drawing" width="300">
+</p>
+<p><strong>Remarque :</strong>
+On obtient un arbre (binaire) dont les nœuds internes sont les connecteurs logiques et les nœuds externes sont les atomes. L'arité d'un connecteur est l'arité du nœud correspondant.</p>
+<p>L'écriture linéaire de la formule correspondant au parcours en profondeur infixe, en adoptant une représentation préfixe pour les nœuds d'arité 1.</p>
+<p>On pourrait envisager d'utiliser les parcours préfixe / postfixe pour représenter les formules.</p>
+<h3 id="216-vocabulaire">2.1.6. Vocabulaire</h3>
+<ul>
+<li>Une sous-formule d'une formule $\varphi$ donnée est la formule associée à un sous-arbre de l'arbre représentant $\varphi$.</li>
+</ul>
+<p>On définit inductivement l'ensemble $SF(\varphi)$ des sous-formules de $\varphi$ par :</p>
+<p>$\forall x\in V, SF(x)$ $SF(\neg\varphi)={\neg\varphi}\cup SF(\varphi)$</p>
+<p>$\forall\circ\in{\vee;\wedge;\rightarrow},SF(\varphi_1\circ\varphi_2)={\varphi_1\circ\varphi_2}\cup SF(\varphi_1)\cup SF(\varphi_2)$</p>
+<p><strong>Exemple :</strong>
+$SF(p\rightarrow(\neg q\wedge r))={p\rightarrow(\neg q\vee r);\neg q\vee r;p;\neg q;r;q$}</p>
+<ul>
+<li>La taille $|\varphi|$ d'une formule $\varphi$ est le nombre de connecteurs logiques de la formule, i.e. le nombre de nœuds internes de l'arbre $A_\varphi$ associé à $\varphi$.</li>
+</ul>
+<p><strong>Proposition :</strong>
+$|\dfrac{|A_\varphi|-1}{2}\le|\varphi|\le|A_\varphi|-1$</p>
+<p><strong>Démonstration :</strong>
+L'arbre $A_\varphi$ contient au moins une feuille donc $|\varphi|\le|A_\varphi|-1$
+(cas d'égalité pour $\varphi$ de taille $n$ : $\varphi=\underbrace{\neg\neg\dots\neg}_{\text{n fois}} p$)</p>
+<p>$A_\varphi$ est un arbre binaire ayant |\varphi| noeuds internes, donc il a au plus $|\varphi|+1$ feuilles (Chap 6 1.1.10.) donc $A_\varphi\le|\varphi|+|\varphi|+1=2|\varphi|+1$.</p>
+<ul>
+<li>La hauteur d'une formule est la hauteur de l'arbre associé, i.e. le nombre maximal de connecteurs à traverser pour atteindre une variable proportionnelle.</li>
+</ul>
+<p><strong>Exemple :</strong>
+La hauteur de $p\rightarrow(\neg q\vee r)$ est 3.</p>
+<hr>
+<h2 id="22-logique-du-premier-ordre">2.2. Logique du premier ordre</h2>
+<hr>
+<h3 id="211-d%C3%A9finition--langage-du-premier-ordre">2.1.1. Définition : langage du premier ordre</h3>
+<p>Un langage du premier ordre est défini par une signature $\Sigma$, composée de :</p>
+<ul>
+<li>symboles de fonction, chacun muni d'une arité $k\in\mathbb N$. Les symboles de fonction d'une arité 0 sont appelés symboles de constante.</li>
+<li>symboles de prédicat ou de relation, chacun muni d'une arité $k\in\mathbb N$. Les symboles de fonction d'une arité 0 sont appelés symboles de constante propositionnelle.</li>
+</ul>
+<hr>
+<h3 id="222-exemple">2.2.2. Exemple</h3>
+<p>Le langage de la théorie des ensembles est défini par la signature suivante :</p>
+<ul>
+<li>symboles de fonction :</li>
+<li>$\empty$ (arité 0)</li>
+<li>${.}$ (arité 1)</li>
+<li>$.\cup.$ et $.\cap .$ (arité 2)</li>
+<li>$.^c$ (arité 1)</li>
+<li>symboles de prédicat :</li>
+<li>$.=.$, $.\subseteq.$, $.\in.$ (arité 2)</li>
+</ul>
+<hr>
+<h3 id="223-d%C3%A9finition--termes-et-formules-de-la-logique-du-premier-ordre">2.2.3. Définition : termes et formules de la logique du premier ordre</h3>
+<p>Soit $\Sigma$ une signature et $\vee$ un ensemble de variables. $\Sigma$ et $\vee$ définissent des ensembles de termes et de formules via grammaires suivantes :</p>
+<ul>
+<li>
+<p>Terme : $t::=x|f(t_1,\dots,t_k)$
+où
+$\left{\begin{array}{ll}
+x\text{ parcours }\vee
+\
+(f,k)\text{ parcourt les symboles de fonction et leur arité}
+\end{array}\right.$</p>
+</li>
+<li>
+<p>Formules : $\varphi::=p(t_1,\dots t_k)|\neg\varphi|\varphi_1\vee\varphi_2|\varphi_1\wedge\varphi_2|\varphi_1\rightarrow\varphi_2|\forall x.\varphi|\exists x.\varphi$
+où
+$\left{\begin{array}{ll}
+x\text{ parcours }\vee
+\
+(p,k)\text{ parcourt les symboles de prédicat et leur arité}
+\end{array}\right.$</p>
+</li>
+</ul>
+<p>On appelle :</p>
+<ul>
+<li>$\forall$ le qualificateur universel</li>
+<li>$\exists$ le quantificateur existentiel</li>
+</ul>
+<p>Les atomes de cette logique sont les formules de la forme $p(t_1,\dots,t_k)$.</p>
+<p>$\exists!x,P(x)\equiv\exists x(P(x)\wedge\forall y.(P(y)\rightarrow y=x))$</p>
+<p>On parle de logique du 1er ordre car on ne peut quantifier que sur des variables représentant des termes. Si l'on peut quantifier sur des variables représentant des formules, on parle de logique du second ordre.</p>
+<hr>
+<h3 id="224-exemple">2.2.4. Exemple</h3>
+<p>En théorie des ensemble, la formule $(\forall A.\forall B.A\cap B\subseteq A)\wedge\empty\subseteq A$ est représentée de manière arborescente par :</p>
+<p align="center">
+<img src="Pictures/Graphe2.png" alt="drawing" width="300">
+</p>
+<hr>
+<h3 id="225-remarque">2.2.5. Remarque</h3>
+<ul>
+<li>La logique du premier ordre est aussi appelée calcul des prédicats</li>
+<li>Dans une formule du premier ordre, les variables peuvent être &quot;capturées&quot; par un quantificateur ou indépendantes de toute quantification</li>
+</ul>
+<p>On peut voir une formule comme une propriété des variables indépendantes de toute quantification et donc remplacer ces variables par des termes concrets.</p>
+<ul>
+<li>Le calcul propositionnel est un cas particulier du calcul des prédicats où il n'y a pas que des constantes propositionnelles (les quantificateurs et les termes deviennent inutiles).</li>
+</ul>
+<blockquote>
+<p>New</p>
+</blockquote>
+<hr>
+<h3 id="226-d%C3%A9finition--variables-libres--li%C3%A9es">2.2.6. Définition : variables libres / liées</h3>
+<p>Les variables libres d'une formule $\varphi$ sont les variables qui ne sont pas &quot;capturées&quot; par un quantificateur. On les définit inductivement par :</p>
+<p>$$FV(p(t_1,\dots,t_p))=\displaystyle\bigcup_{i=1}\mathrm{Vars}(t_i)\text{ où }\left{\begin{array}{ll}
+\mathrm{Vars}(x)={x}
+\
+\mathrm{Vars}(f(t_i,\dots,t_n))=\displaystyle\bigcup_{i=1}\mathrm{Vars}(t_i)
+\end{array}\right.$$</p>
+<p>$FV(\neg\varphi)=FV(\varphi)$</p>
+<p>$FV(\varphi_1\circ\varphi_2)=FV(\varphi_1)\cup FV(\varphi_2),\forall\circ\in{\wedge;\vee;\rightarrow}$</p>
+<p>$FV(Qx\varphi)=FV(\varphi)\setminus{x},\forall Q\in{\exists,\forall}$</p>
+<p><strong>Exemple :</strong>
+$FV(\forall x,x+Sy&gt;0)={y}$</p>
+<p align="center">
+<img src="Pictures/Graphe3.png" alt="drawing" width="300">
+</p>
+<p>$FV((\forall x,x+y=1)\wedge(\forall y,x+y=1))={x;y}$</p>
+<p>Une variable est dite liée si elle n'est pas libre. Un même nom de variable peut avoir des occurrences libres et des occurrences liées. Dans une formule de la forme $Qx\varphi$ où $Q\in{\exists,\forall}$, on dit que $\varphi$ est la portée de la liaison pour x. Une variable est donc</p>
+<ul>
+<li>libre si elle admet une occurrence hors de la portée de toutes les liaisons pour cette variable</li>
+<li>liée si toutes ses occurrences sont dans la portée d'une liaison pour cette variable.</li>
+</ul>
+<p>Une formule dont toutes les variables sont liées est dite close.</p>
+<hr>
+<h3 id="227-remarque">2.2.7. Remarque</h3>
+<p>Le nom des variables liées n'est pas important (exemple : $\forall x, x=x$ et $\forall y, y=y$ expriment la même propriété) donc on identifiera les formules au renommage près de leurs variables liées.</p>
+<p>On appelle cela l'$\alpha$-équivalence. Lors du renommage de variables liées, il faut faire attention au phénomène de capture de variables, par exemple $\forall y,x+y=1$ n'est pas la même formule que $\forall x,x+x=1$.</p>
+<hr>
+<h3 id="228-d%C3%A9finition--substitution">2.2.8. Définition : substitution</h3>
+<p>$\begin{array}{lll}
+\text{Soit } &amp; \varphi\text{ une formule}
+\
+&amp; x\text{ une variable}
+\
+&amp; t\text{ un terme}
+\end{array}$</p>
+<p>La substitution de $t$ à $x$ dans $\varphi$, notée $\varphi[x:=t]$, est définie inductivement par :</p>
+<p>$$p(t_1\dots,t_n)[x:=t]=(t_1[x:=t],\dots,t_n[x:=t])$$
+$$\text{où }\left{\begin{array}{ll}
+x[x:=t]=t
+\
+y[x:=t]=y,\forall y\in\vee\setminus{x}
+\
+f(t_1,\dots,t_n)[x:=t]=f(t_1[x:=t],\dots,t_n[x:=t])
+\end{array}\right.$$</p>
+<p>$(\neg\varphi)[x:=t]=\neg(\varphi[x:=t])$</p>
+<p>$(\varphi_1\circ\varphi_2)[x:=t]=\varphi_1[x:=t]\circ\varphi_2[x:=t],\forall\circ\in{\wedge;\vee;\rightarrow}$</p>
+<p>$\forall Q\in{\exists;\forall},(Qx\varphi)[x:=t]=Qx\varphi$</p>
+<p>$(Qy\varphi)[x:=t]=Qy(\varphi[x:=t]),\forall y\not =x$ et $y\notin\mathrm{Vars}(t)$</p>
+<p><strong>Exemple :</strong>
+$(\forall y,y=y+x)[x:=1+y]\not =\forall y(y=y+1+1)$ mais plutôt $\forall z,z=z+1+y\$ ~&gt; on renomme les occurrences liées dans $\varphi$ des variables de $t$ avant de substituer.</p>
+<hr>
+<h3 id="229-remarque">2.2.9 Remarque</h3>
+<p>Le principe de l'$\alpha$-équivalence et les restrictions de la substitution sont liés aux questions de sémantique : l'$\alpha$-équivalence et la substitution doivent en quelque sorte conserver la signification logique des formules.</p>
+<hr>
+<h1 id="3-s%C3%A9mantique-de-la-logique-proportionnelle">3. Sémantique de la logique proportionnelle</h1>
+<h2 id="31-vocabulaire">3.1. Vocabulaire</h2>
+<hr>
+<h3 id="311-introduction">3.1.1. Introduction</h3>
+<p>Définir une sémantique revient à donner du sens aux symboles utilisés dans la syntaxe abstraite. On doit donc choisir un ensemble de valeurs qui servent d'interprétation aux termes construits à l'aide de la syntaxe et on doit décrire l'effet des symboles sur cet ensemble de valeurs.</p>
+<p><strong>Exemple :</strong>
+On considère des termes arithmétiques définis pas :</p>
+<p>$t::=x|c|t_1+t_2|t_1-t_2|t_1\times t_2$ où $x$ parcourt un ensemble $V$ de variables et $c$ parcours $\mathbb{N}$, l'ensemble des constantes.</p>
+<p>On peut définir une sémantique en choisissant $\mathbb{N}$ pour l'ensemble des valeurs :</p>
+<ul>
+<li>$c+1$ comme interprétation de $c$</li>
+<li>la fonction $\min$ comme interprétation de $+$</li>
+<li>la fonction $\max$ pour $-$</li>
+<li>l'addition pour $X$</li>
+</ul>
+<p>On peut bien-sûr donner une autre sémantique à ces termes, plus en cohérence avec les règles de l'arithmétique.</p>
+<p><strong>Problème :</strong>
+L'interprétation des variables ~&gt; elle dépend d'un contexte qui donne une valeur à chaque variable.</p>
+<p>Les sémantiques sont donc paramétrées par son environnement.</p>
+<hr>
+<h3 id="312-d%C3%A9finition--valuation">3.1.2. Définition : valuation</h3>
+<p>Une évaluation est une fonction de l'ensemble $\mathcal{V}$ des variables dans l'ensemble des valeurs choisies pour définir la sémantique. On parle également d'environnement ou, dans le cadre de la logique proportionnelle, de distribution de vérité. L'ensemble des valeurs de vérité est noté ${V;F}$ où :</p>
+<ul>
+<li>$V$ est la valeur vraie</li>
+<li>$F$ est la valeur fausse</li>
+</ul>
+<hr>
+<h3 id="313-d%C3%A9finition--valeur-de-v%C3%A9rit%C3%A9-dune-formule">3.1.3. Définition : valeur de vérité d'une formule</h3>
+<p>Soit $\varphi$ une formule et $v$ une valuation.</p>
+<p>On définit inductivement l'interprétation de $\varphi$ pour $v$, notée $[![\varphi]!]_v$ par :</p>
+<p>$[![x]!]_v=v(x), \forall x$ variable propositionnelle</p>
+<p>$[![\neg\varphi]!]_v=\left{\begin{array}{ll}
+V\text{ si }[![\varphi]!]_v=F
+\
+F\text{ sinon}
+\end{array}\right.$</p>
+<p>$[![\varphi_1\vee\varphi_2]!]_v=\left{\begin{array}{ll}
+F\text{ si }[![\varphi_1]!]_v=[![\varphi_2]!]_v=F
+\
+V\text{ sinon}
+\end{array}\right.$</p>
+<p>$[![\varphi_1\wedge\varphi_2]!]_v=\left{\begin{array}{ll}
+V\text{ si }[![\varphi_1]!]_v=[![\varphi_2]!]_v=V
+\
+F\text{ sinon}
+\end{array}\right.$</p>
+<p>$[![\varphi_1\rightarrow\varphi_2]!]_v=\left{\begin{array}{ll}
+F\text{ si }[![\varphi_1]!]_v=V\text{ et }[![\varphi_2]!]_v=F
+\
+V\text{ sinon}
+\end{array}\right.$</p>
+<p>On dit que $v$ est un modèle de $\varphi$ si $[![\varphi_]!]_v=V$</p>
+<hr>
+<h3 id="314-d%C3%A9finition--tautologique--anthologie--satisfiabilit%C3%A9">3.1.4. Définition : tautologique / anthologie / satisfiabilité</h3>
+<p>Soit $\varphi$ une formule. On dit que $\varphi$ est :</p>
+<ul>
+<li>une tautologie sii toute valuation est un modèle de $\varphi$. On note alors $\models\varphi$</li>
+<li>une antilogie ssi elle n'admet aucun modèle</li>
+<li>satisfiable ssi elle admet un modèle</li>
+</ul>
+<hr>
+<h3 id="remarque">Remarque</h3>
+<p>On ajoute parfois à la syntaxe une tautologie notée $T$ et une anthologie notée $\bot$.</p>
+<p>On peut toutefois les encoder : $T=x\vee\neg x$ et $\bot=x\wedge\neg x$</p>
+<p>La tautologie $\varphi\vee\neg\varphi$ est appelée loi du tiers exclu.</p>
+<p><strong>Exercice :</strong>
+Montrer que les formules suivantes sont des tautologies :</p>
+<ul>
+<li>$p\rightarrow(q\rightarrow p)$</li>
+<li>$(p\rightarrow q)\vee(q\rightarrow r)$</li>
+<li>$(p\rightarrow(q\rightarrow r))\rightarrow((p\rightarrow q)\rightarrow(p\rightarrow r))$</li>
+</ul>
+<hr>
+<h3 id="316-d%C3%A9finition--table-de-v%C3%A9rit%C3%A9">3.1.6. Définition : table de vérité</h3>
+<p>Soit $\varphi$ une formule.</p>
+<p>La table de vérité de $\varphi$ est la table indexée par les valuations des variables de $\varphi$ et qui contient comme entrée correspondant à une valuation $v$ la valeur $[![\varphi]!]_v$.</p>
+<p>On représente la table de $\varphi$, de variable $x_1\dotsx_n$, en plaçant une colonne pour chaque $x_i$ et une colonne pour $\varphi$.</p>
+<p>Pour chaque valuation de $v$ l'entrée correspondant à $x_i$ est $v(x_i)$ et l'entrée correspondant à $\varphi$ est $[![\varphi]!]_v$.</p>
+<hr>
+<h3 id="317-exemple--table-de-v%C3%A9rit%C3%A9-de-plongleftrightarrow-q">3.1.7. Exemple : table de vérité de $p\longleftrightarrow q$</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">$p$</th>
+<th style="text-align:center">$q$</th>
+<th style="text-align:center">$p\rightarrow q$</th>
+<th style="text-align:center">$q\rightarrow p$</th>
+<th style="text-align:center">$p\leftrightarrow q$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$F$</td>
+<td style="text-align:center">$F$</td>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$V$</td>
+</tr>
+<tr>
+<td style="text-align:center">$F$</td>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$F$</td>
+<td style="text-align:center">$F$</td>
+</tr>
+<tr>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$F$</td>
+<td style="text-align:center">$F$</td>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$F$</td>
+</tr>
+<tr>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$V$</td>
+<td style="text-align:center">$V$</td>
+</tr>
+</tbody>
+</table>
+<p>$(p\leftrightarrow q=(p\rightarrow q)\rightarrow(q\rightarrow p))$</p>
+<p><strong>Remarque :</strong>
+Ici, on a inséré des colonnes supplémentaires pour des sous-formules pour simplifier le calcul.</p>
+<hr>
+<h3 id="318-remarque">3.1.8. Remarque</h3>
+<p>Construire une table de vérité est un algo simple pour déterminer si une formule est satisfiable / une tautologie / une antilogie.</p>
+<p>Cependant, si $\varphi$ a $n$ variables distinctes, alors il y a $2^n$ lignes dans sa table de vérité.</p>
+<p>De plus, étant donné $\mathrm v$, déterminer $[![\varphi]!]_v$ se fait en temps $\mathcal{O}(|\varphi|)$ et $\varphi$ peut avoir au plus $|\varphi|+1$ variables distinctes.</p>
+<p>Cela donne donc un aglo de complexité $\mathcal{O}(|\varphi|2^{|\varphi|})$</p>
+<hr>
+<h3 id="319-proposition">3.1.9 Proposition</h3>
+<p>Il y a $2^{(2^n)}$ tables de vérités distinctes pour des formules à $n$ variables distinctes.</p>
+<p><strong>Démonstration :</strong>
+Il y a $2^n$ lignes dans une table et pour chaque ligne on a le choix entre 2 valeurs de vérité.</p>
+<hr>
+<h2 id="32-cons%C3%A9quence-et-%C3%A9quivalence">3.2. Conséquence et équivalence</h2>
+<hr>
+<h3 id="321-d%C3%A9finition--cons%C3%A9quence">3.2.1. Définition : conséquence</h3>
+<p>Soit $\varphi$ et $\psi$ deux formules.</p>
+<p>On dit que $\psi$ est une conséquence logique de $\varphi$, noté $\varphi\models\psi$, si tout modèle de $\varphi$ est un modèle de $\psi$</p>
+<hr>
+<h3 id="322-proposition">3.2.2. Proposition</h3>
+<p>Soit $\varphi$ et $\psi$ deux formules.
+$\varphi\models\psi$ ssi $\models\varphi\rightarrow\psi$</p>
+<p><strong>Démonstration :</strong>
+$\varphi\models\psi$ sii tout modèle de $\varphi$ est une modèle de $\psi$</p>
+<p>ssi $\forall$ valuations $v$, soit $[![\varphi]!]_v=V=[![\psi]!]$, soit $[![\varphi]!]=F$</p>
+<p>ssi $\forall$ valuations $v$, $[![\varphi\rightarrow\psi]!]_v=V$</p>
+<p>ssi $\models\varphi\rightarrow\psi$.</p>
+<hr>
+<h3 id="323-g%C3%A9n%C3%A9ralisation-aux-ensembles-de-formules">3.2.3. Généralisation aux ensembles de formules</h3>
+<ul>
+<li>modèle : un modèle d'un ensemble $\Gamma$ de formules est une valuations $v$ tel que $\forall\varphi\in\Gamma,[![\varphi]!]_v=V$</li>
+<li>satisfiabilité : un ensemble $\Gamma$ de formules est dit :</li>
+<li>satisfiable si $\Gamma$ admet un modèle</li>
+<li>contradictoire si $\Gamma$ n'admet aucun modèle</li>
+<li>conséquence logique : une formule $\varphi$ est conséquence logique d'un ensemble $\Gamma$ de formules si tout modèle de $\Gamma$ est modèle de $\varphi$. On note alors $\Gamma\models\varphi$.</li>
+</ul>
+<p><strong>Remarque :</strong></p>
+<ul>
+<li>$\varphi\models\psi$ ssi ${\varphi}\models\psi$</li>
+<li>l'intuition est la suivante : un ensemble de formules $\Gamma$ définit une théorie (un ensemble d'axiomes) et on s'intéresse aux formules vraies dans cette théorie (les conséquences logiques de $\Gamma$)</li>
+</ul>
+<hr>
+<h3 id="324-proposition">3.2.4. Proposition</h3>
+<p>Soit $\Gamma$ un ensemble de formules et $\varphi$ une formule</p>
+<p>$\Gamma=\varphi$ ssi $\Gamma\cup{\neg\varphi}$ est contradictoire.</p>
+<p><strong>Démonstration :</strong>
+$\Gamma\models\varphi$ ssi tout modèle de $\Gamma$ est un modèle de $\varphi$</p>
+<p>ssi $\forall$ valuations $v$, soit $v$ n'est pas ne modèle de $\Gamma$, soit $v$ est un modèle de $\Gamma$ et $[![\varphi]!]_v=V$</p>
+<p>ssi $\forall$ valuations $v$, soit $v$ n'est pas ne modèle de $\Gamma$, soit $v$ est un modèle de $\Gamma$ et $[![\neg\varphi]!]_v=F$</p>
+<p>ssi $\Gamma\cup{\neg\varphi}$ n'admet aucun modèle</p>
+<p>ssi $\Gamma=\varphi$ ssi $\Gamma\cup{\neg\varphi}$ est contradictoire.</p>
+<hr>
+<h3 id="325-proposition">3.2.5. Proposition</h3>
+<p>Soit $\varphi_1\dots\varphi_n$ et $\psi$ des formules
+${\varphi_1\dots\varphi_n}\models\psi$ ssi $\models(\varphi_1\wedge\dots\wedge\varphi_n)\rightarrow\psi$</p>
+<p><strong>Démonstration :</strong>
+Lemme : Soit $\Gamma$ un ensemble de formules et $\varphi$ et $\psi$ deux formules</p>
+<p>$\Gamma\cup{\varphi}\models\psi$ ssi $\Gamma\models\varphi\rightarrow\psi$</p>
+<ul>
+<li><strong>Démonstration :</strong>
+$\Gamma\models\varphi\rightarrow\psi$ ssi $\forall$ valuation $v$ n'est pas un modèle de $\Gamma\cup{\varphi}$, soit $[![\psi]!]_v=V$</li>
+</ul>
+<p>ssi $\forall$ valuation $v$ n'est pas un modèle de $\Gamma$, soit $[![\varphi]!]_v=F$, soit $[![\varphi]!]_v=V=[![\psi]!]_v$</p>
+<p>ssi $\forall$ valuation $v$ n'est pas un modèle de $\Gamma$, soit $[![\varphi]!]_v=F$, soit $[![\varphi\rightarrow\psi]!]_v=V$
+ssi $\Gamma\models\varphi\rightarrow\psi$.</p>
+<p>On procède alors par récurrence en remarquant que $\forall\varphi_1,\varphi_2,\psi,(\varphi_1\wedge\varphi_2)\rightarrow\psi$ et $\varphi_1\rightarrow(\varphi_2\rightarrow\psi)$ ont les mêmes modèles.</p>
+<p><strong>Remarque :</strong>
+Cela ne s'exprime que pour les ensembles finis de formules, car les formules sont des objets finis.</p>
+<p>Le théorème de compacité (<code>H.P</code>) permet toujours de se ramener à un ensemble fini de formules.</p>
+<hr>
+<h3 id="326-d%C3%A9finition--%C3%A9quivalence">3.2.6. Définition : équivalence</h3>
+<p>Soit $\varphi$ et $\psi$ deux formules.</p>
+<p>On dit que $\varphi$ et $\psi$ sont équivalents, noté $\varphi\equiv\psi$, si $\varphi$ et $\psi$ ont les mêmes modèles.</p>
+<hr>
+<h3 id="327-remarque">3.2.7. Remarque</h3>
+<p>$\varphi\equiv\psi$ ssi $(\varphi\models\psi$ et $\psi\models\varphi)$ ssi $\models\varphi\leftrightarrow\psi$ (d'après 3.2.1.)</p>
+<ul>
+<li>$\models\equiv$ est une relation d'équivalence</li>
+<li>deux formules sont équivalentes si elles ont la même table de vérité donc il y a au plus $2^{(2^n)}$ classes d'équivalence pour des formules à $n$ variables.</li>
+</ul>
+<p>On verra comment construire une formule associée à chaque table de vérité possible.</p>
+<hr>
+<h3 id="328-%C3%A9quivalence-classique">3.2.8. Équivalence classique</h3>
+<ul>
+<li>Élément neutre :</li>
+<li>$\varphi\wedge\top\equiv\varphi$</li>
+<li>$\varphi\vee\bot\equiv\varphi$</li>
+<li>Élément absorbant :</li>
+<li>$\varphi\wedge\top\equiv\bot$</li>
+<li>$\varphi\vee\top\equiv\top$</li>
+<li>Commutativité :</li>
+<li>$\varphi_1\wedge\varphi_2\equiv\varphi_2\wedge\varphi_1$</li>
+<li>$\varphi_1\vee\varphi_2\equiv\varphi_2\vee\varphi_1$</li>
+<li>Associativité :</li>
+<li>$\varphi_1\wedge(\varphi_2\wedge\varphi_3)\equiv(\varphi_1\wedge\varphi_2)\wedge\varphi_3$</li>
+<li>$\varphi_1\vee(\varphi_2\vee\varphi_3)\equiv(\varphi_1\vee\varphi_2)\vee\varphi_3$</li>
+<li>Distributivité :</li>
+<li>$\varphi_1\wedge(\varphi_2\vee\varphi_3)\equiv(\varphi_1\wedge\varphi_2)\vee(\varphi_1\wedge\varphi_3)$</li>
+<li>$\varphi_1\vee(\varphi_2\wedge\varphi_3)\equiv(\varphi_1\vee\varphi_2)\wedge(\varphi_1\vee\varphi_3)$</li>
+<li>Idempotence :</li>
+<li>$\varphi \wedge \varphi \equiv \varphi$</li>
+<li>$\varphi \vee \varphi \equiv \varphi$</li>
+<li>Involutivité :</li>
+<li>$\neg \neg \varphi \equiv \varphi$</li>
+<li>Règles de complément (tiers exclu) :</li>
+<li>$\varphi \wedge \neg \varphi \equiv \bot$</li>
+<li>$\varphi \vee \neg \varphi \equiv \top$</li>
+<li>Lois de De Morgan :</li>
+<li>$\neg (\varphi \wedge \psi) \equiv \neg \varphi \vee \neg \psi$</li>
+<li>$\neg (\varphi \vee \psi) \equiv \neg \varphi \wedge \neg \psi$</li>
+<li>Décomposition de l'implication :</li>
+<li>$\varphi \rightarrow \psi \equiv \neg (\varphi \wedge \neg \psi) \equiv \neg \varphi \vee \psi$</li>
+<li>Contraposition :</li>
+<li>$\varphi \rightarrow \psi \equiv \neg \psi \rightarrow \neg \varphi$</li>
+<li>Curryfication :</li>
+<li>$(\varphi_1 \wedge \varphi_2) \rightarrow \varphi_3 \equiv \varphi_1 \rightarrow (\varphi_2 \rightarrow \varphi_3)$</li>
+</ul>
+<hr>
+<h3 id="329-remarque">3.2.9. Remarque</h3>
+<p>Ces équivalences définissent des règles de simplification qui préservent la valeur logique des formules. Ces règles peuvent aussi s'appliquer aux sous-formules d'une formule donnée. On dit que l'équivalence passe au contexte et que c'est une relation de congruence.</p>
+<p>Ces règles permettent de donner une formule particulière aux formules afin de simplifier l'étude de leur stabilité.</p>
+<hr>
+<h2 id="33-formes-normales">3.3. Formes normales</h2>
+<hr>
+<h3 id="331-d%C3%A9finition--litt%C3%A9raux-clauses-formes-normales">3.3.1. Définition : littéraux, clauses, formes normales</h3>
+<ul>
+<li>Un littéral est une formule qui suit une variable, soit la négation d'une variable.</li>
+<li>Une clause est conjonctive (resp. disjonctive) est une conjonction (resp. disjonction) de littéraux.</li>
+<li>Une formule sous forme normale disjointe (resp. conjonctive) est une disjonction (resp. conjonction) de classes conjonctives (resp. disjonctives).</li>
+</ul>
+<hr>
+<h3 id="322-exemple">3.2.2. Exemple</h3>
+<ul>
+<li>$(\neg x\wedge\neg y)\vee(\neg x\wedge\neg z\wedge t)$ est une FND</li>
+<li>$(x\vee y)\wedge(\neg x\vee\neg y)$ est une FNC (c'est le XOR)</li>
+</ul>
+<hr>
+<h3 id="333-th%C3%A9or%C3%A8me">3.3.3. Théorème</h3>
+<p>Toute formule est équivalente à une forme normale conjonctive (resp. disjonctive).</p>
+<p><strong>Démonstration :</strong></p>
+<ul>
+<li>Il suffit de montrer le théorème pour les FND :</li>
+</ul>
+<p>Soit $\varphi$ une formule. Alors $\neg\varphi$ est équivalente à une FND.
+Cette FND, $\displaystyle\bigvee_{i=1}^m c_i$ où $\forall i\in[![a;n]!]$ la classe $c_i$ s'écrit $\displaystyle\bigwedge_{j=1}^{m_i} l_{i,j}$ avec les $l_{i,j}$ des littéraux.</p>
+<p>Donc</p>
+<p>$
+\begin{array}{rcl}
+\varphi
+&amp;\equiv&amp; \neg \neg \varphi
+\ \equiv\ \displaystyle \neg (\bigvee_{i = 1}^n c_i)
+\ \equiv\ \displaystyle \bigwedge_{i = 1}^n \neg c_i
+\
+&amp;\equiv&amp; \displaystyle \bigwedge_{i = 1}^n \neg (\bigwedge_{j = 1}^{m_i} l_{i, j})
+\ \equiv\ \displaystyle \bigwedge_{i = 1}^n \bigvee_{j = 1}^{m_i} \neg l_{i, j}
+\
+&amp;\equiv&amp; \displaystyle \underbrace{\bigwedge_{i = 1}^n \bigvee_{j = 1}^{m_i} \widetilde{l_{i, j}}}<em>{\text{FNC}}
+\end{array}
+$
+où
+$
+\forall (i, j),\ \widetilde{l</em>{i, j}} =
+\left{
+\begin{array}{ll}
+\neg x_{i, j} &amp; \text{si }l_{i ,j} = x_{i ,j} \in \mathcal{V}
+\
+x_{i ,j} &amp; \text{si }l_{i ,j} = \neg \underbrace{x_{i, j}}_{\in \mathcal{V}}
+\end{array}
+\right.
+$</p>
+<ul>
+<li>Soit $\varphi$ une formule. Montrons que $\varphi$ est équivalent à une FND.</li>
+</ul>
+<p>Soit $v$ une valuation. On construit la classe $c_v=\displaystyle\bigwedge_{\substack{x\in V\\text{tq }v(x)=V}}x\wedge\bigwedge_{\substack{x\in V\\text{tq }v(x)=F}}\neg x$ (clause conjonctive).</p>
+<p>(<strong>Exercice :</strong>
+$v$ est l'unique modèle de $c_v$)</p>
+<p>Alors $\varphi\equiv\displaystyle\bigvee_{\substack{v\\text{tq }[![\varphi]!]_v=V}}x$ (FND).</p>
+<hr>
+<h3 id="334-remarque">3.3.4. Remarque</h3>
+<p>On a démontré qu'il existe une formule associée à toute table de vérité.</p>
+<ul>
+<li>la normalisation d'une formule peut résulter en une formule de taille exponentielle en la taille de la formule initiale.</li>
+</ul>
+<p><strong>Exemple :</strong>
+$\varphi=(x_1\vee y_1)\vee\dots\vee(x_n\vee y_n)$ est une FNC dont la FND est de taille exponentielle en $n$</p>
+<p><strong>Exercice :</strong>
+Cette formule admet $3^n$ modèles.</p>
+<ul>
+<li>si on ne s'intéresse qu'à la satisfiabilité d'une formule, il est inutile de préserver l'équivalence : il suffit de considérer une formule qui lui est équisatisfiable, i.e. satisfiable ssi la formule initiale est satisfiable.</li>
+</ul>
+<hr>
+<h3 id="335-transformation-de-tseitin-hp">3.3.5. Transformation de Tseitin (<code>H.P</code>)</h3>
+<p><strong>Idée :</strong>
+On ajoute de nouvelles variables qui seront &quot;équivalentes&quot; aux sous-formules.</p>
+<p>Soit $\varphi$ une formule. $\forall\psi\in\mathrm{SF}(\varphi)$ on ajoute une variable $p_\psi$ et on construit une FNC $f_\psi$ définie inductivement par :</p>
+<ul>
+<li>$f_x~~~~~~=(\neg p_x\vee x)\wedge(p_x\vee\neg x)$</li>
+<li>$f_{\neg\psi}~~~~=(\neg p_{\neg\psi}\vee\neg p_\psi)\wedge(p_{\neg\psi}\vee p_\psi)$</li>
+<li>$f_{\psi_1 \vee \psi_2} = (\neg p_{\psi_1 \vee \psi_2} \wedge p_{\psi_1} \vee p_{\psi_2}) \wedge (p_{\psi_1 \vee \psi_2} \vee \neg p_{\psi_1}) \wedge (p_{\psi_1 \vee \psi_2} \vee \neg p_{\psi_2})$</li>
+<li>$f_{\psi_1 \wedge \psi_2} = (\neg p_{\psi_1 \wedge \psi_2} \vee p_{\psi_1}) \wedge (\neg p_{\psi_1 \wedge \psi_2} \vee p_{\psi_2}) \wedge (p_{\psi_1 \wedge \psi_2} \vee \neg p_{\psi_1} \vee \neg p_{\psi_2})$</li>
+</ul>
+<p>On suppose avoir éliminé les simplifications ce qui ne fait que doubler la taille de la formule dans le pire cas.</p>
+<p>La transformée de Tseitin de $\varphi$ est alors $p_\varphi \wedge \bigwedge_{\psi \in SF(\varphi)} f_\psi$, qui est une FNC.</p>
+<p><strong>Remarque :</strong>
+La traqnfmorm.ee de Tsentin se clacule en taille linéaire en la taille de la formule</p>
+<p><strong>Prop (admise) :</strong>
+$\varphi$ et $p_\varphi \wedge \displaystyle \bigwedge_{\psi \in SF(\varphi)} f_\psi$ sont équisatisfiable.</p>
+<p><strong>Idée :</strong>
+$f_\psi$ exprime $\psi \leftrightarrow p_\psi$.</p>
+<hr>
+<h1 id="4-probl%C3%A8me-de-la-satisfiabilit%C3%A9-des-formules-proportionnelles">4. Problème de la satisfiabilité des formules proportionnelles</h1>
+<h2 id="41-repr%C3%A9sentation-du-probl%C3%A8me">4.1 Représentation du problème</h2>
+<hr>
+<h3 id="411-d%C3%A9finition--probl%C3%A8me-sat">4.1.1. Définition : problème SAT</h3>
+<p>Le problème SAT est le problème de décision suivant : étant donné une formule $\varphi$ de la logique proportionnelle, $\varphi$ est-elle satisfiable ?</p>
+<hr>
+<h3 id="412-remarque">4.1.2. Remarque</h3>
+<p>Il existe un algorithme pour répondre à ce problème (on dit que SAT est décidable), mais l'algorithme vu en 3.1.8. est de complexité exponentielle.</p>
+<p><strong>Question :</strong>
+Peut-on faire mieux ?</p>
+<hr>
+<h3 id="413-proposition">4.1.3. Proposition</h3>
+<p>Une clause conjonctive est une antilogie / antinomie ssi elle contient une variable et sa négation.</p>
+<p><strong>Démonstration :</strong></p>
+<ul>
+<li>$\Leftarrow$ : Si la clause s'écrit $x\wedge\neg x\wedge c$ (à l'ordre près des littéraux), alors $\forall v,[![x\wedge\neg\wedge c]!]_v=F$ car $[![x\wedge\neg x]!]_v=F$</li>
+<li>$\Rightarrow$ : Par contraposée, on suppose que la clause ne contient pas une variable et sa négation. On montre qu'elle est satisfiable.</li>
+</ul>
+<p>On peut supposer que les littéraux portent sur des variables 2 à 2 distinctes</p>
+<p>$x\wedge x=x$ et $\neg x\wedge\neg x=\neg x$</p>
+<p>On note alors :</p>
+<ul>
+<li>$l_1\dots l_n$ les littéraux ;</li>
+<li>$x_1\dots x_n$ les variables associées.</li>
+</ul>
+<p>On définit une valuation $v$ par $\forall i\in[![1;n]!], v(x_i) = \left{\begin{array}{ll}
+V\text{ si }l_i=x_i
+\
+F\text{ si } l_i=\neg x_i
+\end{array}\right.$</p>
+<p>Alors $\displaystyle[![\bigwedge_{i=1}^n l_i]!]_v=V$</p>
+<p>Donc la clause est satisfiable.</p>
+<hr>
+<h3 id="414-corollaire">4.1.4. Corollaire</h3>
+<p>On peut résoudre SAT en temps polynomial pour les FND.</p>
+<p><strong>Démonstration :</strong>
+Une FND est satisfiable ssi l'une de ses clauses est satisfiable ssi l'une de ses clauses ne contient pas une variable et sa négation.</p>
+<p>Vérifier si une clause ne contient pas une variable et sa négation se fait en temps $\mathcal{O}(n^2)$ si la clause contient $n$ littéraux voire $\mathcal{O}(n)$ si les variables sont représentées par des entiers.</p>
+<p>On applique cette vérification à chaque clause.</p>
+<hr>
+<h3 id="415-remarque">4.1.5. Remarque</h3>
+<ul>
+<li>On ne sait pas s'il est possible de résoudre SAT en temps polynomial (cf. cours sur la classe NP) ;</li>
+<li>C'est déjà le cas pour certains cas particuliers de SAT.</li>
+</ul>
+<hr>
+<h3 id="416-d%C3%A9finition--k-sat">4.1.6. Définition : $k$-SAT</h3>
+<p>Étant donné $k\in\mathbb{N}^*$, $k$-SAT est le problème de décision suivant : étant donné une formule $\varphi$ sous FNC telle que chaque clause contient au plus $k$ littéraux, $\varphi$ est-elle satisfiable ?</p>
+<hr>
+<h3 id="417-remarque">4.1.7. Remarque</h3>
+<ul>
+<li>$1$-SAT est résoluble en temps polynomial (cf. 4.1.3.) ;</li>
+<li>on verra que $2$-SAT est résoluble en temps polynomial (cf. cours en théorie des graphes) ;</li>
+<li>la transformation de Tseitin fournit pour toute formule $\varphi$ une instance de $3$-SAT qui est de taille linéaire en la taille de $\varphi$ et qui est équisatisfiable à $\varphi$, donc on ne sait pas résoudre $k$-SAT en temps polynomial pour $k\ge 3$ ;</li>
+<li>SAT et ses restrictions sont des problèmes importants car ils servent à modéliser de nombreux problèmes. On parle de réduction de ces problèmes à SAT.</li>
+</ul>
+<hr>
+<h3 id="418-exemple-de-r%C3%A9duction-%C3%A0-sat--le-probl%C3%A8me-du-sudoku">4.1.8. Exemple de réduction à SAT : Le problème du Sudoku</h3>
+<ul>
+<li>Rappel des règles : on dispose d'une grille $n\times n$ qu'on veut remplir avec des entiers de $[![1;n]!]$ de telle sorte que chaque ligne / colonne / bloc de taille $l\times l$ où $n=l^2$ contienne chaque entier exactement une fois.</li>
+</ul>
+<p>Une grille peut être partiellement pré-remplie afin qu'il n'existe qu'une seule solution.</p>
+<ul>
+<li>Réduction à SAT :</li>
+</ul>
+<p>On introduit $n^3$ variables propositionnelles $(x_{i,j}^k)_{i,j,k\in[![1;n]!]}$.</p>
+<p><strong>Idée :</strong>
+$x_{i,j}^k$ signifie &quot;la case $(i,j)$ contient l'entier $k$&quot;</p>
+<p>On peut représenter les règles à l'aide de formules :</p>
+<ul>
+<li>chaque case contient un unique chiffre : $\displaystyle\bigwedge_{i=1}^n\bigwedge_{j=1}^n\bigvee_{k=1}^n\left(x_{i,j}^k\wedge\bigwedge_{k'\not =k}\neg x_{i,j}^{k'}\right)$</li>
+<li>chaque ligne contient au moins une fois chaque chiffre : $\displaystyle\bigwedge_{k=1}^n\bigwedge_{i=1}^n\bigvee_{j=1}^nx_{i,j}^k$</li>
+<li>chaque ligne contient au plus une fois chaque chiffre : $\displaystyle\bigwedge_{i=1}^n\bigwedge_{j=1}^n\bigwedge_{k=1}^n\left(x_{i,j}^k\rightarrow\bigwedge_{j'\not =j}\neg x_{i,j'}^{k}\right)$</li>
+<li>etc...</li>
+</ul>
+<p>On peut représenter les cases pré-remplies par des clauses unitaires $x_{i,j}^{k}$ (si la case $(i,j)$ est pré-remplie avec $k$)</p>
+<p>La conjonction de toutes ces formules donne une instance de SAT telle que tout modèle de cette conjonction représente une solution.</p>
+<hr>
+<h2 id="42-r%C3%A9solution-du-probl%C3%A8me-sat">4.2. Résolution du problème SAT</h2>
+<hr>
+<h3 id="421-algorithme-de-quine">4.2.1. Algorithme de Quine</h3>
+<p>L'algorithme de Quine est un algorithme de résolution de SAT pour les FNC.</p>
+<p><strong>Idée :</strong>
+On teste toutes les valuations possibles, mais en construisant de manière incrémentale les valuations en simplifiant la formule lors de la construction.</p>
+<p>Si $v(x)=V$ et si une clause $c$ contient $x$, alors $[![c]!]_v=V$ donc on peut retirer $c$ de a formule.</p>
+<p>Si $v(x)=V$ et si une clause $c$ contient $\neg x$, alors $[![c]!]_v=[![c\setminus{\neg x}]!]_v$ donc on peut retirer $\neg x$ de $c$</p>
+<p>Cas symétrique si $v(x)=F$</p>
+<p>Si on parvient à retirer toutes les clauses, alors la formule est satisfiable</p>
+<p>Si on retire tous les littéraux d'une clause, alors elle n'est pas satisfiable dans la valuation partielle $\rightarrow$ il faut changer de valuation partielle en revenant sur les choix précédents</p>
+<p><strong>Algorithme :</strong></p>
+<p>Entrée : ensemble de clauses disjointes $C$</p>
+<p>Algo :</p>
+<ul>
+<li>Si $C=\empty$ :
+<ul>
+<li>alors renvoyer vraie</li>
+</ul>
+</li>
+<li>Si la clause vide $\in C$ :
+<ul>
+<li>alors renvoyer faux</li>
+</ul>
+</li>
+<li>Choisir $x$, une variable apparaissant dans une clause de $C$</li>
+<li>$C'\leftarrow C$ où :
+<ul>
+<li>toute clause contenant $x$ a été supprimée</li>
+<li>$\neg x$ a été retiré de toutes les clauses</li>
+</ul>
+</li>
+<li>Si $\mathrm{Quine}(C')$ :
+<ul>
+<li>alors renvoyer vraie</li>
+</ul>
+</li>
+<li>Sinon :
+<ul>
+<li>$C''\leftarrow C$ où :
+<ul>
+<li>toute clause contenant $\neg x$ a été supprimée</li>
+<li>$x$ a été retiré de toutes les clauses</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Renvoyer $\mathrm{Quine}(C'')$</li>
+</ul>
+<p><strong>Dans le pire cas :</strong>
+On test toutes les valuations, d'où une complexité exponentielle</p>
+<hr>
+<h3 id="422-impl%C3%A9mentation-de-lalgorithme-de-quine">4.2.2. Implémentation de l'algorithme de Quine</h3>
+<p>On peut représenter les clauses par des listes de littéraux et les FNC par des listes de clauses.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">type</span> litteral = <span class="hljs-type">Var</span> <span class="hljs-keyword">of</span> <span class="hljs-built_in">string</span> |<span class="hljs-type">NVar</span> <span class="hljs-keyword">of</span> <span class="hljs-built_in">string</span>
+<span class="hljs-keyword">type</span> clause = literal <span class="hljs-built_in">list</span>
+<span class="hljs-keyword">type</span> fnc = clause <span class="hljs-built_in">list</span>
+
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> quine (f : fnc) : <span class="hljs-built_in">bool</span> =
+ <span class="hljs-keyword">match</span> f <span class="hljs-keyword">with</span>
+ |<span class="hljs-literal">[]</span> -&gt; <span class="hljs-literal">true</span>
+ |_ <span class="hljs-keyword">when</span> <span class="hljs-type">List</span>.mem <span class="hljs-literal">[]</span> f -&gt; <span class="hljs-literal">false</span> <span class="hljs-comment">(*si f contient une liste vide*)</span>
+ |(<span class="hljs-type">Var</span> x::_)::_ |(<span class="hljs-type">NVar</span> x::_)::_ -&gt;
+ <span class="hljs-keyword">if</span> quine (<span class="hljs-type">List</span>.map (<span class="hljs-type">List</span>.filter (<span class="hljs-keyword">fun</span> l -&gt; l &lt;&gt; <span class="hljs-type">NVar</span> x)) (<span class="hljs-type">List</span>.filter(<span class="hljs-keyword">fun</span> c -&gt; not(<span class="hljs-type">List</span>.mem(<span class="hljs-type">Var</span> x) c)) f))
+ <span class="hljs-keyword">then</span> <span class="hljs-literal">true</span>
+ <span class="hljs-keyword">else</span> quine (<span class="hljs-type">List</span>.map (<span class="hljs-type">List</span>.filter (<span class="hljs-keyword">fun</span> l -&gt; l &lt;&gt; <span class="hljs-type">Var</span> x)) (<span class="hljs-type">List</span>.filter (<span class="hljs-keyword">fun</span> c -&gt; not(<span class="hljs-type">List</span>.mem (<span class="hljs-type">NVar</span> x) c)) f))
+</div></code></pre>
+<hr>
+<h3 id="423-optimisation">4.2.3. Optimisation</h3>
+<p>On peut utiliser plusieurs techniques afin de rendre cet algorithme plus efficace :</p>
+<ul>
+<li>Propagation des clauses unitaires : si une clause ne contient plus qu'un seul littéral, la valeur de ce littéral est imposée. On peut donc effectuer les simplifications associées à cette valeur sans avoir besoin de revenir sur un choix.</li>
+</ul>
+<p>Cela donne l'algorithme DPLL (Davis Putnam Logemax Loveland) (<code>H.P</code>)</p>
+<ul>
+<li>On peut utiliser des heuristiques pour le choix du littéral, par exemple, le littéral le plus fréquent, celui qui apparaît dans une clause la plus courte possible, ou un littéral choisi au hasard.</li>
+<li>On peut ajouter des clauses à la formule pour tenir compte des échecs : une valuation partielle correspond à un ensemble de choix.</li>
+</ul>
+<p>On peut &quot;apprendre&quot; une clause pour ne pas refaire de choix similaires dans un autre appel récursif.</p>
+<p>Cela donne l'algorithme CDCL (Conflict Driven Clause Learning) (<code>H.P</code>)</p>
+<p>DPPLL et CDCL sont à la base des SAT-solvers modernes.</p>
+<hr>
+<h2 id="43-compl%C3%A9ments-dalgorithmique">4.3. Compléments d'algorithmique</h2>
+<hr>
+<h3 id="431-introduction">4.3.1. Introduction</h3>
+<p>L'algorithme de Quine est un cas particulier de l'algorithme de recherche par force brute. Le principe de la recherche par force brute, ou exploration exhaustive, est de tester toutes les valeurs possibles pour en trouver une qui réponde au problème que l'on se pose.</p>
+<p>On peut appliquer cette méthode pour résoudre des problèmes de :</p>
+<ul>
+<li>décision (existe-t-il une valeur qui satisfait des contraintes données ?)</li>
+<li>optimisation (trouver une valeur qui satisfait certaines contraintes tout en maximisant / minimisant une certaine quantité).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Avantages</th>
+<th style="text-align:center">Inconvénients</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Méthode complète : on trouve nécessairement une solution (optimale) si elle existe</td>
+<td style="text-align:center">Complexité élévée : par ex, trouver la clé secrète d'un schéma cryptographique, encodée sur $n$ bits, nécessite $2^n$ essais</td>
+</tr>
+<tr>
+<td style="text-align:center">Souplesse : on peut aisément modifier l'algorithme à l'aide d'heuristiques pour le rendre plus efficace dans certains cas</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Méthode simple : implémentation aisé et simple à débuguer</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">On peut trouver toutes les solutions possibles, si c'est ce que l'on cherche</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="432-modalit%C3%A9s-dimpl%C3%A9mentations">4.3.2. Modalités d'implémentations</h3>
+<p>Un algorithme de recherche par brute force s'écrit simplement ainsi :</p>
+<ul>
+<li>Pour toute les valeurs de $v$</li>
+<li>Si $v$ satisfait les contraintes
+<ul>
+<li>alors s'arrêter avec $v$ comme solution</li>
+</ul>
+</li>
+<li>Échec de la recherche</li>
+</ul>
+<p><strong>Version &quot;toutes solutions&quot; :</strong></p>
+<ul>
+<li>$S\leftarrow\empty$</li>
+<li>Pour toute valeur $v$</li>
+<li>Si $v$ satisfait les contraintes
+<ul>
+<li>alors $S\leftarrow S\cup{v}$</li>
+</ul>
+</li>
+<li>Renvoyer S</li>
+</ul>
+<p>Pour l'implémentation d'un algo, le paradigme de programmation et la manière dont on parcours les valeurs contraignent la façon dont on écrit le code.</p>
+<p>Pour une implémentation récursive, on peut manipuler l'ensemble des valeurs à traiter en en retirant une à chaque appel récursif (coûteux en espace) ou, si l'on suppose d'une manière d'énumérer les valeurs en choisissant la valeur qui suit une valeur donnée, on peut partir d'une valeur initiale et faire un appel récursif sur la suivante jusqu'à exhaustion des valeurs (exmple : liste chaînés ou parcours des indices d'un tableau par une fonction récursive).</p>
+<p>Si on dispose d'une telle manière d'énumérer les valeurs, on peut facilement traduire l'algo récursif en boucle while (tant qu'on n'a pas trouvé de solution et qu'on n'a pas parcouru toutes les valeurs, poser à la valeur suivante) ou une boucle for (pour $i$ de $1$ au nombre de valeurs, tester la valeur n°$i$).</p>
+<p><strong>Exemple :</strong>
+On veut savoir si $x$ apparaît dans $t$ de taille $n$</p>
+<p><strong>Boucle while :</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">bool</span> trouve = <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">int</span> i = _1;
+<span class="hljs-keyword">while</span> (i &lt; n<span class="hljs-number">-1</span> &amp;&amp; !trouve) {
+ i++;
+ trouve = t[i]==x;
+}
+<span class="hljs-comment">// test de trouve</span>
+</div></code></pre>
+<p><strong>Boucle for :</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">int</span> i;
+<span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>; i&lt;n; i++) {
+ <span class="hljs-keyword">if</span> (t[i]==x) <span class="hljs-keyword">break</span>;
+}
+<span class="hljs-comment">// test de i</span>
+</div></code></pre>
+<p><strong>Remarque :</strong></p>
+<ul>
+<li>On peut aussi simplifier la boucle while avec l'usage de break ;</li>
+<li>Il n'y a pas d'instruction &quot;break&quot; en OCaml, mais on peut contrôler l'exécution à l'aide d'une exception.</li>
+</ul>
+<p><strong>Exemple :</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">exception</span> <span class="hljs-type">Trouve</span> <span class="hljs-keyword">of</span> <span class="hljs-built_in">int</span>
+<span class="hljs-keyword">try</span>
+ <span class="hljs-keyword">for</span> i = <span class="hljs-number">0</span> <span class="hljs-keyword">to</span> n-<span class="hljs-number">1</span> <span class="hljs-keyword">do</span>
+   <span class="hljs-keyword">if</span> t.(i) = x <span class="hljs-keyword">then</span> raise (<span class="hljs-type">Trouve</span> i)
+ <span class="hljs-keyword">done</span>;
+ raise <span class="hljs-type">Not</span>.found
+<span class="hljs-keyword">with</span>
+ |<span class="hljs-type">Trouve</span> i -&gt; i;;
+</div></code></pre>
+<hr>
+<h3 id="433-retour-sur-trace">4.3.3. Retour sur trace</h3>
+<p>L'algo de Quine correspond à une autre manière de parcourir l'ensemble des valeurs : on construit de manière incrémentale des valeurs partielles (valuation d'un sous-ensemble des variables), en passant d'une valeur partielle à une autre en effectuant un choix (choix de la valeur d'une variable) sur lequel on reviendra pour tester d'autres choix si celui-ci permet pas de trouver une solution. On appelle cette méthode le retour en trace (ou backtracking).</p>
+<p>La caractère incrémental impose de ne pas pouvoir boucler sur un ensemble de valeurs partielles et peut permettre d'éliminer des choix avant d'avoir construit une valeur complète.</p>
+<p><strong>Pseudo-code :</strong></p>
+<ul>
+<li>Recherche ($v_\text{init}$) :</li>
+<li>Si $v_\text{init}$ est complète et satisfait les contraintes
+<ul>
+<li>S'arrêter avec $v_\text{init}$ comme solution</li>
+</ul>
+</li>
+<li>Si $v_\text{init}$ est partielle
+<ul>
+<li>Pour chaque choix valide à partir de $v_\text{init}$
+<ul>
+<li>$v_\text{next}\leftarrow$ résultat du choix</li>
+<li>Recherche ($v_\text{next}$)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Exemple :</strong>
+Sudoku</p>
+<ul>
+<li>Valeur : remplissage de la grille (pas forcément selon les règles)</li>
+<li>Valeur partielle : remplissage partiel de la grille : il peut y avoir des cases vides</li>
+<li>$v_\textsf{init}$ : problème posé</li>
+<li>Choix : écriture d'un chiffre dans une case vide</li>
+<li>Choix valide : choix qui respecte les règles du jeu vis-à-vis des chiffres déjà inscrits</li>
+</ul>
+<p>Avec ces définitions, une valeur complète construite à l'aide d'une succession de choix valides est récursivement une solution.</p>
+<hr>
+<h3 id="434-optimisation">4.3.4. Optimisation</h3>
+<ul>
+<li>Comme pour l'algo DPLL par rapport à l'algo de Quine, certains choix peuvent contraindre la complétion des valeurs partielles de telle sorte qu'il n'est pas nécessaire de revenir sur les choix &quot;imposés&quot;</li>
+<li>On peut également utiliser des heuristiques pour parcourir l'ensemble des valeurs dans un ordre précis, voire pour ne parcourir qu'un sous-ensemble des valeurs possibles.</li>
+</ul>
+<p>C'est un procédé classique en géométrie algorithmique : l'ensemble des valeurs à parcourir est en général construit à partir d'un ensemble de points du plan / de l'espace. Parcourir l'ensemble des points selon une direction permet de ne considérer que certaines valeurs. On appelle cela un algorithme par droite de balayage?</p>
+<p><strong>Idée :</strong>
+Une droite / un plan perpendiculaire à la direction choisie balaye l'ensemble des points et, à chaque point rencontré, on effectue des opérations visant à construire une solution.</p>
+<p><strong>Exemple : retour sur le TP_12</strong></p>
+<ul>
+<li>Problème : Étant donné un ensemble de points du plan, trouver une paire de points qui minimise la distance euclidienne entre ces points.</li>
+<li>Ensemble des valeurs : l'ensemble des paires de points ~&gt; algo force brute en $\mathcal{O}(n^2)$</li>
+<li>Rappel : algo `diviser pour régner' en $\mathcal{O}(n\log n)$ vu en TP</li>
+<li>Idée d'algo par droite de balayage : on parcours les points par abscisse croissante en conservant la distance minimale courante $d$</li>
+</ul>
+<p>On note $(x_0,y_0)\dots(x_{n-1},y_{n-1})$ les points triés par abscisse.</p>
+<p>Si la distance minimale vaut d'après le parcours des $k$ premiers points, il est inutile de considérer les points d'abscisse $&lt;x_k-d$ par la mise à jour de $d$.</p>
+<p>De même, il est inutile de considérer les points d'ordonnée $&lt;y_k-d$ ou $&gt;y_k+d$</p>
+<p><strong>Attention :</strong>
+Si les points d'abscisse $&lt;x_k-d$ peuvent être définitivement oubliés, ceux de l'abscisse $\ge x_k-d$ doivent être conservés même s'ils sont hors du rectangle dans l'éventualité d'un usage avec $(x_{k+1},y_{k+1})$.</p>
+<p><strong>Remarque :</strong>
+Le rectangle autour du point courant contient au plus 5 points en plus du point courant.</p>
+<p align="center">
+<img src="Pictures/Graphe4.png" alt="drawing" width="300">
+</p>
+<p>S'il y avait plus, l'un des rectangles de dimension $\dfrac{2d}{3}\times\dfrac{d}{2}$ contiendrait deux points.</p>
+<p align="center">
+<img src="Pictures/Graphe5.png" alt="drawing" width="300">
+</p>
+<p>La distance maximale entre 2 points dans un tel rectangle est :</p>
+<p>$$\sqrt{\left(\dfrac{2d}{3}\right)^2+\left(\dfrac{d}{2}\right)^2}=\sqrt{\dfrac{4d^2}{9}+\dfrac{d^2}{4}}=\sqrt{\dfrac{25}{36}}d=\dfrac{5}{6}d&lt;d\textsf{ : impossible}$$</p>
+<p><strong>On en déduit l'algo suivant :</strong></p>
+<ul>
+<li>Trier les points par abscisse croissante, les nommer $(x_0,y_0)\dots(x_{n-1},y_{n-1})$</li>
+<li>$E\leftarrow{(x_0,y_0),(x_1,y_1)}$</li>
+<li>$d\leftarrow\mathrm{dist}((x_0,y_0),(x_1,y_1))$</li>
+<li>Pour $k$ de 2 à $n-1$ :</li>
+<li>Retirer de $E$ les points d'abscisse $&lt;r_k-d$ <code>(1)</code></li>
+<li>Pour chaque point actif $(x,y)$ tq $y_k-d\le y\le y_k+d$ <code>(2)</code>
+<ul>
+<li>$d\leftarrow\min d~\mathrm{dist}((x_k,y_k),(x,y))$</li>
+</ul>
+</li>
+<li>$E\leftarrow E\cup{(x_k,y_k)}$</li>
+<li>Renvoyer $d$</li>
+</ul>
+<p><strong>Complexité :</strong></p>
+<ul>
+<li>$\mathcal{O}(n\log n)$ pour le tri</li>
+<li>manipulations de $E$ : cela dépend de la structure de données
+<code>(1)</code> inutile de faire un parcours de $E$ : il suffit de parcourir la liste des points triés en se souvenant du dernier point retiré.</li>
+</ul>
+<p>~&gt; coût total de cette ligne : coût de $n$ suppressions dans $E$</p>
+<p>on aura aussi le coût de $n$ insertions dans $E$</p>
+<p><code>(2)</code> nécessite une structure organisée selon les ordonnées $\rightarrow$ on peut choisir pour $E$ une structure d'ABR équilibré :</p>
+<ul>
+<li>coût d'une insertion / suppression en $\mathcal{O}(\log n)$</li>
+<li>coût de la recherche des (au plus) 5 éléments en <code>(2)</code> : $\mathcal{O}(\log n)$ (exercice)
+Au total : $\mathcal{O}(n\log n)$.</li>
+</ul>
+
+</body>
+</html>

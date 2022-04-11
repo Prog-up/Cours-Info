@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chap_7.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="chapitre-7--%C3%A9l%C3%A9ment-dalgorithmes"><strong>Chapitre 7 : Élément d'algorithmes</strong></h1>
+<h1 id="1-introduction">1. Introduction</h1>
+<p>A la manière de la recherche d'un élément dans un ABR, on s'intéresse à la décomposition d'un problème en un ou plusieurs sous-problèmes.</p>
+<p><strong>On distingue plusieurs méthodes selon :</strong></p>
+<ul>
+<li>le type de problème à résoudre ;</li>
+<li>la manière dont on décompose le problème ;</li>
+<li>la manière dont on reconstruit la solution au problème à partir de celles des sous-problèmes.</li>
+</ul>
+<p><strong>Nous étudierons :</strong></p>
+<ul>
+<li>la méthode <code>diviser pour régner</code> ;</li>
+<li>la programmation dynamique ;</li>
+<li>les algorithmes gloutons.</li>
+</ul>
+<h1 id="2-diviser-pour-r%C3%A9gner">2. Diviser pour régner</h1>
+<h2 id="21-m%C3%A9thode-et-premiers-exemples">2.1. Méthode et premiers exemples</h2>
+<hr>
+<h3 id="211-m%C3%A9thode">2.1.1. Méthode</h3>
+<p><strong>La méthode <code>diviser pour régner</code> se décompose en 3 étapes :</strong></p>
+<ul>
+<li>Diviser le problème en un ou plusieurs sous-problèmes <code>disjoints</code> ;</li>
+<li>Résoudre les sous-problèmes, soit récursivement, soit directement si le sous-problème est assez simple ;</li>
+<li>Reconstruire la solution au problème initial à partir de celles des sous-problèmes.</li>
+</ul>
+<hr>
+<h3 id="212-remarque">2.1.2. Remarque</h3>
+<p>On retrouve l'idée des principes d'induction, où l'on utilise l'hypothèse d'induction (la solution à un sous-problème) pour démontrer la propriété sur une instance plus grande (le problème initial).</p>
+<hr>
+<h3 id="213-complexit%C3%A9-des-algorithmes-diviser-pour-r%C3%A9gner">2.1.3. Complexité des algorithmes <em>diviser pour régner</em></h3>
+<p><strong>Cette méthode donne une relation de récurrence de la forme :</strong></p>
+<p>$\mathcal C(n) = C_{\text{décomposition}}(n) + \sum_{p\ \text{sous-problèmes}} \mathcal C(\lvert p\rvert) + C_{\text{reconstruction}}(n)$</p>
+<p>(ici, $\lvert p\rvert$ désigne la taille du problème $p$).</p>
+<p>L'enjeux est de trouver des manières peu coûteuses de décomposer / reconstruire et d'obtenir peu de sous-problèmes assez petits pour avoir une complexité meilleure que celle de la résolution naïve du problème.</p>
+<hr>
+<h3 id="214-exemple--tri-fusion">2.1.4. Exemple : Tri fusion</h3>
+<p>(chap 1, 3.1.4)</p>
+<p><strong>Problème :</strong>
+On veut trier une liste.</p>
+<p><strong>Algorithme :</strong></p>
+<ul>
+<li>Diviser : on décompose la liste en 2 listes de tailles égales à une unité près ;</li>
+<li>Résoudre : on trie récursivement les 2 listes, sauf si elles sont de taille $\le 1$ (déjà triées)</li>
+<li>Reconstruire : on fusionne les 2 listes triées en une liste.</li>
+</ul>
+<p><strong>Récurrence :</strong>
+$\mathcal C(n) = \mathcal O(n) + \mathcal C(\lfloor\frac n 2\rfloor) + \mathcal C(\lceil\frac n 2\rceil) + \mathcal O(n)$.</p>
+<p>Donc $\mathcal O(n \log n)$.</p>
+<hr>
+<h3 id="215-exemple--exponentiation-rapide">2.1.5. Exemple : Exponentiation rapide</h3>
+<p>(TD_04)</p>
+<p><strong>Problème :</strong>
+Calcul de $x^n$.</p>
+<p><strong>Algorithme :</strong></p>
+<ul>
+<li>Diviser : on veut calculer $x^{\frac n 2}$ ;</li>
+<li>Résoudre : appel récursif, ou si $\frac n 2 = 0$, on renvoie 1 ;</li>
+<li>Reconstruire : si $n \equiv 0\ [2]$, on calcule $x^{\frac n 2} \times x^{\frac n 2}$, sinon on calcule $x \times x^{\frac n 2} \times x^{\frac n 2}$.</li>
+</ul>
+<p><strong>Récurrence :</strong>
+$\mathcal C(n) = \mathcal O(1) + \mathcal C(\frac n 2) + \mathcal O(1)$.</p>
+<p>Donc $\mathcal O(\log n)$.</p>
+<hr>
+<h3 id="216-exemple--recherche-dichotomique">2.1.6. Exemple : Recherche dichotomique</h3>
+<p>(TD_06)</p>
+<p><strong>Problème :</strong>
+On veut déterminer si une valeur apparaît dans un tableau trié.</p>
+<p><strong>Algorithme :</strong></p>
+<ul>
+<li>Diviser : on s'intéresse à la moitié gauche ou droite du tableau selon la comparaison de la valeur recherchée avec l'élément au milieu du tableau ;</li>
+<li>Résoudre : appel récursif sauf si le sous-tableau est de taille $\le 1$ ou si l'élément au milieu est la valeur recherché ;</li>
+<li>Reconstruire : la solution au sous-problème est la solution au problème initial.</li>
+</ul>
+<p><strong>Récurrence :</strong>
+$\mathcal C(n) = \mathcal O(1) + \mathcal C(\frac n 2)$.</p>
+<p>Donc $\mathcal O(\log n)$.</p>
+<hr>
+<h3 id="217-exemple--tri-rapide-colle-01">2.1.7. Exemple : Tri rapide (colle 01)</h3>
+<p><strong>Problème :</strong>
+Trier une liste.</p>
+<p><strong>Algorithme :</strong></p>
+<ul>
+<li>Diviser : on choisit un élément <code>pivot</code> et a réparti la liste en 2 sous-listes (celles des éléments) $&lt;$ au pivot et celle des éléments $&gt;$ pivot) et on compte le nombre d'occurrences du pivot ;</li>
+<li>Résoudre : appel réc sauf si la liste est de taille $\le 1$ ;</li>
+<li>Reconstruction : on concatène les 2 sous-listes triées (dans le bon ordre) en plaçant entre les 2 le nombre d'occurrence du pivot.</li>
+</ul>
+<p><strong>Récurrence :</strong>
+$\mathcal C(n) = \mathcal O(1) + \mathcal C(q) + \mathcal C(r) + \mathcal O(p + q)$</p>
+<p>où
+$
+\left|
+\begin{array}{l}
+\text{p est le  nombre d'occurrences du pivot}
+\
+\text{q est le nombre d'éléments &lt; pivot}
+\
+\text{r est le nombre d'éléments &gt; pivot}
+\end{array}
+\right.
+$</p>
+<p>Avec un choix déterministe en temps constant du pivot (ex : le premier élément), on a :</p>
+<ul>
+<li>$\mathcal O(n^2)$ dans le pire cas ;</li>
+<li>$\mathcal O(n\log n)$ dans le meilleur cas.</li>
+</ul>
+<hr>
+<h2 id="22-application--calcul-de-la-m%C3%A9diane">2.2. Application : Calcul de la médiane</h2>
+<hr>
+<h3 id="221-probl%C3%A8me">2.2.1. Problème</h3>
+<p>On veut calculer la médiane d'une liste de  valeurs distinctes, c'est-à-dire l'élément de rang $\lfloor\frac{n}{2}\rfloor$ où le rang d'un élément est le nombre d'éléments qui lui sont strictement inférieurs.</p>
+<hr>
+<h3 id="222-solution-na%C3%AFve">2.2.2. Solution naïve</h3>
+<p>On trie la liste et on renvoie l'élément au milieu.</p>
+<p><strong>Complexité :</strong>
+$\mathcal O(n \log (n))$ (ex : avec le tri fusion).</p>
+<p><strong>Objectif :</strong>
+$\mathcal O(n)$ (optimal puisqu'on doit bien lire tous les élément)</p>
+<hr>
+<h3 id="223-g%C3%A9n%C3%A9ralisation-et-algorithme-%22diviser-pour-r%C3%A9gner%22">2.2.3. Généralisation et algorithme &quot;diviser pour régner&quot;</h3>
+<p>On s'intéresse au problème suivant : trouver l'élément de rang i, où il est un paramètre.</p>
+<p><strong>Algorithme :</strong>
+On s'inspire du tri rapide</p>
+<ul>
+<li>Diviser : on choisit un pivot p et on détermine les listes $l_&lt;$ et $l_&gt;$ des éléments strictement inférieurs/supérieurs à p ;</li>
+<li>Résoudre : cela dépend de la taille de $l_&lt;$
+<ul>
+<li>si $\lvert l_&lt;\rvert &gt; i$, alors on cherche l'élément de rang i dans $l_&lt;$</li>
+<li>si $\lvert l_&lt;\rvert = i$, alors p est l'élément de rang i</li>
+<li>si $\lvert l_&lt;\rvert &lt; i$, alors on cherche l'élément de rang $i-\lvert l_&lt;\rvert -1$ dans $l_&gt;$ ;</li>
+</ul>
+</li>
+<li>Reconstruire : l'élément de rang i est le résultat de la résolution du sous-problème.</li>
+</ul>
+<p><strong>Récurrence :</strong> $\mathcal C(n) = \mathcal O(n) +C_{\text{choix du pivot}}(n) + \left{
+\begin{array}{l}
+\mathcal C(q)
+\
+\text{ou}
+\
+\mathcal O(1)
+\
+\text{ou}
+\
+\mathcal C(r)
+\end{array}
+\right.
+$ selon la taille de $l_&lt;$, avec les notations de 2.1.7.</p>
+<p><strong>Dans le pire cas :</strong>
+Comme pour le tri rapide $\mathcal O(n^2)$, par exemple si on choisit le $1^{er}$ élément comme pivot et si le tab est trié et $i=n-1$.</p>
+<p><strong>Dans le meilleur cas :</strong>
+Le pivot est l'élément de rang i ~&gt; $\mathcal O(n)$.</p>
+<p><strong>Conclusion :</strong>
+Le choix du pivot est déterminant. On peut se rapprocher du meilleur cas de tri rapide en choisissant un pivot près de la médiane. On peut s'approcher de la médiane (que l'on cherche à calculer), à moindre coût à l'aide de l'algorithme de la médiane des médianes.</p>
+<hr>
+<h3 id="224-algorithme-de-la-m%C3%A9diane-des-m%C3%A9dianes">2.2.4. Algorithme de la médiane des médianes</h3>
+<p><strong>Idée :</strong>
+On regroupe les éléments de la liste en petits paquets (de taille constante) dont on peut calculer les médianes naïvement, et on choisit comme pivot la médiane de ces médianes, calculée récursivement.</p>
+<p><strong>Complexité :</strong> $\mathcal C(n) = \underbrace{\mathcal O(n) + \mathcal C{\dfrac n 5}}<em>{\text{calcul du pivot}} + \underbrace{\mathcal O(n)}</em>{\text{division}} + \underbrace{f(n)}_{\text{éventuel appel récursif}}$</p>
+<p>On peut majorer la valeur de $f(n)$ en majorant les tailles des listes $l_&lt;$ et $l_&gt;$.</p>
+<p>On s'intéresse à $l_&lt;$ (le cas $l_&gt;$ se traite de manière similaire).</p>
+<p>Observons le $\frac{n}{5}$ médianes des paquets. Parmi celles-ci, il y en a à la moitié qui sont inférieures à p.</p>
+<p>Dans le pire cas : tous les éléments des $\frac{n}{10}$ paquets de ces médianes sont inférieurs à p.</p>
+<p>Dans les autres paquets, il y a au plus 2 élément inférieur à p (car la médiane et les 2 éléments qui lui sont supérieur soit inférieur à p).</p>
+<p>Au total, il y a au plus $5\times{\frac{n}{10}}+2\times{\frac{n}{10}}=\frac{n}{2}+\frac{n}{5}=\frac{7n}{10}$ éléments dans $l_&lt;$.</p>
+<p>Donc $\mathcal C(n)\le \mathcal C(\frac{n}{5})+\mathcal C(\frac{7n}{10})+\mathcal O(n)$.</p>
+<p>En pratique, sous les approximations, on montre qu'il existe $\mathcal c&gt;0$, tel que $\forall n ,\mathcal C(n)\le cn + C(\lfloor\frac n 5\rfloor) + C(7\lfloor\frac n {10}\rfloor + 4)$.</p>
+<p>Montrons que $\mathcal C(n)=\mathcal O(n)$, i.e. qu'il existe $\mathcal c'&gt;0$ et $N\in \mathbb{N}$ tel que $\forall n &gt;= N, \mathcal C(n) \le \mathcal c'n$.</p>
+<p><strong>On procède par analyse puis synthèse :</strong></p>
+<ul>
+<li>Analyse :</li>
+</ul>
+<p>$
+\begin{array}{rcll}
+C(n) &amp;\le&amp; cn + C(\lfloor\frac n 5\rfloor) + C(7\lfloor\frac n {10}\rfloor) + 4
+\
+&amp;\le&amp; cn + c'\lfloor\frac n 5\rfloor + c'\frac n {10} + 4
+\
+&amp;\le&amp; cn + \dfrac{c'n}{5} + c'\frac{7n}{10} + 4
+\
+&amp;\le&amp; cn + c'\frac{9n}{10} + 4
+\
+&amp;\le&amp; c'n &amp; \text{dès que}\ cn \le c'\frac n {10} - 4
+\end{array}
+$</p>
+<p>Or, $cn \le \mathcal C'(\frac{n}{10}-4)$ ssi $\frac{10cn}{n-40}\le c'$ (si $n&gt;40$) et $\frac{n}{n-40}\le 2$ si $n\ge 80$.</p>
+<ul>
+<li>
+<p>Synthèse : on choisit $N=800$ et $c'=20c$</p>
+<p>$\forall n \ge N, \frac{n}{n-40}\le 2$ donc $\frac{10cn}{n-40}\le 20c = c'$
+Donc une récurrence avec la même démonstration qu'une analyse conclut : $\mathcal C(n)\le c'n$.</p>
+</li>
+</ul>
+<p>Donc l'algorithme de la médiane des médianes permet de déterminer la médiane en temps linéaire.</p>
+<hr>
+<h2 id="23-application--couverture-de-points-par-des-segments-de-m%C3%AAme-longueur">2.3. Application  : couverture de points par des segments de même longueur</h2>
+<hr>
+<h3 id="231-probl%C3%A8me">2.3.1. Problème</h3>
+<p>Étant donné $n$ points $x_1, ..., x_n$ sur la droite réelle et $k\in \mathbb{N}^*$, on veut déterminer la longueur $l$ minimale telle qu'il existe une couverture de $x_1, ..., x_n$ par $k$ segments de longueur $l$.</p>
+<p>$k$ segments $[l_1;r_1] ... [l_k;r_k]$ forment une couverture de $x_1, ..., x_n$ ssi $\forall i\in [![1; n]!]$, $\exists j\in [![1;k]!]$, $x_i\in [![l_j;r_j]!]$</p>
+<hr>
+<h3 id="232-remarque">2.3.2. Remarque</h3>
+<p>Ceci est un problème d'optimisation : on cherche à minimiser/maximiser une certaine quantité en respectant des contraintes. On peut en général associer à un problème d'optimisation un problème de décision, c'est-à-dire un problème où l'on se pose la question de l'existence d'un objet vérifiant des contraintes.</p>
+<p><strong>Ici :</strong>
+Étant donné $x_1, ..., x_n$, $k$ et $l$ existe-t-il une couverture  de $x_1, ..., x_n$ par $k$ segments de longueur $l$ ?</p>
+<hr>
+<h3 id="233-r%C3%A9solution-par-dichotomie-de-probl%C3%A8me-doptimisation">2.3.3. Résolution par dichotomie de problème d'optimisation</h3>
+<p><strong>Idée :</strong>
+On suppose que l'on sait résoudre le problème de décision et on procède à une recherche dichotomique du $l$ minimal pour lequel l'algorithme de résolution du problème de décision répond &quot;oui&quot;.</p>
+<p>On sait que $L=\frac{max_{i; j} (x_i; x_j)}{k}$ permet de construire une couverture, donc on cherche $l$ dans $[0; L]$.</p>
+<p>On procède à une recherche dichotomique dans un tableau virtuel (on ne le construit pas) qui à chaque $i\in [![0; L]!]$ associe la réponse au problème de décision pour $l=i$.</p>
+<hr>
+<h3 id="234-r%C3%A9solution-du-probl%C3%A8me-de-d%C3%A9cision">2.3.4. Résolution du problème de décision</h3>
+<p><strong>Idée :</strong>
+On s'intéresse au problème de décision dual suivant : étant donné $n$ segments $[l_1;r_1],...,[l_n;r_n]$ et $k\in \mathbb{N}^*$, peut-on choisir $k$ points $x_1, ..., x_k$ tel que $\forall i\in [![1;n]!]$, $\exists j\in [![1:k]!]$ tel que $x_j\in [l_i;r_i]$ ?</p>
+<p>Cela permet de résoudre le problème initial : si $\exists [l_1;r_1],...,[l_r;r_r]$ couverture de $x_1, ..., x_n$ par des segments de longueur $l$, alors on a une solution au problème dual pour les intervalles $[x_1-l;x_1],...,[x_n-l;x_n]$ ($x_i\in [l_j;r_j]$ ssi $l_j\in [x_i-l;x_i]$).</p>
+<p><strong>Résolution du problème dual :</strong>
+Soit $[l_1;r_1],...,[l_r;r_r]$ $n$ segments et $k\in \mathbb{N}^*$.</p>
+<p>On traite les segments par extrémité droite croissante :</p>
+<p><strong>Algorithme :</strong></p>
+<p>$
+\begin{aligned}
+&amp;P\leftarrow\varnothing
+\
+&amp;\text{Trier et renuméroter les segments par }r_i\text{ croissant}
+\
+&amp;P\leftarrow r_1
+\
+&amp;P\leftarrow P\cup{p}
+\
+&amp;\text{Pour }i\text{ de }2\text{ à } n
+\end{aligned}
+$</p>
+<p>$
+\begin{aligned}
+\text{Si }l_i &gt; p
+\
+&amp; p\leftarrow r_i
+\
+&amp; p\leftarrow r_i
+\
+&amp; P\leftarrow P\cup{p}
+\end{aligned}
+$</p>
+<p>Si $\lvert P\rvert\le k$ succès, sinon échec.</p>
+<p><strong>Correction :</strong>
+Tous les segments sont rencontrés par un point de P.</p>
+<p><strong>Invariant de boucle :</strong>
+Au début du tour indice $i$, tous les segments jusqu'à l'indice $i-1$ sont rencontrés et $p=max(P)=r_j$ pour un certain $j&lt;i$.</p>
+<p>$\rightarrow$ Initialement : $P={r_1}={p}$ donc $p=max(P)=r_1$ avec $1&lt;2$ et $r_1\in [l_1;r_1]$ donc $[l_1;r_1]$ est rencontré par un élément de P.</p>
+<p>$\rightarrow$ Conservation de l'invariant : on suppose l'invariant vrai au début du tour i, en particulier $p=max(P)=r_j$ pour $j&lt;i$.</p>
+<ul>
+<li>Si $l_i\le p$, comme $j&lt;i$,$r_j\le r_i$ donc $l_i\le p\le r_i$ et il est inutile de rajouter un points pour $[l_i;r_i]$. De plus, $p=max(P)=r_j$ avec $j&lt;i+1$.</li>
+<li>Si $l_i&lt;p$, il faut un point supplémentaire : $P\cup{r_i}$ rencontre bien $[l_i;r_i]$ et $p=r_i=max(P\cup{r_i})$ avec $i&lt;i+1$.</li>
+</ul>
+<p><strong>Optimalité :</strong>
+En notant $P={p_1, p_2, ..., p_{f}}$ on montre par récurrence finie que $\forall i\in [|1;\lvert p\rvert|]$, il exite $P_{opt}$ optimal rencontrant tous les segments et contenant {$p_1, ..., p_i$}.</p>
+<p><strong>Initialisation :</strong>
+$i=1$</p>
+<p>On considère $P_{opt}$ une solution optimale</p>
+<p>Si $p_1\notin P_{opt}$, on s'intéresse à min $P_{opt}$, qui est nécessaire pour rencontrer les segments $[l_1;r_1],...,[l_j;r_j]$ pour un certain j.</p>
+<p>$\forall k\le j$, on remarque que $l_k\le min(P_{opt})\le r_1\le r_k$ donc $P_{opt}\backslash{min(P_{opt})}\cup{r_1}$ convient.</p>
+<p><strong>Hérédité :</strong>
+Par hypothèse de récurrence, $\exists P_{opt}$ qui rencontre $[l_1;r_1],...,[l_n;r_n]$ et qui contient ${p_s|s\in[![1;i]!]}$.</p>
+<p>On numérote les éléments de $P_{opt}$ : $popt_1,...,popt_{\rvert P_{opt}\lvert}$, si $popt_{i+1}\not ={p_{i+1}}$, on utilise le même raisonnement que ci-dessous pour montrer que tous les intervalles pour lesquels $popt_{i+1}$ est nécessaire sont rencontrés par $p+1$.</p>
+<p>Pour la même raison, on peut remplacer $popt_{i+1}$ par $p_{i+1}$.</p>
+<p><strong>Remarque :</strong>
+On a utilisé un algorithme glouton pour résoudre le problème dual (cf.4.)</p>
+<hr>
+<h3 id="235-analyse-de-complexit%C3%A9">2.3.5. Analyse de complexité</h3>
+<ul>
+<li>Résolution du problème dual : $\mathcal O (n \log n)$ à cause du tri ;</li>
+<li>Conversion du problème de décision en son dual : $\mathcal O (n)$ pour la construction des $[x_i-l;x_i]$ ;</li>
+<li>Recherche par dichotomie : calcul des diamètre $D=max_{i, j}(x_i-x_j)$ en $\mathcal O (n)$ puis $\mathcal O (\log(\frac{D}{k}))$ itérations ;</li>
+<li>Au total : $\mathcal O (n \log (n) \log(\frac{D}{k}))$.</li>
+</ul>
+<h1 id="3-programmation-dynamique">3. Programmation dynamique</h1>
+<h2 id="31-m%C3%A9thode">3.1. Méthode</h2>
+<hr>
+<h3 id="311-introduction">3.1.1. Introduction</h3>
+<p>Si les sous-problèmes ne sont pas disjoints, la méthode <code>diviser pour régner</code> donne des algorithmes dont la complexité est mauvaise, parce que l'on est amené à résoudre plusieurs fois le même sous-problème.</p>
+<p><strong>Exemple :</strong>
+Calcul des coefficients binomiaux avec le triangle de Pascal :</p>
+<p>$$\dbinom{n}{p}=\dbinom{n-1}{p}+\dbinom{n-1}{p-1}$$</p>
+<p>l'implémentation naïve de cette formule donne une complexité</p>
+<p>$
+\mathcal C (n, p)
+\
+=\mathcal C (n-1, p)+\mathcal C(n-1, p-1)
+\
+=...
+\
+=\mathcal O (\binom{n}{p})\rightarrow$ exponentiel dans le pire cas $(p=\frac{n}{2})
+$.</p>
+<hr>
+<h3 id="312-approche-descendante-de-la-programmation-dynamique">3.1.2. Approche descendante de la programmation dynamique</h3>
+<p>On stocke les valeurs calculées pour les retrouver en temps constant si on en a encore besoin. On parle de mémoïsation.</p>
+<p><strong>Exemple</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">let</span> binom_memorised (n:<span class="hljs-built_in">int</span>) (p:<span class="hljs-built_in">int</span>):<span class="hljs-built_in">int</span>=
+  <span class="hljs-keyword">let</span> t = <span class="hljs-type">Array</span>.make_matrix (n+<span class="hljs-number">1</span>) (p+<span class="hljs-number">1</span>) (-<span class="hljs-number">1</span>) <span class="hljs-keyword">in</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> aux (i:<span class="hljs-built_in">int</span>) (j:<span class="hljs-built_in">int</span>):<span class="hljs-built_in">int</span>=
+     <span class="hljs-keyword">if</span> t.(i).(j)&lt;&gt;-<span class="hljs-number">1</span> <span class="hljs-keyword">then</span> t.(i).(j)
+  <span class="hljs-keyword">else</span>
+     <span class="hljs-keyword">if</span> j=<span class="hljs-number">0</span>||i=j <span class="hljs-keyword">then</span> <span class="hljs-keyword">begin</span>
+        t.(i).(j)&lt;-<span class="hljs-number">1</span>;
+        <span class="hljs-number">1</span>
+     <span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">begin</span>
+        t.(i).(j)&lt;- aux (i-<span class="hljs-number">1</span>) j + aux (i-<span class="hljs-number">1</span>) (j-<span class="hljs-number">1</span>);
+        t.(i).(j)
+     <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">in</span> aux n p;;
+</div></code></pre>
+<p><strong>Complexité temporelle / spatiale :</strong>
+$\mathcal O (np)$</p>
+<hr>
+<h3 id="313-approche-ascendante">3.1.3. Approche ascendante</h3>
+<p>On adopte un point de vue impératif en inversant l'ordre dans lequel les sous-problèmes sont considérés. On commence pour les cas de base et on construit progressivement la solution au problème global.</p>
+<p><strong>Remarque :</strong>
+On doit faire attention aux dépendances entre les valeurs calculées car elles ne sont plus gérées par la pile d'exécution.</p>
+<p><strong>Exemple : Triangle de Pascal</strong></p>
+<p>$\dbinom{i}{j}=\dbinom{i-1}{j}+\dbinom{i-1}{j-1}\rightarrow$ on remplit la matrice ligne par ligne.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">let</span> binom_ascending (n:<span class="hljs-built_in">int</span>) (p:<span class="hljs-built_in">int</span>):<span class="hljs-built_in">int</span>=
+  <span class="hljs-keyword">let</span> t = <span class="hljs-type">Array</span>.make_matrix (n+<span class="hljs-number">1</span>) (p+<span class="hljs-number">1</span>) <span class="hljs-number">1</span> <span class="hljs-keyword">in</span>
+  <span class="hljs-keyword">for</span> i = <span class="hljs-number">2</span> <span class="hljs-keyword">to</span> n <span class="hljs-keyword">do</span>
+     <span class="hljs-keyword">for</span> j = <span class="hljs-number">1</span> <span class="hljs-keyword">to</span> min (i-<span class="hljs-number">1</span>) p <span class="hljs-keyword">do</span>
+        t.(i).(j)&lt;-t.(i-<span class="hljs-number">1</span>).(j)+t.(i-<span class="hljs-number">1</span>).(j-<span class="hljs-number">1</span>)
+     <span class="hljs-keyword">done</span>
+  <span class="hljs-keyword">done</span>
+  t.(m).(p)
+</div></code></pre>
+<p><strong>Complexité spatiale / temporelle :</strong>
+$\mathcal O (np)$</p>
+<p>On peut faire mieux en complexité spatiale : $\mathcal O (p)$</p>
+<p>Un seul tableau de taille $p$ suffit, on utilise la formule sur le tableau de la droite vers la gauche.</p>
+<hr>
+<h3 id="314-exemple--nombres-de-delannay">3.1.4. Exemple : Nombres de Delannay</h3>
+<p>Nombre de chemins distincts que peut prendre une dame sur un échiquier pour aller du coin inférieur gauche au coin supérieur droit en n'utilisant que des déplacements par rangée / colonne croissante, en fonction des dimensions de l'échiquier.</p>
+<ul>
+<li>Si $i\not ={0}$ et $j\not ={0}$ : $D(i,j)=\underbrace{D(i, j-1)}<em>{\rightarrow}+\underbrace{D(i-1,j)}</em>{\uparrow}+\underbrace{D(i-1,j-1)}_{\nearrow}$</li>
+<li>Si $i=0$ ou $j=0$ : $D(i,j)=1$</li>
+</ul>
+<p>Par programmation dynamique, on calcul $D(n,p)$ en $\mathcal O (np)$ en temps et $\mathcal 0 (p)$ en espace (2 rangées suffisent).</p>
+<hr>
+<h2 id="32-application-aux-probl%C3%A8mes-doptimisation">3.2. Application aux problèmes d'optimisation</h2>
+<hr>
+<h3 id="introduction">Introduction</h3>
+<p>Un problème d'optimisation est un problème dans lequel on veut maximiser ou minimiser une valeur sans certaines contraintes L'objectif est de déterminer les paramètres permettant d'atteindre l'optimum. La méthode de la programmation dynamique s'applique à de nombreux problèmes d'optimisation.Pour appliquer cette méthode, le problème doit avoir une certaine propriété, appelée propriété de sous-structure optimale : si l'on dispose d'une solution optimale au problème, alors cette solution induit une solution optimale à une ou plusieurs sous-problèmes.</p>
+<p>Par exemple, si un plus court chemin de A à B passe par C, alors le sous-chemin de A à C est bien un plus court chemin de A à C.</p>
+<hr>
+<h3 id="322-exemple--chemin-de-poids-maximum-sur-un-%C3%A9chiquier">3.2.2. Exemple : Chemin de poids maximum sur un échiquier</h3>
+<p>On reprend le problème vu en 3.1.4. mais on ne cherche plus à déterminer le nombre de chemin, mais plutôt on suppose que les cases de l'échiquier contiennent des poids et on veut trouver un chemin qui maximise la somme des poids des cases parcourues.</p>
+<p><strong>On modélise le problème à l'aide d'une matrice de poids :</strong></p>
+<p>$\begin{bmatrix}
+31 &amp; 21 &amp; 12 &amp; 26 &amp; 34
+\
+37 &amp; 21 &amp; 34 &amp; 26 &amp; 10
+\
+2 &amp; 39 &amp; 12 &amp; 49 &amp; 47
+\end{bmatrix}$chemin de poids max.</p>
+<p>Une recherche exhaustive n'est pas raisonnable : le nombre de chemins à tester pour une matrice $n\times p$ est le nombre de Delannay $D(n, p)$. Or, $D(n, p)\ge\binom{n+p}{p}$</p>
+<p>(en interdisant les pas diagonaux, il faut $n$ pas verticaux et $p$ pas horizontaux pour passer d'un coin à l'autre. Un chemin est donc caractérisé par l'emplacement de ses pas horizontaux).</p>
+<p>Vérifions que ce problème satisfait la propriété de sous-structure optimale :</p>
+<ul>
+<li>Si un chemin de poids max de $(0,0)\ge (n-1,p-1)$ passe par $(i,j)$, alors le sous-chemin de $(0,0)$ à $(i,j)$ est de poids max.</li>
+<li>Sinon, on complète un chemin de poids max de $(0,0)$ à $(i,j)$ par le sous-chemin de $(0,0)$ à $(n-1,p-1)$ et on obtient un chemin valide de $(0,0)$ à $(n-1,p-1)$ qui contredit l'optimalité du chemin initial.</li>
+</ul>
+<p>La propriété de sous-chemin optimale correspond en fait à une récurrence sur le poids max $w_{i,j}$ d'un chemin de $(0,0)$ à $(i,j)$ : on note $M=(m_{i,j})_{i,j}$, la matrice définissant le problème.</p>
+<p>Alors : $w_{i,j}=(m_{i,j})<em>{i,j}+\left{
+\begin{array}{l}
+0\text{ si }i=j=0
+\
+w</em>{0,j-1}\text{ si }i=0\text{ et }j\not =0
+\
+w_{i-1,0}\text{ si }i\not =0\text{ et }j=0
+\
+max(w_{i,j-1},w_{i-1,j},w_{i-1,j-1})\text{ si }i\not =0\text{ et }j\not =0
+\end{array}\right.
+$</p>
+<p>On peut calculer $w_{n-1,p-1}$ par programmation dynamique.</p>
+<p>On adopte l'approche ascendante de la programmation dynamique : on remplit la matrice $W=(m_{i,j})_{i,j}$, soit par :</p>
+<ul>
+<li>ligne croissante (et colonnes croissantes)</li>
+<li>colonnes croissantes (et lignes croissantes)</li>
+<li>anti-digonales, i.e. par $i+j$ croissant</li>
+</ul>
+<p><strong>Exercice : Code</strong></p>
+<p><strong>Complexité :</strong>
+$\mathcal O(n,p)$, en espace aussi, mais on peut optimiser l'espace requis car il suffit de connaître une ligne / colonne pour remplir la suivante ~&gt; $\mathcal O(min(n,p))$ en espace.</p>
+<p><strong>Remarque :</strong>
+On n'a calculé que le poids maximal, pas un chemin réalisant ce poids. Deux possibilités :</p>
+<ol>
+<li>Lors du remplissage de la matrice, on détermine en plus de $w_{i,j}$ un prédécesseur de $(i,j)$ sur un chemin de poids max de $(0,0)$ à $(i,j)$. On détermine un tel prédécesseur en gardant un couple qui réalise le maximum dans la formule de récurrence.</li>
+<li>On détermine la matrice $W$ puis on retrouve un chemin de poids max en partant de la case $(n-1,p-1)$, en déterminant un prédécesseur à  l'aide des valeurs de $N$ puis en calculant récursivement un chemin vers ce prédécesseur.</li>
+</ol>
+<hr>
+<h3 id="323-exemple--produit-de-matrices">3.2.3. Exemple : Produit de matrices</h3>
+<p>On cherche à minimiser le nombre de multiplications nécessaires au calcul du produit de matrices.</p>
+<ul>
+<li>Si $A$ et $B$ sont de taille $n\times p$ et $p\times q$, on peut calculer $AB$ à l'aide de $npq$ multiplications à l'aide de la définition :</li>
+</ul>
+<p>$$(AB)<em>{i,j}=\sum</em>{k=1}^p a_{i,k}b_{k,j}$$</p>
+<ul>
+<li>Si $A$, $B$ et $C$ sont de taille $2\times 5$, $5\times 8$ et $8\times 6$, on peut calculer $ABC$ de 2 façons :</li>
+<li>$(AB)C$ ~&gt; 176 multiplications ($2\times5\times8+2\times8\times6$)</li>
+<li>$A(BC)$ ~&gt; 300 multiplications ($5\times8\times6+2\times5\times6$)</li>
+</ul>
+<p>On veut donc trouver un parenthésage optimal du produit $A_0,...,A_{n-1}$ où $\forall i\in[![0;n-1]!], A_i$ est de taille $t_i\times t_{i+1}$</p>
+<p>Ce problème vérifie la propriété de sous-structures optimale : si $(A_0,...,A_k)(A_{k+1},...,A_{n-1})$ est un parenthésage optimal, on a bien des parenthésages optimaux des produits $A_0,...,A_k$ et $A_{k+1},...,A_{n-1}$.</p>
+<p>On observe qu'il faudra résoudre les sous-problèmes suivants : optimisation du parenthésage des produits $A_i,...,A_j$.</p>
+<p>$\forall 0\le i\le j\le n-1$, on note $m_{i,j}$ le nombre minimal de multiplication nécessaires au calcul de $A_i,...,A_j$.</p>
+<p>Si $\underbrace{(A_i,...,A_k)}<em>{\text{matrice de taille }t_i\times t</em>{k+1}}\times\underbrace{(A_{k+1},...,A_j)}<em>{\text{matrice de taille }t</em>{k+1}\times t_{j+1}}$ est un parenthésage optimal, alors $m_{i,j}=m_{i,k}+m_{k+1,j}+t_i+t_{k+1}t_{j+1}$.</p>
+<p>On retrouve alors la relation de récurrence : $m_{i,j}\left{\begin{array}{l}
+0\text{ si }i=j
+\
+min
+\
+k\in[![i;j-1]!]
+\end{array}\right.(m_{i,k}+m_{k+1,j}+t_i+t_{k+1}t_{j+1})$ si $i&lt;j$.</p>
+<p>Comment remplir la matrice $M=(m_{i,j})_{i,j}$ ?</p>
+<p>On peut remplir la matrice par diagonales, i.e. par $j-1$ croissant</p>
+<p><strong>Exercice : Code</strong></p>
+<p><strong>Complexité :</strong>
+$\mathcal O(n^3)$ en temps, $\mathcal O(n^2)$ en espace.</p>
+<p>Comment représenter un parenthésage optimal $\pi_{i,j}$ de $A_i,...,A_j$ ?</p>
+<p>Si le parenthésage s'écrit $(A_i,...,A_k)(A_{k+1},...,A_j)$, il suffit de retenir $k$ et les parenthésages $\pi_{i,k} et \pi_{k+1,j}$.</p>
+<p><strong>Remarque :</strong>
+C'est un ABR.</p>
+<h1 id="4-algorithmes-gloutons">4. Algorithmes gloutons</h1>
+<h2 id="41-m%C3%A9thode">4.1. Méthode</h2>
+<hr>
+<h3 id="411-introduction">4.1.1. Introduction</h3>
+<p>La programmation dynamique est une méthode utilisée pour résoudre de nombreux problèmes, mais les implémentations nécessitent en général d'allouer une grande quantité de mémoire. L'approche des algorithmes gloutons est similaire à celle de la programmation dynamique dans sa version descendante. La différence principale dans le fait qu'on ne résout pas plusieurs sous-problèmes pour garder ensuite la meilleure solution : on choisit à l'avance le sous-problème à résoudre. Le choix du sous-problème se fait à l'aide d'une heuristique, i.e. d'une stratégie de décision locale permettent de faire un choix rapide.</p>
+<hr>
+<h3 id="412-exemple--probl%C3%A8me-du-rendu-de-monnaie">4.1.2. Exemple : Problème du rendu de monnaie</h3>
+<p>On doit rendre une somme $n$ à l'aide de pièces / billets dont la valeur appartient à une ensemble $S$.</p>
+<p><strong>Objectif :</strong>
+Minimiser le nombre de pièces / billets utilisés.</p>
+<ul>
+<li><strong>Résolution par prog dynamique :</strong> on va noter $f(n,S)$ le nombre minimal de pièces / billets nécessaires pour atteindre $n$ avec des pièces / billets de valeur prise dans $S$ et on note $S={c_1,...,c_k}$.
+On remarque que $\forall i\in \llbracket 1;k\rrbracket,f(n,S)\le \min(\underbrace{f(n,S)\setminus{c_i}}_{\text{on utilise pas }c_i},1+f(n-c_i,S))$</li>
+</ul>
+<p>On peut remplir la matrice $F=(f_{i,j})<em>{i,j}$, où $\forall i,j, f</em>{i,j}=f(i,{c_1,...,c_j})$
+~&gt; algo en $\mathcal O(nk)\rightarrow$ complexité exponentielle</p>
+<p><strong>Explication :</strong></p>
+<ul>
+<li>
+<p>paramètres du problème : $n$ et $S={c_1,...,c_k}$</p>
+</li>
+<li>
+<p>taille des paramètres : $\mathcal O(\log n)$ et $k$</p>
+</li>
+<li>
+<p>$\mathcal O(nk)=\mathcal O(\underbrace{2^{\log_2 n}}_{\text{exponentiel en }\log n}k)$</p>
+</li>
+<li>
+<p><strong>Algo glouton :</strong>
+<strong>Idée :</strong> on utilise autant que possible la plus grosse pièce $\le n$ dans l'idée qu'il faudrait utiliser plusieurs petites pièces pour compenser l'absence d'une telle pièce.</p>
+</li>
+</ul>
+<p><strong>Algo :</strong> Trié $S$ par ordre décroissant et renuméroter en ${c_1',...,c_k'$</p>
+<p>$\begin{aligned}{}
+\text{Pour }i\text{ de 1 à }k :
+\
+&amp;\text{Utiliser }c_i\text{ autant que possible, i.e. }\lfloor\frac{n}{c_i'}\rfloor\text{ fois}
+\
+&amp;n\leftarrow n-c_i'\times\lfloor\frac{n}{c_i'}\rfloor
+\
+\text{Si }n\not = 0\text{, échec }
+\end{aligned}$</p>
+<p><strong>Complexité :</strong> $\mathcal O(k\log k)$</p>
+<p><strong>Exemple : n = 48</strong></p>
+<ul>
+<li>
+<p>dans le système européen, $S={1,2,5,10,20}\rightarrow$ solution $2\times 20+5\times 2+1$</p>
+<p>on peut démontrer que l'algo est optimal et qu'il réussi toujours dans ce système</p>
+</li>
+<li>
+<p>dans le système britannique antérieur à 1971 : $S={1,3,6,12,24,30}\rightarrow$ solution : $30+12+6$, optimum : $2\times 24$</p>
+</li>
+</ul>
+<hr>
+<h3 id="remarque">Remarque</h3>
+<p>Cet exemple démontre qu'un algo glouton ne fournit pas forcément toujours une solution optimale. Il faut donc pouvoir démontrer l'optimalité d'un algo glouton lorsque l'on souhaite l'utiliser. Il existe un cadre théorique donnant une condition suffisante d'optimalité, appelé théorie des matroïdes (<strong>H.P.</strong>). Nous avons vu en <strong>2.3.4.</strong> une autre méthode de démonstration : on montre par récurrence qu'il existe une solution optimale qui fait les mêmes choix que l'algo glouton et on montre aussi que l'algo glouton fournit une solution, ce qui implique que toute solution optimale faisant les mêmes choix donne la même solution.</p>
+<hr>
+<h2 id="42-application">4.2. Application</h2>
+<p>Ordonnancement de tâches unitaires avec pénalité de retard.</p>
+<hr>
+<h3 id="421-description-du-probl%C3%A8me">4.2.1 Description du problème</h3>
+<p>On considère un ensemble de $n$ tâches $T={t_s,...,t_{n-1}}$ qui nécessitent chacune une unité de temps pour être réalisées. À chaque tâche $t\in T$ est associée une date limite $f(t)\in \llbracket 0,n-1 \rrbracket$ et une pénalité $p(t)\in\mathbb{N}$ si la date limite n'est pas respectée.</p>
+<p>On appelle ordonnancement des tâches une fonction $d$ : $T\rightarrow\llbracket O,n-1\rrbracket$ qui associe à chaque $t\in T$ la date limite $d(t)$ à laquelle la date est réalisée. $d$ doit être une bijection (on n'effectue qu'une tâche à chaque instant et toutes les tâches sont traitées).</p>
+<p>Un ordonnancement $d$ définit 2 ensembles :</p>
+<ul>
+<li>$T^+={t\in T,d(t)\le f(t)}$ l'ensemble des tâches réalisées à temps</li>
+<li>$T^-={t\in T,d(t)&gt;f(t)}$ l'ensemble des tâches réalisées en retard.</li>
+</ul>
+<p>La pénalité associée à d est $P(d)=\displaystyle\sum_{t\in T} p(t)$</p>
+<p><strong>Objectif :</strong>
+Déterminer $d$ minimisant $P(d)$</p>
+<p><strong>Exemple :</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">0</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">4</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">f</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td style="text-align:center">p</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">d</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">5</td>
+</tr>
+</tbody>
+</table>
+<p>donne $P(d)(t_0)+p(t_3)=3+2=5$</p>
+<hr>
+<h3 id="422-algo-glouton">4.2.2. Algo glouton</h3>
+<p>On remarque que les pénalités de retard ne dépendent pas de la durée du retard. Ce qui compte est donc l'ordonnancement des tâches de $T^+$. On cherche donc à construire $T^+\subseteq{T}$ tq on peut trouver un ordonnancement qui traite dans les délais les éléments de $T^+$ et tq $P(T^+)=\displaystyle\sum_{t\in T^+} p(t)$ est maximal.</p>
+<p><strong>Heuristique :</strong>
+On sélectionne en priorité les tâches de pénalité maximale que l'on planifie le plus tard possible.</p>
+<p><strong>Algo :</strong>
+Trier les tâches par pénalité décroissante et les renommer $t_0,...,t_{n-1}$</p>
+<p>$T^+\leftarrow\empty$</p>
+<p>Marquer toutes les dates de $\llbracket 0,n-1\rrbracket$ comme disponibles</p>
+<p>$
+\begin{aligned}
+\text{Pour }i\text{ de 0 à }n-1
+\
+&amp;\text{S'il existe une date}j\le f(t_i)\text{ disponible}
+\
+&amp;&amp;\text{Ajouter }t_i\text{ à }T^+
+\
+&amp;&amp;\text{Marquer le plus grand }j\le f(t_i)\text{disponible comme occupé par }t_i
+\end{aligned}
+$</p>
+<p>À la fin, placer les tâches non sélectionnées aux dates restantes.</p>
+<p><strong>Complexité :</strong></p>
+<ul>
+<li>le tri se fait en $\mathcal O(n\log n)$</li>
+<li>la recherche d'un temps $j\le f(t_i)$ disponible dépend de la structure de données utilisée pour représenter l'ensemble des dates disponibles.</li>
+</ul>
+<p>Avec un tableau de booléens, on parcourt les dates jusqu'à en trouver une disponible ou jusqu'à exhaustion des dates ~&gt; recherche linéaire $\rightarrow\mathcal O(n^2)$ au total</p>
+<p>Avec un ABR équilibré contenant les dates disponibles : Exo : étant donné une date $d$, on peut trouver le plus grand élément de l'ABR inférieur ou égal à $d$ $\rightarrow\mathcal O(n\log n)$ au total</p>
+<hr>
+<h3 id="preuve-doptimalit%C3%A9">Preuve d'optimalité</h3>
+<p><strong>Lemme 1 :</strong>
+Soit $T$ un ensemble de tâches et $t$ une tâche $\in T$ de pénalité maximale</p>
+<p>Alors $\exists T^+\subseteq{T}$ dont on peut planifier les éléments dans les délais, tq $P(T^+)$ est maximal et tq $t\in T^+$</p>
+<p><strong>Démonstration :</strong>
+On considère $T^+$ optimal.</p>
+<p>Si $t\notin T^+$. S'il reste une date $d\le f(t)$ non occupée par des tâches de $T^+$, alors $T^+\cup{t}$ contredit l'optimalité de $T^+$.</p>
+<p>Donc il existe une tâche $t'\in T^+$ planifiée à une date $d\le f(t)$.</p>
+<p>Or, $p(t')\le p(t)$ donc $T'=(T^+\setminus{t'})\cup {t}$ est aussi une solution optimale.</p>
+<p>En effet, on peut traiter toutes les tâches de $T'$ dans les délais et $P(T')=P(T^+)-p(t')+p(t)\ge P(T^+)$</p>
+<p><strong>Lemme 2 :</strong>
+On considère $T^+\subseteq{T}$ optimal contenant une tâche $t$ de pénalité maximale associée à la date $j$.</p>
+<p>On construit le sous-problème sans $t$ ni date $j$ ainsi :</p>
+<p>$$T'=T\setminus{t}$$</p>
+<p>$$\forall t'\in T', f'(t')=\left{\begin{array}{ll}
+f(t') &amp; \text{ si } f(t')&lt;j
+\
+f(t')-1 &amp; \text{ sinon}
+\end{array}\right.$$</p>
+<p>Alors $T^+\setminus{t}$ est optimal pour $T'$</p>
+<p><strong>Démonstration :</strong>
+Tout ordonnancement de $T'$ correspond à ordonnancement de $T$ et réciproquement en décalant les temps postérieurs à $j$ pour insérer la tâche de $t$. Si on dispose de $d'$ pour $T'$, alors $d$, définie par $d(t')=\left{
+\begin{array}{ll}
+d'(t') &amp; \text{si }d'(t') &lt; j
+\
+d'(t') + 1 &amp; \text{sinon}
+\end{array}
+\right.$ donne un ordonnancement de même pénalité.</p>
+<p>S'il existait $T^{++}$ optimal pour $T'$ avec $P(t^{++}&gt;P(T^+\setminus{t}=P(T^+)-p(t)$ alors $T^{++}\cup {t}$ donnerait une solution optimale pour qui contredit l'optimalité de $T^+$.</p>
+<p><strong>Théorème :</strong>
+L'algo glouton donne une solution optimale</p>
+<p><strong>Démonstration :</strong>
+Par récurrence sur $n$ :</p>
+<ul>
+<li>$n=1$, trivial</li>
+<li>hérédité : on note $T={t_0,...,t_n}$ ordonné par pénalité décroissante</li>
+</ul>
+<p>Par le lemme 1, il existe une solution optimale $T^-+$ contenant $t_0$
+Par le lemme 2, $T^=+\setminus{t_0}$ est optimale pour $T\setminus{t_0}$ avec les délais décalés</p>
+<p>Par hypothèse de récurrence, l'algo glouton est optimal pour $T\setminus{t_0}$ avec les délais décalés $\rightarrow$ ensemble $T$</p>
+<p>On peut décaler l'ordonnancement pour insérer $t_0$ et obtenir une solution pour $T$</p>
+<p>$P(T'\cup{t_0}) = P(T') + p(t_0) = P(T^+ \setminus{t_0}) + p(t_0) = P(T^+)$ optimal</p>
+
+</body>
+</html>

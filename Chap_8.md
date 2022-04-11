@@ -767,7 +767,7 @@ On peut utiliser plusieurs techniques afin de rendre cet algorithme plus efficac
  DPPLL et CDCL sont à la base des SAT-solvers modernes.
 
 ---
-## 4.3. Compléments d'algorithme
+## 4.3. Compléments d'algorithmique
 
 ---
 ### 4.3.1. Introduction
