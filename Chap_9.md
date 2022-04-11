@@ -174,5 +174,3 @@ SELECT titre, date_de_parution AS date
 FROM Document
 ORDER BY date DESC, titre;
 ```
-
-test
