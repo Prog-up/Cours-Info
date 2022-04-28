@@ -161,8 +161,6 @@ On peut voir une formule comme une propriété des variables indépendantes de t
 
 - Le calcul propositionnel est un cas particulier du calcul des prédicats où il n'y a pas que des constantes propositionnelles (les quantificateurs et les termes deviennent inutiles).
 
-> New
-
 ---
 ### 2.2.6. Définition : variables libres / liées
 Les variables libres d'une formule $\varphi$ sont les variables qui ne sont pas "capturées" par un quantificateur. On les définit inductivement par :
@@ -330,7 +328,7 @@ Soit $\varphi$ une formule.
 
 La table de vérité de $\varphi$ est la table indexée par les valuations des variables de $\varphi$ et qui contient comme entrée correspondant à une valuation $v$ la valeur $[\![\varphi]\!]_v$.
 
-On représente la table de $\varphi$, de variable $x_1\dotsx_n$, en plaçant une colonne pour chaque $x_i$ et une colonne pour $\varphi$.
+On représente la table de $\varphi$, de variable $x_1\dots x_n$, en plaçant une colonne pour chaque $x_i$ et une colonne pour $\varphi$.
 
 Pour chaque valuation de $v$ l'entrée correspondant à $x_i$ est $v(x_i)$ et l'entrée correspondant à $\varphi$ est $[\![\varphi]\!]_v$.
 
