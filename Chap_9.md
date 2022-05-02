@@ -65,7 +65,7 @@ Pour que cela fonctionne, la plupart des SGBD s'appuient sur un modèle introdui
  |:-:|:-:|:-:|:-:|:-:|
  | La cousine Bette | Honoré de Balzac | Roman | 1848 | *240* |
  | De la guerre | Carl von Clausewitz | Traité | 1832 | *240* |
- | Cyrano de Bergerac | Edouard Rostand | Théâtre | 1897 | 280 |
+ | Cyrano de Bergerac | Edmond Rostand | Théâtre | 1897 | 280 |
 
  **Remarque :**
  Certains enregistrements peuvent coïncider pour certains attributs et on veut une manière efficace de les distinguer
@@ -174,3 +174,164 @@ SELECT titre, date_de_parution AS date
 FROM Document
 ORDER BY date DESC, titre;
 ```
+
+---
+### 1.2.3. Opération de sélection
+On peut ne conserver que les enregistrements qui satisfont une condition donnée via l'opération de sélection, introduite par le mot-clé `WHERE`.
+
+**Exemple :**
+```SQL
+SELECT * FROM Document
+WHERE auteur = 'Edouard Rostand';
+```
+
+Les opérateurs de comparaison au programme sont : =, <>, <, >, <=, >=
+
+**Attention :**
+Les enregistrements ne fournissent pas forcément une valeur pour chaque attribut. Les attributs sans valeur prennent la valeur spéciale NULL. On ne peut pas vérifier si un attribut a la valeur NULL avec les opérateurs ci-dessous : on utilise les opérateurs `IS NULL` et `IS NOT NULL`.
+
+**Exemple :**
+```SQL
+SELECT * FROM Document
+WHERE date_de_parution IS NULL;
+```
+(documents dont la date de parution est inconnue)
+
+On peut combiner plusieurs conditions grâce aux connecteurs logiques : `AND`, `OR`, et `NOT`.
+
+**Exemple :**
+```SQL
+SELECT * FROM Document
+WHERE NOT (date_de_parution >= 2000 AND nombre_de_pages < 200);
+```
+
+**Remarque :**
+On peut combiner sélection et projection.
+
+On peut aussi fixer un nombre maximal d'enregistrements pour le résultat : le SGBD choisira les premiers qu'il traite jusqu'à éventuellement atteindre la borne. On utilise le mot-clé `LIMIT`.
+
+**Exemple :** 10 ouvrages les plus récents :
+```SQL
+SELECT * FROM Document
+ORDER BY date_de_parution DESC
+LIMIT 100;
+```
+
+On peut ajouter un décalage lors de l'usage de `LIMIT` grâce au mot-clé `OFFSET`.
+
+**Exemple :**
+```SQL
+SELECT DISTINCT auteur FROM Document
+ORDER BY nombre_de_page DESC
+LIMIT 5 OFFSET 10;
+```
+(dernier tiers du top 15 des auteurs ayant écrit les plus gros livres)
+
+---
+# 2.
+## 2.1. Modèle entité-association
+
+---
+### Introduction
+Le modèle entité-association est un modèle de la fin des années 1970 qui propose un formalisme pour décrire la structuration des données en fonction des liens qu'elles entretiennent. On lui associe une représentation graphique permettant d'identifier facilement les 2 concepts de base de ce modèle : les entités et les associations.
+
+---
+### 2.1.2. Entités
+Une entité est un objet donné pour lequel on dispose de données que l'on souhaite traiter.
+
+**Exemple :**
+Moi, le livre de d'Edmond Rostand intitulé Cyrano de Bergerac.
+
+Les informations associées à une entité sont ses `attributs`. On réunit un ensemble d'entités ayant des caractéristiques communes dans un type d'entité que l'on appelle aussi par abus `entités`.
+
+Dans ce cadre, une entité concrète est appelée `instance` ou 'occurrence' de l'entité.
+
+---
+### 2.1.3. Associations :
+Une association exprime un lien entre plusieurs entités.
+
+**Exemple :**
+Edmond Rostand *a écrit* le livre intitulé Cyrano de Bergerac.
+
+Une association peut aussi avoir des attributs (exemple : date d'écriture) et on fait également l'abus de langage qui consiste à appeler association un type d'association.
+
+**Représentation graphique :**
+On représente deux types de blocs (les entités et les associations) et on lie les blocs d'entités via les blocs d'association qui expriment ces liens.
+
+|Document|Écriture|Personne|
+|:-|:-|:-|
+|- titre|- date|- Nom|
+|- genre||- Prénom|
+|- #pages||- date de naissance|
+
+> Insert graph (cf. Louis)
+
+On distingue les associations binaires (i.e. qui tient 2 entités) des associations $n$-aires. On peut toujours se limiter aux associations binaires en remplaçant une associations $n$-aire par une nouvelle entité représentant l'association, liée aux $n$ entités par $n$ associations binaires.
+
+**Exemple :**
+
+> Insert graph (1) ~> (2)
+
+---
+### 2.1.4. Cardinalité d'une association
+Le lien entre une entité et une association peut être étiqueté par un couple $p$, $q$ représentant les nombres minimum et maximum de fois que l'entité peut apparaître dans une association de ce type : $q=*$ s'il n'y a pas de borne supérieure.
+
+Exemple :
+
+> Insert graph (3)
+
+- un document a nécessairement au moins 1 auteur, potentiellement plusieurs ;
+- une personne peut avoir écrit 0 ou plusieurs documents.
+
+On appelle cette association une association $*-*$ car elle peut lier plusieurs entités à plusieurs entiers.
+
+D'autres types d'associations sont :
+- les associations $1-*$ : elles lient une entité à plusieurs autres.
+  **Exemple :**
+ une oeuvre peut être tirée à plusieurs exemplaires mais un exemplaire n'est un tirage que d'une seule oeuvre
+
+ > Insert graph (4)
+
+- les associations $1-1$ : elles lient une entité à une seule autre.
+
+ **Exemple :**
+ Chaque exemplaire d'une bibliothèque a une référence unique.
+
+**Remarque :**
+On peut souvent fusionner les entités impliquées dans 1 association $1-1$ sans introduire trop de redondance dans les données.
+
+Une association $*-*$ peut être scindée en 2 associations $1-*$ via l'introduction d'une nouvelle entité représentant l'association.
+
+**Exemple :**
+
+> Insert graph (6) ~> (7)
+
+**Remarque :**
+Les attributs de la nouvelle entité doivent permettre d'identifier les entités impliquées dans l'association : on utilise des clés étrangères dans le modèle relationnel associé à ce modèle.
+
+---
+## 2.2. Passage du modèle entité-association au modèle relationnel
+
+---
+### 2.2.1. Idée
+On associe une relation à chaque entité avec les mêmes attributs. Les associations expriment des liens entre les tables et introduisent donc des contraintes d'intégrité des données.
+
+- La décomposition d'une association $n$-aire en associations binaires se traduit en la création d'une nouvelle entité donc d'une nouvelle association.
+- La décomposition des associations binaires $*-*$ en 2 association $1-*$ se traduit aussi en la création d'une nouvelle table, dite `table de jonction`.
+- Après cela, il ne reste plus qu'à traiter les associations $1-1$ et $1-*$.
+
+---
+### 2.2.2. Cas des associations $1-1$ et $1-*$
+Ces types d'association impliquent que pour l'une des deux entités, chaque instance de l'entité ne peut être associée qu'à une unique instance de l'autre entité. Pour exprimer ce lien entre les tables correspondantes on ajoute une clé étrangère à la première table, faisant référence à l'unique enregistrement de la seconde table impliqué dans l'association. Les attributs de l'association seront aussi intégrés à la première table.
+
+**Exemple :**
+
+> Insert graph (8)
+
+Modèle relationnel associé : on utilise des identifiants numériques pour les clés primaires
+- Personne ($\underline{\text{id : entier}}$, nom : texte, prénom : texte, date de naissance : date)
+- Document ($\underline{\text{id Doc : entier}}$, titre : texte, genre : ... ($\dots$))
+- Exemplaire ($\underline{\text{numéro : entier}}$, imprimerie : texte, id Doc : entier, date d'impression : date)
+- Écriture (date : date, id DOc : entier, id : entier)
+
+(id Doc et id = clé étrangère)
