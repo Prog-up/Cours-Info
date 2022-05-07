@@ -265,9 +265,9 @@ On représente deux types de blocs (les entités et les associations) et on lie 
 > Ici
 
 ```mermaid
-graph;
-  Biblo--Prop;
-  Prop-->Usage;
+graph
+  Biblo--Prop
+  Prop-->Usage
 ```
 
 ```mermaid
