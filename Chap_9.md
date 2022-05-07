@@ -262,6 +262,29 @@ On représente deux types de blocs (les entités et les associations) et on lie 
 <img src="Pictures/Graphe13.png" alt="drawing" width="750">
 </p>
 
+> Ici
+
+```mermaid
+graph;
+  Biblo--Prop;
+  Prop-->Usage;
+```
+
+```mermaid
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>John: Hello John, how are you?
+    loop Healthcheck
+        John->>John: Fight against hypochondria
+    end
+    Note right of John: Rational thoughts <br/>prevail!
+    John-->>Alice: Great!
+    John->>Bob: How about you?
+    Bob-->>John: Jolly good!
+```
+
+
 On distingue les associations binaires (i.e. qui tient 2 entités) des associations $n$-aires. On peut toujours se limiter aux associations binaires en remplaçant une associations $n$-aire par une nouvelle entité représentant l'association, liée aux $n$ entités par $n$ associations binaires.
 
 **Exemple :**
