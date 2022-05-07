@@ -265,9 +265,9 @@ On représente deux types de blocs (les entités et les associations) et on lie 
 > Ici
 
 ```mermaid
-graph
-  Biblo--Prop
-  Prop-->Usage
+graph TD;
+    Biblio\nlol-->Prop;
+    Prop-->Usage;
 ```
 
 ```mermaid
@@ -282,6 +282,21 @@ sequenceDiagram
     John-->>Alice: Great!
     John->>Bob: How about you?
     Bob-->>John: Jolly good!
+```
+e
+```geojson
+{
+  "type": "Polygon",
+  "coordinates": [
+      [
+          [-90,30],
+          [-90,35],
+          [-90,35],
+          [-85,35],
+          [-85,30]
+      ]
+  ]
+}
 ```
 
 
