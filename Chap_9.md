@@ -265,9 +265,11 @@ On représente deux types de blocs (les entités et les associations) et on lie 
 > Ici
 
 ```mermaid
-graph TD;
-    Biblio\nlol-->Prop;
-    Prop-->Usage;
+sequenceDigram
+  participant Document
+  participant Écriture
+  participant Personne
+  Document->>Écriture
 ```
 
 ```mermaid
@@ -283,22 +285,6 @@ sequenceDiagram
     John->>Bob: How about you?
     Bob-->>John: Jolly good!
 ```
-e
-```geojson
-{
-  "type": "Polygon",
-  "coordinates": [
-      [
-          [-90,30],
-          [-90,35],
-          [-90,35],
-          [-85,35],
-          [-85,30]
-      ]
-  ]
-}
-```
-
 
 On distingue les associations binaires (i.e. qui tient 2 entités) des associations $n$-aires. On peut toujours se limiter aux associations binaires en remplaçant une associations $n$-aire par une nouvelle entité représentant l'association, liée aux $n$ entités par $n$ associations binaires.
 
