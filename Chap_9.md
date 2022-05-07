@@ -275,11 +275,6 @@ On distingue les associations binaires (i.e. qui tient 2 entités) des associati
 <img src="Pictures/Graphe7.png" alt="drawing" width="750">
 </p>
 
-```mermaid
-erDiagram
-    Personne }o--|{ Bibliotheque : Emprunt
-```
-
 ---
 ### 2.1.4. Cardinalité d'une association
 Le lien entre une entité et une association peut être étiqueté par un couple $p$, $q$ représentant les nombres minimum et maximum de fois que l'entité peut apparaître dans une association de ce type : $q=*$ s'il n'y a pas de borne supérieure.
@@ -296,17 +291,17 @@ On appelle cette association une association $*-*$ car elle peut lier plusieurs 
 
 D'autres types d'associations sont :
 - les associations $1-*$ : elles lient une entité à plusieurs autres.
-  **Exemple :**
- une oeuvre peut être tirée à plusieurs exemplaires mais un exemplaire n'est un tirage que d'une seule oeuvre
+ **Exemple :**
+une oeuvre peut être tirée à plusieurs exemplaires mais un exemplaire n'est un tirage que d'une seule oeuvre
 
-  <p align="center">
-  <img src="Pictures/Graphe9.png" alt="drawing" width="750">
-  </p>
+ <p align="center">
+ <img src="Pictures/Graphe9.png" alt="drawing" width="750">
+ </p>
 
 - les associations $1-1$ : elles lient une entité à une seule autre.
 
- **Exemple :**
- Chaque exemplaire d'une bibliothèque a une référence unique.
+**Exemple :**
+Chaque exemplaire d'une bibliothèque a une référence unique.
 
 **Remarque :**
 On peut souvent fusionner les entités impliquées dans 1 association $1-1$ sans introduire trop de redondance dans les données.
@@ -367,14 +362,15 @@ On s'intéresse à des opérations qui prennent plusieurs tables en argument et 
 ### 3.1.2. Produit cartésien
 On construit le produit cartésien de deux relations vues comme des ensembles de tuples.
 
-**Schéma relationnel :** 
+**Schéma relationnel :**
 Si on a deux relations $R(A_1: D_1, \ldots, A_n: D_n)$ et $R'(A_1': D_1', \ldots, A_n': D_n')$, alors
 
 $$(R \times R')(A_1: D_1, \ldots, A_n: D_n, A_1': D_1', \ldots, A_n': D_n')$$
 
 de clé primaire l'union des clés primaires de $R$ et $R'$.
 
-**Réalisation SQL :** on sépare les tables par des virgules dans la clause `FROM`.
+**Réalisation SQL :**
+On sépare les tables par des virgules dans la clause `FROM`.
 
 **Exemple :**
 ```SQL
@@ -388,230 +384,195 @@ On peut faire des produits $n$-aires :
 SELECT * FROM R1, R2, ..., Rn;
 ```
 
-  **Exemple :** 
-  auteur, titre et date d'écriture dans la BDD vue en 2.2.2.
+**Exemple :**
+auteur, titre et date d'écriture dans la BDD vue en 2.2.2.
 
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+```SQL
 SELECT nom, prenom, titre, date
 FROM Personne, Document, Ecriture
-WHERE Personne.id = Ecriture.id AND Document.idDoc = Ecriture.idDoc;\end{lstlisting}
+WHERE Personne.id = Ecriture.id AND Document.idDoc = Ecriture.idDoc;
+```
 
-  Remarque : il existe une construction appelée jointure qui est plus adaptée à ce type de requête (\textit{cf} \ref{3.2}, page \pageref{3.2}).
-\end{indt}
+**Remarque :**
+Il existe une construction appelée jointure qui est plus adaptée à ce type de requête (cf 3.2).
 
-\vspace{12pt}
+---
+### 3.1.3. Définition (relations union-compatibles)
+ Deux relations sont `union-compatibles` si elles ont le même nombre d'attributs et si les attributs de même position dans les deux relations ont le même domaine.
 
-\begin{indt}{\subsubsection{Définition (relations \textit{union-compatibles})}}
-  Deux relations sont \textit{union-compatibles} si elles ont le même nombre d'attributs et si les attributs de même position dans les deux relations ont même domaine.
+**Intuition :**
+Même schéma au renommage des attributs et au choix de la clé primaire près.
 
-  Intuition : même schéma au renommage des attributs et au choix de la clé primaire près.
-\end{indt}
+---
+### 3.1.4. Union
+L'union de deux relations union-compatibles est une relation de même schéma que la première et dont les enregistrements sont ceux qui apparaissent dans au moins l'une des deux relations.
 
-\vspace{12pt}
+**Remarque :**
+Cela signifie que si les noms d'attributs sont différents pour deux relations, alors on conserve ceux de la première. De plus, les doublons sont supprimés.
 
-\begin{indt}{\subsubsection{Union}}
-  L'union de deux relations union-compatibles est une relation de \textit{même schéma que la première} et dont les enregistrements sont ceux qui apparaissent dans au moins l'une des deux relations.
+**Réalisation SQL :**
+On utilise le mot clé `UNION` entre deux requêtes qui produisent les tables dont on veut faire l'union.
 
-  Remarque : cela signifie que si les noms d'attributs sont différents pour deux relations, alors on conserve ceux de la première. De plus, les doublons sont supprimés.
+**Attention :**
+Pas de `UNION` dans une clause `FROM`.
 
-  Réalisation SQL : on utilise le mot clé \texttt{UNION} entre deux requêtes qui produisent les tables dont on veut faire l'union.
+**Exemple :**
+```SQL
+SELECT ... UNION SELECT ...;
+```
 
-  Attention : pas de \texttt{UNION} dans une clause \texttt{FROM}
+**Exemple :**
+Dates qui sont des dates d'écriture ou d'impression de documents.
 
-  Exemple : \texttt{SELECT ... UNION SELECT ...}
-
-  Exemple : dates qui sont des dates d'écriture ou d'impression de documents.
-
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+```SQL
 SELECT date FROM Ecriture
 UNION
-SELECT date d impression FROM Exemplaire;\end{lstlisting}
-\end{indt}
+SELECT date_d’impression FROM Exemplaire;
+```
 
-\vspace{12pt}
+---
+### 3.1.5. Intersection
+L'intersection de deux relations union-compatibles est une relation de même schéma que la première dont les enregistrements sont les tuples qui apparaissent dans les deux relations.
 
-\begin{indt}{\subsubsection{Intersection}}
-  L'intersection de deux relations union-compatibles est une relation de même schéma que la première dont les enregistrements sont les tuples qui apparaissent dans les deux relations.
+**Réalisation SQL :**
+On utilise le mot-clé `INTERSECT` de la même manière que `UNION`.
 
-  Réalisation SQL : on utilise le mot-clé \texttt{INTERSECT} de la même manière que \texttt{UNION}.
+**Remarque :**
+Certains SGBD (comme MySQL) n'implémentent pas cette opération. Dans ce cas, il faut encoder cette opération avec des requêtes. On peut par exemple utiliser un produit cartésien.
 
-  Remarque : certains SGBD (comme mysql) n'implémentent pas cette opération. Dans ce cas, il faut encoder cette opération avec des requêtes. On peut par exemple utiliser un produit cartésien.
+**Exemple :**
+Prénom qui sont aussi des titres d'œuvres.
 
-  Exemple : Prénom qui sont aussi des titres d'\oe uvres.
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+```SQL
 SELECT prenom FROM Personne
 INTERSECT
-SELECT titre FROM Document;\end{lstlisting}
+SELECT titre FROM Document;
+```
 
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+```SQL
 SELECT DISTINCT prenom FROM Personne, Document
-WHERE prenom = titre;\end{lstlisting}
+WHERE prenom = titre;
+```
 
-  Remarque : la clause \texttt{WHERE} contient autant de tests d'égalité qu'il y a d'attributs dans le résultat.
-\end{indt}
+**Remarque :**
+La clause `WHERE` contient autant de tests d'égalité qu'il y a d'attributs dans le résultat.
 
-\vspace{12pt}
+---
+### 3.1.6. Différence
+La différence de deux relations union-compatibles est une relation de même schéma que la première relation dont les enregistrements sont les tuples qui apparaissent dans la première relation mais pas dans la seconde.
 
-\begin{indt}{\subsubsection{Différence}}
-  La différence de deux relations union-compatibles est une relation de même schéma que la première relation dont les enregistrements sont les tuples qui apparaissent dans la première relation mais pas dans la seconde.
+**Réalisation SQL :**
+On utilise le mot-clé `EXCEPT` de la même manière que `UNION`.
 
-  Réalisation SQL : on utilise le mot-clé \texttt{EXCEPT} de la même manière que \texttt{UNION}.
+**Remarque :**
+Certains SGBD n'implémentent pas cette opération, d'autres utilisent le mot-clé `MINUS` (qui est `H.P.`).
 
-  Remarque : certains SGBD n'implémentent pas cette opération, d'autres utilisent le mot-clé \texttt{MINUS} (qui est H.P).
+On peut encoder l'opération à l'aide de requêtes imbriquées (cf 3.3).
 
-  On peut encoder l'opération à l'aide de requêtes imbriquées (\textit{cf} \ref{3.3}, page \pageref{3.3}).
+**Exemple :**
+Noms qui ne sont pas des prénoms
 
-  \vspace{6pt}
-  
-  Exemple : noms qui ne sont pas des prénoms
-
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+```SQL
 SELECT nom FROM Personne
 EXCEPT
-SELECT prenom FROM Personne;\end{lstlisting}
+SELECT prenom FROM Personne;
+```
 
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+```SQL
 SELECT nom FROM Personne AS P1
 WHERE NOT EXISTS
 (SELECT prenom FROM Personne AS P2
-WHERE P1.nom = P1.prenom);\end{lstlisting}
-\end{indt}
-\end{indt}
+WHERE P1.nom = P1.prenom);
+```
 
-\vspace{12pt}
+---
+### 3.2. Jointures
 
-\begin{indt}{\subsection{Jointures}}
-\label{3.2}
+---
+### 3.2.1. Principe
+Il s'agit d'établir un lien entre plusieurs tables sous certaines contraintes.
 
-\begin{indt}{\subsubsection{Principe}}
-  Il s'agit d'établir un lien entre plusieurs tables sous certaines contraintes.
+L'idée est la même que la création d'une table de jonction pour décomposer une association $*-*$ : un opérateur de jointure crée une nouvelle relation recollant les enregistrements de deux relations qui se correspondent. La correspondance entre deux enregistrements est exprimée par le satisfaction des contraintes passées en argument de l'opérateur.
 
-  L'idée est la même que la création d'une table de jonction pour décomposer une association $*-*$ : un opérateur de jointure crée une nouvelle relation recollant les enregistrements de deux relations qui se correspondent. La correspondance entre deux enregistrements est exprimée par le satisfaction des contraintes passées en argument de l'opérateur.
+Les contraintes sont dans la plupart des cas l'égalité de deux attributs, le plus souvent entre la clé primaire de l'une des tables et une clé étrangère y faisant référence dans la seconde table.
 
-  Les contraintes sont dans la plupart des cas l'égalité de deux attributs, le plus souvent entre la clé primaire de l'une des tables et une clé étrangère y faisant référence dans la seconde table.
-\end{indt}
+---
+### 3.2.2. Jointure interne
+La jointure interne est une opération prenant deux relations et une condition en argument et qui produit une relation dont le schéma est la concaténation des schémas des deux relations (comme pour le produit cartésien) et dont les enregistrements sont les concaténations des tuples des deux relations qui satisfont la condition.
 
-\vspace{12pt}
+**Réalisation SQL :**
+```SQL
+SELECT ... FROM R JOIN R2 ON C ...
+```
 
-\begin{indt}{\subsubsection{Jointure interne}}
-  La jointure interne est une opération prenant deux relations et une condition en argument et qui produit une relation dont le schéma est la concaténation des schémas des deux relations (comme pour le produit cartésien) et dont les enregistrements sont les concaténations des tuples des deux relations qui satisfont la condition.
+La condition C s'écrit de la même manière que les conditions de la clause `WHERE`
 
-  Réalisation SQL :
+**Exemple :**
+On dispose des tables suivantes :
+- Document(\underline{idDoc: entier}, titre: texte, auteur: texte, genre: enum(...))
+- Personne(\underline{id: entier}, nom: texte, prénom: texte)
+- Emprunt(\underline{id: entier, idDoc: entier}, dateEmprunt: date, dateRetour: date)
 
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
-SELECT ... FROM R JOIN R2 ON C ...\end{lstlisting}
+On souhaite récupérer les noms et prénoms des emprunteurs avec les dates de retour associées
 
-  \vspace{12pt}
-  
-  La condition C s'écrit de la même manière que les conditions de la clause \texttt{WHERE}.
-
-  \vspace{6pt}
-  
-  \begin{indt}{Exemple : on dispose des tables suivantes :
-}
-      Document(\underline{idDoc: entier}, titre: texte, auteur: texte, genre: enum(...))
-
-      Personne(\underline{id: entier}, nom: texte, prénom: texte)
-
-      Emprunt(\underline{id: entier, idDoc: entier}, dateEmprunt: date, dateRetour: date)
-  \end{indt}
-
-  \vspace{12pt}
-  
-  On souhaite récupérer les noms et prénoms des emprunteurs avec les dates de retour associées
-
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+```SQL
 SELECT nom, prenom, dateRetour
-FROM Personne JOIN Emprunt ON Personne.id = Emprunt.id;\end{lstlisting}
-  
-  On peut enchaîner les jointures (en pratique la jointure de deux tables sert d'argument à la jointure suivante). Il faut donc une condition par jointure.
+FROM Personne JOIN Emprunt ON Personne.id = Emprunt.id;
+```
 
-  Exemple : on veut les mêmes informations qu'avant et en plus le titre du document, et seulement pour les retour en retard.
+On peut enchaîner les jointures (en pratique la jointure de deux tables sert d'argument à la jointure suivante). Il faut donc une condition par jointure.
 
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+Exemple : on veut les mêmes informations qu'avant et en plus le titre du document, et seulement pour les retour en retard.
+
+```SQL
 SELECT nom, prenom, dateRetour, titre
 FROM Personne
 JOIN Emprunt ON Personne.id = Emprunt.id
 JOIN Document ON Document.idDoc = Emprunt.idDoc
-WHERE dateRetour < [date du jour];\end{lstlisting}
+WHERE dateRetour < [date_du_jour];
+```
 
-  \vspace{6pt}
-  
-  Pourquoi un opérateur de jointure alors qu'on peut l'implémenter avec un produit cartésien ?
+Pourquoi un opérateur de jointure alors qu'on peut l'implémenter avec un produit cartésien ?
+- À priori, les SGBD peuvent optimiser les jointures alors qu'il faut construire tous les tuples du produit cartésien avant de faire la sélection.
+- Une condition de jointure est une contrainte structurelle exprimant les associations entre plusieurs tables alors qu'une condition de sélection sert plutôt à filtrer les enregistrements pertinents pour la requête : la logique est différente.
+- On gagne en lisibilité en séparant les deux types de condition et en séparant les conditions associées à chaque jointure.
 
-  \vspace{6pt}
-  
-  $-$ A \textit{priori}, les SGBD peuvent optimiser les jointures alors qu'il faut construire tous les tuples du produit cartésien avant de faire la sélection.
+**Remarque :**
+La `jointure interne` est aussi simplement appelée `jointure` : c'est le type de jointure par défaut.
 
-  $-$ Une condition de jointure est une contrainte structurelle exprimant les associations entre plusieurs tables alors qu'une condition de sélection sert plutôt à filtrer les enregistrements pertinents pour la requête : la logique est différente.
+---
+### 3.2.3.Jointure externe à gauche
+Une `jointure externe à gauche` fonctionne comme une jointure interne, mais les enregistrements de la première relation pour lesquels il n'existe aucun enregistrement dans la seconde relation tel que leur concaténation satisfait la condition de jointure sont conservés. Pour respecter le schéma du résultat (qui est la concaténation des schémas des deux tables), on associe à ces enregistrements la valeur `NULL` pour chaque attribut qui provient de la seconde table.
 
-  $-$ On gagne en lisibilité en séparant les deux types de condition et en séparant les conditions associées à chaque jointure.
+**Réalisation SQL :**
+Comme pour la jointure interne en remplaçant `JOIN` par `LEFT JOIN`.
 
-  \vspace{12pt}
-  
-  Remarque : la \textit{jointure interne} est aussi simplement appelée \textit{jointure} : c'est le type de jointure par défaut.
-\end{indt}
+**Exemple :**
+Noms, prénoms des emprunteurs associés aux dates de retour, s'il y en a :
 
-\vspace{12pt}
-
-\begin{indt}{\subsubsection{Jointure externe à gauche}}
-  Une \textit{jointure externe à gauche} fonctionne comme une jointure interne, mais les enregistrements de la première relation pour lesquels il n'existe aucun enregistrement dans la seconde relation tel que leur concaténation satisfait la condition de jointure sont conservés. Pour respecter le schéma du résultat (qui est la concaténation des schémas des deux tables), on associe à ces enregistrements la valeur \texttt{NULL} pour chaque attribut qui provient de la seconde table.
-
-  Réalisation SQL : comme pour la jointure interne en remplaçant \texttt{JOIN} par \texttt{LEFT JOIN}.
-
-  \vspace{12pt}
-  
-  Exemple : noms, prénoms des emprunteurs associés aux dates de retour, s'il y en a :
-
-  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+```SQL
 SELECT nom, prenom, dateRetour
-FROM Personne LEFT JOIN Emprunt ON Personne.id = Emprunt.id;\end{lstlisting}
+FROM Personne LEFT JOIN Emprunt ON Personne.id = Emprunt.id;
+```
 
-  \vspace{6pt}
-  
-  Personne :
-  \begin{tabular}{|c|c|c|}
-      \hline
-      idAlice & Alice & Dupond
-      \\
-      \hline
-      idBob & Bob & Dupont
-      \\
-      \hline
-  \end{tabular}
+- Personne :
+ |idAlice|Alice|Dupond|
+ |:-:|:-:|:-:|
+ |idBob|Bob|Dupont|
 
-  Emprunt :
-  \begin{tabular}{|c|c|c|}
-      \hline
-      idAlice & 2022-05-04 & idDoc1
-      \\
-      \hline
-      idAlice & 2022-05-05 & idDoc2
-      \\
-      \hline
-  \end{tabular}
+- Emprunt :
+ |idAlice|2022-05-04|idDoc1|
+ |:-:|:-:|:-:|
+ |idAlice|2022-05-05|idDoc2|
 
-  Résultat :
-  \begin{tabular}{|c|c|c|}
-      \hline
-      Alice & Dupond & 2022-05-04
-      \\
-      \hline
-      Alice & Dupond & 2022-05-05
-      \\
-      \hline
-      Bob & Dupont & NULL
-      \\
-      \hline
-  \end{tabular}
+- Résultat :
+ |Alice|Dupond|2022-05-04|
+ |:-:|:-:|:-:|
+ |Alice|Dupond|2022-05-05|
+ |Bob|Dupont|NULL|
 
-  \begin{indt}{Remarque : il existe d'autres types de jointure (H.P) :}
-      $-$ Externe à droite (\texttt{RIGHT JOIN})
-
-      $-$ naturelle (\texttt{NATURAL JOIN})
-
-      $-$ totale (\texttt{TOTAL JOIN})
-  \end{indt}
-\end{indt}
-\end{indt}
-\end{indt}
+**Remarque :**
+Il existe d'autres types de jointure (`H.P.`) :
+- Externe à droite (`RIGHT JOIN`)
+- Naturelle (`NATURAL JOIN`)
+- Totale (`TOTAL JOIN`)
