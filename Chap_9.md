@@ -265,7 +265,7 @@ On représente deux types de blocs (les entités et les associations) et on lie 
 > Ici
 
 ```mermaid
-sequenceDigram
+sequenceDiagram
   participant Document
   participant Écriture
   participant Personne
