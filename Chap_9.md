@@ -228,7 +228,7 @@ LIMIT 5 OFFSET 10;
 (dernier tiers du top 15 des auteurs ayant écrit les plus gros livres)
 
 ---
-# 2.
+# 2. Conception de bases de données
 ## 2.1. Modèle entité-association
 
 ---
@@ -258,27 +258,31 @@ Une association peut aussi avoir des attributs (exemple : date d'écriture) et o
 **Représentation graphique :**
 On représente deux types de blocs (les entités et les associations) et on lie les blocs d'entités via les blocs d'association qui expriment ces liens.
 
-|Document|Écriture|Personne|
-|:-|:-|:-|
-|- titre|- date|- Nom|
-|- genre||- Prénom|
-|- #pages||- date de naissance|
-
-> Insert graph (cf. Louis)
+<p align="center">
+<img src="Pictures/Graphe13.png" alt="drawing" width="750">
+</p>
 
 On distingue les associations binaires (i.e. qui tient 2 entités) des associations $n$-aires. On peut toujours se limiter aux associations binaires en remplaçant une associations $n$-aire par une nouvelle entité représentant l'association, liée aux $n$ entités par $n$ associations binaires.
 
 **Exemple :**
+<p align="center">
+<img src="Pictures/Graphe6.png" alt="drawing" width="750">
+</p>
 
-> Insert graph (1) ~> (2)
+~>
+
+<p align="center">
+<img src="Pictures/Graphe7.png" alt="drawing" width="750">
+</p>
 
 ---
 ### 2.1.4. Cardinalité d'une association
 Le lien entre une entité et une association peut être étiqueté par un couple $p$, $q$ représentant les nombres minimum et maximum de fois que l'entité peut apparaître dans une association de ce type : $q=*$ s'il n'y a pas de borne supérieure.
 
-Exemple :
-
-> Insert graph (3)
+**Exemple :**
+<p align="center">
+<img src="Pictures/Graphe8.png" alt="drawing" width="750">
+</p>
 
 - un document a nécessairement au moins 1 auteur, potentiellement plusieurs ;
 - une personne peut avoir écrit 0 ou plusieurs documents.
@@ -290,7 +294,9 @@ D'autres types d'associations sont :
   **Exemple :**
  une oeuvre peut être tirée à plusieurs exemplaires mais un exemplaire n'est un tirage que d'une seule oeuvre
 
- > Insert graph (4)
+  <p align="center">
+  <img src="Pictures/Graphe9.png" alt="drawing" width="750">
+  </p>
 
 - les associations $1-1$ : elles lient une entité à une seule autre.
 
@@ -303,8 +309,15 @@ On peut souvent fusionner les entités impliquées dans 1 association $1-1$ sans
 Une association $*-*$ peut être scindée en 2 associations $1-*$ via l'introduction d'une nouvelle entité représentant l'association.
 
 **Exemple :**
+<p align="center">
+<img src="Pictures/Graphe10.png" alt="drawing" width="750">
+</p>
 
-> Insert graph (6) ~> (7)
+~>
+
+<p align="center">
+<img src="Pictures/Graphe11.png" alt="drawing" width="750">
+</p>
 
 **Remarque :**
 Les attributs de la nouvelle entité doivent permettre d'identifier les entités impliquées dans l'association : on utilise des clés étrangères dans le modèle relationnel associé à ce modèle.
@@ -325,8 +338,9 @@ On associe une relation à chaque entité avec les mêmes attributs. Les associa
 Ces types d'association impliquent que pour l'une des deux entités, chaque instance de l'entité ne peut être associée qu'à une unique instance de l'autre entité. Pour exprimer ce lien entre les tables correspondantes on ajoute une clé étrangère à la première table, faisant référence à l'unique enregistrement de la seconde table impliqué dans l'association. Les attributs de l'association seront aussi intégrés à la première table.
 
 **Exemple :**
-
-> Insert graph (8)
+<p align="center">
+<img src="Pictures/Graphe12.png" alt="drawing" width="750">
+</p>
 
 Modèle relationnel associé : on utilise des identifiants numériques pour les clés primaires
 - Personne ($\underline{\text{id : entier}}$, nom : texte, prénom : texte, date de naissance : date)
@@ -334,4 +348,265 @@ Modèle relationnel associé : on utilise des identifiants numériques pour les 
 - Exemplaire ($\underline{\text{numéro : entier}}$, imprimerie : texte, id Doc : entier, date d'impression : date)
 - Écriture (date : date, id DOc : entier, id : entier)
 
-(id Doc et id = clé étrangère)
+> id Doc et id = clé étrangère
+
+---
+# 3. Requêtes avancées
+## 3.1. Opérations ensemblistes
+
+---
+### 3.1.1. Remarque
+On s'intéresse à des opérations qui prennent plusieurs tables en argument et qui produisent une nouvelle table.
+
+---
+### 3.1.2. Produit cartésien
+On construit le produit cartésien de deux relations vues comme des ensembles de tuples.
+
+**Schéma relationnel :** 
+Si on a deux relations $R(A_1: D_1, \ldots, A_n: D_n)$ et $R'(A_1': D_1', \ldots, A_n': D_n')$, alors
+
+$$(R \times R')(A_1: D_1, \ldots, A_n: D_n, A_1': D_1', \ldots, A_n': D_n')$$
+
+de clé primaire l'union des clés primaires de $R$ et $R'$.
+
+**Réalisation SQL :** on sépare les tables par des virgules dans la clause `FROM`.
+
+**Exemple :**
+```SQL
+SELECT * FROM R, R';
+```
+
+**Remarque :**
+On peut faire des produits $n$-aires :
+
+```SQL
+SELECT * FROM R1, R2, ..., Rn;
+```
+
+  **Exemple :** 
+  auteur, titre et date d'écriture dans la BDD vue en 2.2.2.
+
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT nom, prenom, titre, date
+FROM Personne, Document, Ecriture
+WHERE Personne.id = Ecriture.id AND Document.idDoc = Ecriture.idDoc;\end{lstlisting}
+
+  Remarque : il existe une construction appelée jointure qui est plus adaptée à ce type de requête (\textit{cf} \ref{3.2}, page \pageref{3.2}).
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Définition (relations \textit{union-compatibles})}}
+  Deux relations sont \textit{union-compatibles} si elles ont le même nombre d'attributs et si les attributs de même position dans les deux relations ont même domaine.
+
+  Intuition : même schéma au renommage des attributs et au choix de la clé primaire près.
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Union}}
+  L'union de deux relations union-compatibles est une relation de \textit{même schéma que la première} et dont les enregistrements sont ceux qui apparaissent dans au moins l'une des deux relations.
+
+  Remarque : cela signifie que si les noms d'attributs sont différents pour deux relations, alors on conserve ceux de la première. De plus, les doublons sont supprimés.
+
+  Réalisation SQL : on utilise le mot clé \texttt{UNION} entre deux requêtes qui produisent les tables dont on veut faire l'union.
+
+  Attention : pas de \texttt{UNION} dans une clause \texttt{FROM}
+
+  Exemple : \texttt{SELECT ... UNION SELECT ...}
+
+  Exemple : dates qui sont des dates d'écriture ou d'impression de documents.
+
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT date FROM Ecriture
+UNION
+SELECT date d impression FROM Exemplaire;\end{lstlisting}
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Intersection}}
+  L'intersection de deux relations union-compatibles est une relation de même schéma que la première dont les enregistrements sont les tuples qui apparaissent dans les deux relations.
+
+  Réalisation SQL : on utilise le mot-clé \texttt{INTERSECT} de la même manière que \texttt{UNION}.
+
+  Remarque : certains SGBD (comme mysql) n'implémentent pas cette opération. Dans ce cas, il faut encoder cette opération avec des requêtes. On peut par exemple utiliser un produit cartésien.
+
+  Exemple : Prénom qui sont aussi des titres d'\oe uvres.
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT prenom FROM Personne
+INTERSECT
+SELECT titre FROM Document;\end{lstlisting}
+
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT DISTINCT prenom FROM Personne, Document
+WHERE prenom = titre;\end{lstlisting}
+
+  Remarque : la clause \texttt{WHERE} contient autant de tests d'égalité qu'il y a d'attributs dans le résultat.
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Différence}}
+  La différence de deux relations union-compatibles est une relation de même schéma que la première relation dont les enregistrements sont les tuples qui apparaissent dans la première relation mais pas dans la seconde.
+
+  Réalisation SQL : on utilise le mot-clé \texttt{EXCEPT} de la même manière que \texttt{UNION}.
+
+  Remarque : certains SGBD n'implémentent pas cette opération, d'autres utilisent le mot-clé \texttt{MINUS} (qui est H.P).
+
+  On peut encoder l'opération à l'aide de requêtes imbriquées (\textit{cf} \ref{3.3}, page \pageref{3.3}).
+
+  \vspace{6pt}
+  
+  Exemple : noms qui ne sont pas des prénoms
+
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT nom FROM Personne
+EXCEPT
+SELECT prenom FROM Personne;\end{lstlisting}
+
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT nom FROM Personne AS P1
+WHERE NOT EXISTS
+(SELECT prenom FROM Personne AS P2
+WHERE P1.nom = P1.prenom);\end{lstlisting}
+\end{indt}
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsection{Jointures}}
+\label{3.2}
+
+\begin{indt}{\subsubsection{Principe}}
+  Il s'agit d'établir un lien entre plusieurs tables sous certaines contraintes.
+
+  L'idée est la même que la création d'une table de jonction pour décomposer une association $*-*$ : un opérateur de jointure crée une nouvelle relation recollant les enregistrements de deux relations qui se correspondent. La correspondance entre deux enregistrements est exprimée par le satisfaction des contraintes passées en argument de l'opérateur.
+
+  Les contraintes sont dans la plupart des cas l'égalité de deux attributs, le plus souvent entre la clé primaire de l'une des tables et une clé étrangère y faisant référence dans la seconde table.
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Jointure interne}}
+  La jointure interne est une opération prenant deux relations et une condition en argument et qui produit une relation dont le schéma est la concaténation des schémas des deux relations (comme pour le produit cartésien) et dont les enregistrements sont les concaténations des tuples des deux relations qui satisfont la condition.
+
+  Réalisation SQL :
+
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT ... FROM R JOIN R2 ON C ...\end{lstlisting}
+
+  \vspace{12pt}
+  
+  La condition C s'écrit de la même manière que les conditions de la clause \texttt{WHERE}.
+
+  \vspace{6pt}
+  
+  \begin{indt}{Exemple : on dispose des tables suivantes :
+}
+      Document(\underline{idDoc: entier}, titre: texte, auteur: texte, genre: enum(...))
+
+      Personne(\underline{id: entier}, nom: texte, prénom: texte)
+
+      Emprunt(\underline{id: entier, idDoc: entier}, dateEmprunt: date, dateRetour: date)
+  \end{indt}
+
+  \vspace{12pt}
+  
+  On souhaite récupérer les noms et prénoms des emprunteurs avec les dates de retour associées
+
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT nom, prenom, dateRetour
+FROM Personne JOIN Emprunt ON Personne.id = Emprunt.id;\end{lstlisting}
+  
+  On peut enchaîner les jointures (en pratique la jointure de deux tables sert d'argument à la jointure suivante). Il faut donc une condition par jointure.
+
+  Exemple : on veut les mêmes informations qu'avant et en plus le titre du document, et seulement pour les retour en retard.
+
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT nom, prenom, dateRetour, titre
+FROM Personne
+JOIN Emprunt ON Personne.id = Emprunt.id
+JOIN Document ON Document.idDoc = Emprunt.idDoc
+WHERE dateRetour < [date du jour];\end{lstlisting}
+
+  \vspace{6pt}
+  
+  Pourquoi un opérateur de jointure alors qu'on peut l'implémenter avec un produit cartésien ?
+
+  \vspace{6pt}
+  
+  $-$ A \textit{priori}, les SGBD peuvent optimiser les jointures alors qu'il faut construire tous les tuples du produit cartésien avant de faire la sélection.
+
+  $-$ Une condition de jointure est une contrainte structurelle exprimant les associations entre plusieurs tables alors qu'une condition de sélection sert plutôt à filtrer les enregistrements pertinents pour la requête : la logique est différente.
+
+  $-$ On gagne en lisibilité en séparant les deux types de condition et en séparant les conditions associées à chaque jointure.
+
+  \vspace{12pt}
+  
+  Remarque : la \textit{jointure interne} est aussi simplement appelée \textit{jointure} : c'est le type de jointure par défaut.
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Jointure externe à gauche}}
+  Une \textit{jointure externe à gauche} fonctionne comme une jointure interne, mais les enregistrements de la première relation pour lesquels il n'existe aucun enregistrement dans la seconde relation tel que leur concaténation satisfait la condition de jointure sont conservés. Pour respecter le schéma du résultat (qui est la concaténation des schémas des deux tables), on associe à ces enregistrements la valeur \texttt{NULL} pour chaque attribut qui provient de la seconde table.
+
+  Réalisation SQL : comme pour la jointure interne en remplaçant \texttt{JOIN} par \texttt{LEFT JOIN}.
+
+  \vspace{12pt}
+  
+  Exemple : noms, prénoms des emprunteurs associés aux dates de retour, s'il y en a :
+
+  \begin{lstlisting}[language=SQL, xleftmargin=80pt]
+SELECT nom, prenom, dateRetour
+FROM Personne LEFT JOIN Emprunt ON Personne.id = Emprunt.id;\end{lstlisting}
+
+  \vspace{6pt}
+  
+  Personne :
+  \begin{tabular}{|c|c|c|}
+      \hline
+      idAlice & Alice & Dupond
+      \\
+      \hline
+      idBob & Bob & Dupont
+      \\
+      \hline
+  \end{tabular}
+
+  Emprunt :
+  \begin{tabular}{|c|c|c|}
+      \hline
+      idAlice & 2022-05-04 & idDoc1
+      \\
+      \hline
+      idAlice & 2022-05-05 & idDoc2
+      \\
+      \hline
+  \end{tabular}
+
+  Résultat :
+  \begin{tabular}{|c|c|c|}
+      \hline
+      Alice & Dupond & 2022-05-04
+      \\
+      \hline
+      Alice & Dupond & 2022-05-05
+      \\
+      \hline
+      Bob & Dupont & NULL
+      \\
+      \hline
+  \end{tabular}
+
+  \begin{indt}{Remarque : il existe d'autres types de jointure (H.P) :}
+      $-$ Externe à droite (\texttt{RIGHT JOIN})
+
+      $-$ naturelle (\texttt{NATURAL JOIN})
+
+      $-$ totale (\texttt{TOTAL JOIN})
+  \end{indt}
+\end{indt}
+\end{indt}
+\end{indt}
