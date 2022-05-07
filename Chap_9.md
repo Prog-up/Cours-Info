@@ -269,7 +269,8 @@ sequenceDiagram
   participant Document
   participant Écriture
   participant Personne
-  Document->>Écriture:
+  Document->>Écriture
+  Écriture->>Personne
 ```
 
 ```mermaid
