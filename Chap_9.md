@@ -232,7 +232,7 @@ LIMIT 5 OFFSET 10;
 ## 2.1. Modèle entité-association
 
 ---
-### Introduction
+### 2.1.1. Introduction
 Le modèle entité-association est un modèle de la fin des années 1970 qui propose un formalisme pour décrire la structuration des données en fonction des liens qu'elles entretiennent. On lui associe une représentation graphique permettant d'identifier facilement les 2 concepts de base de ce modèle : les entités et les associations.
 
 ---
