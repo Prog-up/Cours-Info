@@ -283,8 +283,6 @@ erDiagram
     Document }|--|{ Personne : emprunt
 ```
 
-$~~~~~~~~~~~~~~~\Downarrow$
-
 ```mermaid
 erDiagram 
     Personne }o--|{ Biblioteque : emprunt
@@ -331,7 +329,7 @@ Une association $*-*$ peut être scindée en 2 associations $1-*$ via l'introduc
 erDiagram
     Personne }o--|{ Document : "écriture (date)"
 ``` 
-$~~~~~~~~~~~~~~~\Downarrow$
+
 ```mermaid
 erDiagram
     Personne }o--|| Ecriture : "participe à"
