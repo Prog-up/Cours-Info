@@ -258,31 +258,47 @@ Une association peut aussi avoir des attributs (exemple : date d'écriture) et o
 **Représentation graphique :**
 On représente deux types de blocs (les entités et les associations) et on lie les blocs d'entités via les blocs d'association qui expriment ces liens.
 
-<p align="center">
-<img src="Pictures/Graphe13.png" alt="drawing" width="750">
-</p>
+```mermaid
+erDiagram
+    Document }o--|{ Personne : "écriture (date)"
+    Document{
+        string titre
+        string genre
+        int nombre_de_page
+    }
+    Personne{
+        string nom
+        string prenom
+        date date_de_naissance
+    }
+```
 
 On distingue les associations binaires (i.e. qui tient 2 entités) des associations $n$-aires. On peut toujours se limiter aux associations binaires en remplaçant une associations $n$-aire par une nouvelle entité représentant l'association, liée aux $n$ entités par $n$ associations binaires.
 
 **Exemple :**
-<p align="center">
-<img src="Pictures/Graphe6.png" alt="drawing" width="750">
-</p>
+```mermaid
+erDiagram
+    Personne }|--|{ Biblioteque : emprunt
+    Biblioteque }|--|{ Document : emprunt
+    Document }|--|{ Personne : emprunt
+```
 
-~>
+$~~~~~~~~~~~~~~~\Downarrow$
 
-<p align="center">
-<img src="Pictures/Graphe7.png" alt="drawing" width="750">
-</p>
+```mermaid
+erDiagram 
+    Personne }o--|{ Biblioteque : emprunt
+```
 
 ---
 ### 2.1.4. Cardinalité d'une association
 Le lien entre une entité et une association peut être étiqueté par un couple $p$, $q$ représentant les nombres minimum et maximum de fois que l'entité peut apparaître dans une association de ce type : $q=*$ s'il n'y a pas de borne supérieure.
 
 **Exemple :**
-<p align="center">
-<img src="Pictures/Graphe8.png" alt="drawing" width="750">
-</p>
+```mermaid
+erDiagram
+    Oeuvre }|--|| Exemplaire : tirage
+```
 
 - un document a nécessairement au moins 1 auteur, potentiellement plusieurs ;
 - une personne peut avoir écrit 0 ou plusieurs documents.
@@ -291,12 +307,14 @@ On appelle cette association une association $*-*$ car elle peut lier plusieurs 
 
 D'autres types d'associations sont :
 - les associations $1-*$ : elles lient une entité à plusieurs autres.
- **Exemple :**
-une oeuvre peut être tirée à plusieurs exemplaires mais un exemplaire n'est un tirage que d'une seule oeuvre
 
- <p align="center">
- <img src="Pictures/Graphe9.png" alt="drawing" width="750">
- </p>
+  **Exemple :**
+  Une oeuvre peut être tirée à plusieurs exemplaires mais un exemplaire n'est un tirage que d'une seule oeuvre :
+
+  ```mermaid
+  erDiagram
+    Exemplaire }|--|{ Reference : "est référencé par"
+  ```
 
 - les associations $1-1$ : elles lient une entité à une seule autre.
 
@@ -309,15 +327,21 @@ On peut souvent fusionner les entités impliquées dans 1 association $1-1$ sans
 Une association $*-*$ peut être scindée en 2 associations $1-*$ via l'introduction d'une nouvelle entité représentant l'association.
 
 **Exemple :**
-<p align="center">
-<img src="Pictures/Graphe10.png" alt="drawing" width="750">
-</p>
-
-~>
-
-<p align="center">
-<img src="Pictures/Graphe11.png" alt="drawing" width="750">
-</p>
+```mermaid
+erDiagram
+    Personne }o--|{ Document : "écriture (date)"
+``` 
+$~~~~~~~~~~~~~~~\Downarrow$
+```mermaid
+erDiagram
+    Personne }o--|| Ecriture : "participe à"
+    Document }|--|| Ecriture : concerne
+    Ecriture{
+        date date
+        string auteur
+        string ouvrage
+    }
+```
 
 **Remarque :**
 Les attributs de la nouvelle entité doivent permettre d'identifier les entités impliquées dans l'association : on utilise des clés étrangères dans le modèle relationnel associé à ce modèle.
@@ -338,9 +362,24 @@ On associe une relation à chaque entité avec les mêmes attributs. Les associa
 Ces types d'association impliquent que pour l'une des deux entités, chaque instance de l'entité ne peut être associée qu'à une unique instance de l'autre entité. Pour exprimer ce lien entre les tables correspondantes on ajoute une clé étrangère à la première table, faisant référence à l'unique enregistrement de la seconde table impliqué dans l'association. Les attributs de l'association seront aussi intégrés à la première table.
 
 **Exemple :**
-<p align="center">
-<img src="Pictures/Graphe12.png" alt="drawing" width="750">
-</p>
+```mermaid
+erDiagram
+    Personne }o--|{ Document : "écriture (date, auteur, ouvrage)"
+    Exemplaire ||--|{ Document : "tirage (date de parution)"
+    Personne{
+        string nom
+        string prenom
+        date date_de_naissance
+    }
+    Document{
+        string titre
+        string genre
+    }
+    Exemplaire{
+        int numero
+        string imprimerie
+    }
+```
 
 Modèle relationnel associé : on utilise des identifiants numériques pour les clés primaires
 - Personne ($\underline{\text{id : entier}}$, nom : texte, prénom : texte, date de naissance : date)
@@ -348,7 +387,7 @@ Modèle relationnel associé : on utilise des identifiants numériques pour les 
 - Exemplaire ($\underline{\text{numéro : entier}}$, imprimerie : texte, id Doc : entier, date d'impression : date)
 - Écriture (date : date, id DOc : entier, id : entier)
 
-> id Doc et id = clé étrangère
+(id Doc et id = clé étrangère)
 
 ---
 # 3. Requêtes avancées
@@ -363,11 +402,11 @@ On s'intéresse à des opérations qui prennent plusieurs tables en argument et 
 On construit le produit cartésien de deux relations vues comme des ensembles de tuples.
 
 **Schéma relationnel :**
-Si on a deux relations $R(A_1: D_1, \ldots, A_n: D_n)$ et $R'(A_1': D_1', \ldots, A_n': D_n')$, alors
+Si on a deux relations :
+- $R(A_1: D_1, \ldots, A_n: D_n)$
+- $R'(A_1': D_1', \ldots, A_n': D_n')$, 
 
-$$(R \times R')(A_1: D_1, \ldots, A_n: D_n, A_1': D_1', \ldots, A_n': D_n')$$
-
-de clé primaire l'union des clés primaires de $R$ et $R'$.
+Alors $(R \times R')(A_1: D_1, \ldots, A_n: D_n, A_1': D_1', \ldots, A_n': D_n')$ de clé primaire l'union des clés primaires de $R$ et $R'$.
 
 **Réalisation SQL :**
 On sépare les tables par des virgules dans la clause `FROM`.
