@@ -593,16 +593,19 @@ FROM Personne LEFT JOIN Emprunt ON Personne.id = Emprunt.id;
 ```
 
 - Personne :
+
  |idAlice|Alice|Dupond|
  |:-:|:-:|:-:|
  |idBob|Bob|Dupont|
 
 - Emprunt :
+
  |idAlice|2022-05-04|idDoc1|
  |:-:|:-:|:-:|
  |idAlice|2022-05-05|idDoc2|
 
 - Résultat :
+
  |Alice|Dupond|2022-05-04|
  |:-:|:-:|:-:|
  |Alice|Dupond|2022-05-05|
