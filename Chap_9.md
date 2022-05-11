@@ -613,3 +613,179 @@ Il existe d'autres types de jointure (`H.P.`) :
 - Externe à droite (`RIGHT JOIN`)
 - Naturelle (`NATURAL JOIN`)
 - Totale (`TOTAL JOIN`)
+
+> New
+
+---
+## 3.3. Agrégation et imbrication
+
+---
+### 3.3.1. Application de fonction aux attributs
+Il est possible d'appliquer des fonctions aux attributs des tuples sélectionnés par une requête, pour calculer de nouvelles valeurs.
+
+> Sont au programme : +, -, *, /.
+
+**Exemple :**
+Durée restante avant retour pour les docs empruntés.
+
+```sql
+SELECT idDoc, dateRetour - "2022-05-09" AS delai FROM Emprunt;
+```
+
+**Remarque :**
+Ces fonctions permettent d'obtenir un résultat pour chaque tuple sélectionné en fonction des valeurs de ses attributs.
+
+On peut vouloir au contraire travailler sur une colonne, i.e. sur l'ensemble des valeurs prises par un attribut pour tous les enregistrements sélectionnés : c'est le rôle des `fonctions agrégatives`.
+
+---
+### 3.3.2. Fonctions d'agrégation
+Une `fonction agrégative` (ou fonction d'agrégation) est une fonction qui s'applique à l'ensemble des valeurs d'un attribut donné pour tous les enregistrements sélectionnés. Une telle fonction renvoie en général un unique  résultat donc la table créée par la requête ne contient qu'une seule ligne.
+
+> Sont au programme : `MIN`, `MAX`, `SUM`, `AVG`, `COUNT` (cardinal du multi-ensemble des valeurs, privé de NULL).
+
+**Exemple :**
+Nombre de documents empruntés
+
+```sql
+SELECT COUNT(idDoc) FROM Emprunt;
+```
+
+**Remarque :**
+Ici, le choix de l'attribut n'est pas important tant que c'est une clé car on veut calculer le nombre d'enregistrements. On dispose de la syntaxe `COUNT(*)` pour cela.
+
+Pour connaître le nombre d'auteurs dont une oeuvre est dans la bibliothèque, on peut avoir des doublons que l'on veut éliminer avant le comptage : on place le mot-clé `DISTINCT` dans l'argument de la fonction `COUNT` :
+
+```sql
+SELECT COUNT(DISTINCT auteur) FROM Document;
+```
+
+---
+### 3.3.3. Regroupement d'enregistrement
+On peut réunir dans un groupe les enregistrements d'une table qui coïncident sur un ensemble d'attributs. On obtient dans le résultat de la requête un tuple par groupe.
+
+**Réalisation SQL :**
+On utilise `GROUP BY`
+```sql
+SELECT ... GROUP BY attribut_1, ..., attribut_n;
+```
+
+**Exemple :**
+```sql
+SELECT auteur FROM Document
+GROUP BY auteur;
+```
+
+$\rightarrow$ équivalent à :
+```sql
+SELECT DISTINCT auteur FROM Document;
+```
+
+On peut bien-sûr projeter sur plusieurs attributs, mais cela n'a pas de sens si ces attributs n'ont pas la même pour tous les tuples d'un groupe.
+
+**Exemple :**
+```sql
+SELECT auteur, titre FROM Document
+GROUP BY auteur;
+```
+
+En pratique, le regroupement prend tout son intérêt s'il est combiné avec les fonctions agrégatives car elles permettent d'obtenir une valeur unique pour tous les enregistrements d'un groupe.
+
+**Exemple :**
+- Nombre d'ouvrage dans la bibliothèque pour chaque auteur :
+```sql
+SELECT auteur, COUNT(*) FROM Document
+GROUP BY auteur;
+```
+
+- Nombre d'ouvrage empruntés pour chaque usager :
+```sql
+SELECT Personne.id, COUNT(idDoc)
+FROM Personne JOIN Emprunt ON Personne.id = Emprunt.id
+GROUP BY Personne.id;
+```
+
+- Nombre d'homonymes parmis les usagers :
+```sql
+SELECT nom, prénom, COUNT(*) FROM Personne
+GROUP BY nom, prénom;
+```
+
+---
+### 3.3.4. Filtrage des agrégats
+On peut vouloir sélectionner certains enregistrements après regroupement et / ou après application d'une fonction d'agrégation. Par exemple, on veut garder les usagers qui ont emprunté au moins 10 documents.
+
+**Réalisation SQL :**
+On utilise le mot-clé `HAVING`, qui s'utilise comme `WHERE`, mais qui sélectionne les tuples après regroupement contrairement à `WHERE` qui les sélectionne avant.
+
+```sql
+SELECT ... HAVING condition;
+```
+
+La condition de la clause `HAVING` ne peut porter que sur des caractéristiques du groupe, i.e. sur des attributs sur lesquelles tous les tuples du groupe coincides ou sur le résultat de l'application d'une fonction agrégative sur les tuples du groupe.
+
+**Exemple :**
+```sql
+SELECT id, COUNT(*) FROM Emprunt
+GROUP BY id
+HAVING COUNT(*) >= 10;
+```
+
+- Usager ayant au moins 2 documents en retard :
+```sql
+SELECT id FROM Emprunt
+GROUP BY id
+HAVING dateRetour < '2022-05-09'
+GROUP BY id
+HAVING COUNT(*) >= 2;
+```
+
+- Si on veut connaître les usagers ayant le plus de documents en retard ?
+
+ Ici on veut pouvoir réutiliser le résultat d'une requête pour faire une autre requête.
+
+---
+### 3.3.5. Requêtes imbriquées
+Une sous-requête est une requête imbriquée dans une autre. On parle aussi de requête interne, par opposition à la requête externe ou englobante qui la contient. Une sous-requête doit être écrite entre parenthèses et peut-être placée à divers endroits.
+
+- Sous-requête dans une clause `FROM` :
+```sql
+SELECT AVG(nombreRetard)
+FROM (SELECT COUNT(*) AS nombreRetard FROM Emprunt
+   WHERE dateRetour < '2022-05-09'
+   GROUP BY id);
+```
+
+- Sous-requête dans une clause `WHERE` ou `HAVING` : l'usage de résultat de la sous-requête dépend de son nombre de lignes.
+ - Cas des sous-requêtes dont le résultat ne contient qu'une seule ligne : on utilise directement ce résultat comme on aurait utilisé les attributs d'un enregistrement donné.
+
+ **Exemple :**
+ Usagers ayant le plus de documents en retard :
+```sql
+SELECT id
+FROM (SELECT COUNT(*) AS nombreRetard FROM Emprunt
+   WHERE dateRetour < '2022-05-09'
+   GROUP BY id) AS Tretard
+WHERE nombreRetard = (SELECT MAX(nombreRetard) FROM Tretard);
+```
+
+- Cas des sous-requêtes à plusieurs résultats : on ne peut pas utiliser les opérateurs habituels car la sous-requête renvoie une table et pas une unique valeur. On dispose d'opérateurs pour vérifier si cette table est vide ou pas (`EXISTS` / `NOT EXISTS`)et pour vérifier si une valeur apparaît dans la table (`IN` / `NOT IN`)
+
+**Exemple :**
+- Usagers sans emprunt en cours :
+```sql
+SELECT id FROM Personne
+WHERE id NOT IN (SELECT id FROM Emprunt);
+```
+ou
+```sql
+SELECT id FROM Personne
+WHERE NOT EXISTS (SELECT id FROM Emprunt
+   WHERE Personne.id = Emprunt.id);
+```
+
+- Usagers ne partageant par leur nom de famille avec d'autres :
+```sql
+SELECT id FROM Personne
+WHERE NOT EXISTS (SELECT * FROM Personne AS P
+   WHERE P.id <> Personne.id AND P.nom = Personne.nom);
+```
