@@ -1,2 +1,0 @@
-CREATE TABLE test(nom VARCHAR(300), id INT);
-SELECT * FROM test;
