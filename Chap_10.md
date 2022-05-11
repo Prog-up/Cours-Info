@@ -9,23 +9,9 @@ Peut-on effectuer une promenade à Königsberg passant exactement une fois par c
 **Variante :**
 Peut-on le faire en revenant à son point de départ ?
 
-> Insert Graphe 1
-
-```mermaid
-graph LR
-    D --- 1
-    1 --- 2
-    2 --- 3
-    2 --- 4
-    4 --- 3
-    1 --- 5
-    5 --- 6
-    6 --- 4
-    4 --- 7
-    6 --- 7
-    3 --- A1
-    7 --- A2
-```
+<p align="center">
+<img src="Pictures/Königsberg.png" alt="drawing" width="300">
+</p>
 
 ---
 
@@ -57,17 +43,18 @@ Cette théorie a pris une grande ampleur car elle permet de modéliser de nombre
 ### 1.2.1. Compilation
 - Modélisation : on représente le graphe de dépendance entre fichiers
 
-```mermaid
-flowchart LR
-    subgraph Foo.ml
-    id1[open Bar]
-    end
-    subgraph Bar.ml
-    id2[open Foo]
-    end
-    id1 --> id2
-    id2 --> id1
-```
+  ```mermaid
+  flowchart LR
+      subgraph Foo.ml
+      id1[open Bar]
+      end
+      subgraph Bar.ml
+      id2[open Foo]
+      end
+      id1 --> id2
+      id2 --> id1
+  ```
+
 - Problème : faisabilité : c'est un problème de détecton de cycle.
   - ordre de compilation : choisir un ordre, c'est effectuer un tri topologique du graphe
 
@@ -120,16 +107,17 @@ graph LR
     D
 ```
 
-> Check 2.
+Autre exemple :
+
 ```mermaid
-graph LR
-    A --> C
-    A --> B
-    A --> D
-    B --> A
-    B --> C
-    C --> D
-    D --> B
+flowchart LR
+  A --> B
+  B --> A
+  A --> C
+  C --> D
+  B --> C
+  D --> B
+  A --> D
 ```
 est la représentation du graphe orienté (`GO`) :
 $$G=(\{A;B;C;D\};\{(A;B);(B;A);(B;C);(D;B);(A;D);(A;C);(C;D)\})$$
@@ -141,7 +129,7 @@ $$G=(\{A;B;C;D\};\{(A;B);(B;A);(B;C);(D;B);(A;D);(A;C);(C;D)\})$$
 Une boucle dans un graphe est une arête / arc dont les extrémités sont égales
 
 **Remarque :**
-> A compléter
+La définition 2.1.1 empêche la présence de boucles dans les GNO. On peut les autoriser en considérant non pas des paires de sommets, mais des multi-ensembles de cardinal 2.
 
 On pourrait aussi utiliser les multi-ensembles pour autoriser les multi-arêtes / plusieurs arêtes entre 2 sommets données, comme en 1.1.1.) mais c'est `H.P.` : $A$ sera toujours un ensemble.
 
@@ -178,22 +166,21 @@ On pourrait aussi utiliser les multi-ensembles pour autoriser les multi-arêtes 
      On note $G'=(S,A\setminus\{s,s'\})$.
 
      Par hypothèse de récurrence : 
-     $$|A|-1=|A\setminus\{s,s'\}|=\displaystyle\sum_{v\in S\setminus\{s'\}}d_-(v)+\underbrace{d_-(s)-1}_{\text{degré sortant de }s\text{ dans }G'}$$
+     $$|A|-1=|A\setminus\{s,s'\}|=\sum_{v\in S\setminus\{s'\}}d_-(v)+\underbrace{d_-(s)-1}_{\text{degré sortant de }s\text{ dans }G'}$$
      donc $|A|=\displaystyle\sum_{v\in S}d_-(v)$ de même pour les degrés entrants, en considérant $s'$ plutôt que $s$.
 
 - **Corollare (hondshaking lemma) :** Tout GNO sans boucle possède un nombre pair de sommets de degré impair.
 
-> A compléter
+  **Démonstration :** 
+  $$2\N \ni 2|A| = \sum_{s \in S} d(s) = \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\N}} d(s)}_{\in 2\N} + \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\N + 1}} d(s)}_{\substack{\text{de la parité du nombre} \\ \text{de sommets de degré impair}}}$$
 
-  **Démonstration :** $2\mathbb{N}\ni 2|A|=\displaystyle\sum_{s\in S}d(s)=\displaystyle\sum_{s\in S\text{ tq }d(s)\in2\mathbb{N}}d(s)+\displaystyle\sum_{s\in S}d(s)$
+  **Contre-exemple en cas de boucle :**
 
-  Contre-exemple en cas de boucle
-
-```mermaid
-flowchart
-    id((A))
-    id --- id
-```
+  ```mermaid
+  flowchart
+      id((A))
+      id --- id
+  ```
 
 ---
 
@@ -212,10 +199,10 @@ flowchart LR
     A --> |5|B
     B --> |10|A
     A --> |3|C
-    A --> |-4|D
     B --> |3|C
     C --> |9|D
     D --> |5|B
+    A --> |-4|D
 ```
 
 En MPI : les automates finis :
@@ -229,5 +216,54 @@ flowchart LR
 ---
 
 ### 2.1.6. Graphes bipartis
+- Définition (graphes bipartis) : Soit $G=(S,A)$ un graphe.
 
-> A rattraper
+  On dit que $G$ est `biparti` s'il existe une partition de $S$ $(U, V)$ telle que pour toute arête $a$, une extrémité de $a$ appartienne à $U$ et l'autre à $V$.
+
+- Exemple $({\color{red}{U}},V)$ :
+
+```mermaid
+flowchart LR
+  id1(( ))
+  id2(( )):::red
+  id3(( ))
+  id4(( ))
+  id5(( )):::red
+  id6(( ))
+  id7(( )):::red
+  id8(( )):::red
+  id1 --- id2
+  id2 --- id3
+  id2 --- id4
+  id3 --- id5
+  id5 --- id6
+  id6 --- id7
+  id6 --- id8
+  classDef red stroke:#FF0000
+```
+
+Peut aussi se représenter :
+```mermaid
+flowchart LR
+  id1(( )):::red
+  id2(( ))
+  id3(( ))
+  id4(( ))
+  id5(( )):::red
+  id6(( ))
+  id7(( )):::red
+  id8(( )):::red
+  id1 --- id2
+  id1 --- id3
+  id1 --- id4
+  id5 --- id4
+  id5 --- id6
+  id7 --- id6
+  id8 --- id6
+  classDef red stroke:#FF0000
+```
+
+**Remarque :**
+Un graphe biparti est 2-colorable.
+
+> Question prof : cd En MP1 (à la fin du cours)
