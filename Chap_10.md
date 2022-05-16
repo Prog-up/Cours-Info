@@ -266,4 +266,238 @@ flowchart LR
 **Remarque :**
 Un graphe biparti est 2-colorable.
 
-> Question prof : cd En MP1 (à la fin du cours)
+---
+
+## 2.2. Convexité
+### 2.2.1. Définition : chemin
+Soit $G=(S,A)$ un graphe.
+
+Un chemin dans $G$ est une suite finie de sommets $s_0,\dots,s_n\in S$ tq $\forall i\in [\![0;n-1]\!], \{s_i;s_{i+1}\}\in A$ (resp. $(s_i+s_{i+1})\in A$ dans le cas orienté).
+
+La longueur du chemin est le nombre d'arêtes / d'arcs parcourus, ici $n$.
+
+---
+
+### 2.2.2. Définition : cas particuliers des chemins
+Soit $G=(S,A)$ un graphe et $p=s_0,\dots,s_n$ un chemin dans $G$ :
+- $p$ est `fermé` ssi $s_0=s_n$
+- $p$ est `élémentaire` ssi $p$ passe au plus une fois par chaque arête / arc, i.e. $\forall i\not ={j}\in[\![0;n-1]\!],\{s_i;s_{i+1}\}\not ={\{s_j;s_{j+1}\}}$ (resp. $\{s_i;s_{i+1}\}\not ={\{s_j;s_{j+1}\}}$)
+
+ ```mermaid
+ graph LR
+   id1(( )) --> id2(( ))
+   id2(( )) --> id1(( ))
+  
+ ```
+
+ ```mermaid
+ graph LR
+   id3(( )) --- id4(( ))
+ ```
+
+- $p$ est simple ssi $\forall i\not ={j}\in[\![0;n]\!],s_i\not ={s_j}$, sauf éventuellement $s_0=s_n$ uniquement si $n\not = 2$ dans le cas non-orienté
+
+**Attention :**
+Vocabulaire différent selon les auteurs.
+
+---
+
+### 2.2.3. Vrai / Faux
+1. $p$ élémentaire $\Rightarrow p$ simple
+2. $p$ simple $\Rightarrow p$ élémentaire
+   ```mermaid
+   graph LR
+     id1((4)) --- id2((0,3))
+     id2 --- id3((1))
+     id3 --- id4((2))
+     id2 --- id4
+   ```
+
+3. $\exists$ des chemins simples / fermés de longueur non-nulle
+   ```mermaid
+   graph LR
+     id1((O,2)) --- id2((1))
+     id3(( )) --- id4(( ))
+
+---
+
+### 2.2.4. Définition : circuit / cycles / chemin eulériens
+Soit $G=(S,A)$ un graphe, $p=s_0,\dots,s_n$ un chemin dans $G$
+- $p$ est un circuit ssi $p$ est un chemin fermé de longueur non-nulle
+- $p$ est un cycle ssi $p$ est un circuit élémentaire
+- $G$ acyclique s'il ne contient aucun cycle
+- $p$ est un chemin eulérien ssi $p$ passe exactement une fois par chaque arête / arc, i.e. si $\{\{s_i;s_{i+1}\},i\in [\![0;n-1]\!]\}=A$ et $|A|=n$ (resp. $(s_i;s_{i+1})$)
+- $G$ est eulérien ssi $G$ contient un chemin fermé eulérien
+
+---
+
+### 2.2.5. Remarque
+- un chemin est élémentaire
+- on parle souvent de circuit / cycle eulérien dans la définition du graphe eulérien même si c'est une erreur de langage pour le graphe sans arête
+- une branche est un cycle simple de longueur 1
+- on peut toujours rendre simple un chemin / cycle en coupant les circuits intermédiaires
+ ```mermaid
+ graph LR
+   id0((0)) --- id1((1)) --- id2((2,5))
+   id2 --- id3((3))
+   id2 --- id4((4))
+   id3 --- id4
+   id2 --- id6((6))
+ ```
+
+Cela n'est pas toujours possible pour les circuits : le circuit $s_0,s_1,s_0$ dans un graphe non-orienté contenant une arête $\{s_0;s_1\}$ ne peut pas être rendu simple (couper le circuit le rend de longueur nulle : ce n'est plus un circuit).
+
+---
+
+### 2.2.6. Proposition
+Soit $G=(S,A)$ un graphe.
+
+Si $G$ est biparti alors $G$ ne contient aucun cycle de longueur impaire.
+
+**Démonstration :**
+On note $(U,V)$ une partition de $S$ convenable.
+
+Soit $c=s_0,\dots,s_n$ un cycle dans $G$. On suppose sans perte de généralité que $s_0\in U$.
+
+On montre alors par récurrence finie que  $\left\{\begin{array}{ll}
+ \forall i\in \mathcal{U}N\cap[\![0;n]\!], s_i\in U
+ \\
+ \forall j\in \mathcal{U}N+1\cap[\![0;n]\!], s_j\in V
+\end{array}\right.$
+
+Alors $s_n=s_0\in U$ donc $n\in\mathcal{U}N$
+
+---
+
+### 2.2.7. Remarque
+C'est une caractérisation des graphes bipartis (réciproque en 4.1.8.).
+
+---
+
+### 2.2.8. Définition : connexité
+Soit $G=(S,A)$ un GNO et $s,s'\in S$.
+- On dit que $s$ et $s'$ sont connectés dans $G$, noté $s\sim_G s'$, s'il existe un chemin reliant $s$ ou $s'$ dans $G$
+- $G$ est connexe ssi $\forall s,s'\in S, s\sim s'$
+---
+
+### 2.2.9. Proposition
+Soit $G=(S,A)$ un GNO. Alors $\sim_G$ est une relation d'équivalence.
+
+**Démonstration :**
+En exercice.
+
+---
+
+### 2.2.10 Définition : composante connexes
+Soit $G=(S,A)$ un GNO et $s\in S$.
+
+La composante connexe de $G$ contenant $s$ est la classe d'équivalence de $s$ par $\sim_G$.
+
+---
+
+### 2.2.11. Lemme
+Soit $G=(S,A)$ un GNO et $s_1,s_2\in A$.
+
+On note $G'=(S,A\setminus \{\{s_1;s_2\}\})$, $C la composante connexe de $G$ contenant $s_1$ et $s_2$ et $\forall i\in [\![1;2]\!]$, $C_i$ la composante connexe de $G'$ contenant $s_i$.
+
+Alors il existe un cycle dans $G$ passant pas $\{s_1:s_2\}$, alors $C_1=C_2=C$.
+
+Sinon, $C_1\cap C_2=\empty$ et $C_1\cup C_2=C$
+
+**Démonstration :**
+- $C_1\cup C_2=C$ :
+  $\subseteq$ : vrai car un chemin dans $G'$ est un chemin dans $G$
+  $\supseteq$ : Soit $s\in C$
+
+Il existe un chemin, $n_0,\dots,n_k$ de $s$ à $s_1$ dans $G$ (avec $n_0=s$ et $n_k=s_1$)
+
+On considère $i=\min\{i\in[\![0;k]\!],n_i,s_1$ ou $n_i=s_2$ (existe car $n_k=s_1$)
+
+Alors $n_0\dots n_i$ est une chemin dans $G'$ de $s$ à $s_1$ ou $s_2$ donc $s\in C_1$ ou $s\in C_2$
+
+- Soit $C_1=C_2$, soit $C_1\cap C_2=\empty$ car $C_1$ et $C_2$ sont des clauses d'équivalence pour $\sim_{G'}$
+- $C_1=C_2$ ssi $\{s_1;s_2\}$ appartient à un cycle de $G$
+
+$\Rightarrow s_1\in C_2$ donc il existe un chemin $s_2 s_3\dots s_n s_1$ dans $G'$, que l'on suppose élémentaire (on peut toujours rendre simple un chemin).
+
+Alors en ajoutant l'arête $\{s_1,s_2\}$ à ce chemin, on obtient $s_1 s_2\dots s_n s_1$, qui est un chemin fermé, de longueur non nulle et élémentaire car le chemin initial ne contenait pas $\{s1;s_2\}$ et était élémentaire. C'est donc un cycle contenant $\{s1;s_2\}$.
+
+$\Leftarrow$ Quitte à réordonner les sommets, on peut supposer qu'il existe un cycle $s_2 s_3\dots s_n s_1$.
+
+Comme il est élémentaire, le chemin $s_2 s_3\dots s_n s_1$ es un chemin de $s_2$ à $s_1$ **dans $G'$** donc $s_2\sim_{G'}s_1$ donc $C_1=c_2$.
+
+---
+
+### 2.2.12. Proposition
+Soit $G=(S,A)$ un GNO avec $|S|=n$ et $|A|=m$
+1. $G$ a au moins $n-m$ composantes connexes
+2. $G$ a exactement $n-m$ composantes connexes ssi $G$ est acyclique
+
+**Démonstration :**
+Par l'absurde, considérons $G$ un contre-exemple avec $m$ minimal.
+- Si $m=0$ : $G$ n'a pas d'arête donc $G$ est acyclique et a $n=n-0=n-m$ composantes connexes donc $G$ n'est pas un contre-exemple : absurde.
+- donc $m>0$ : on peut essayer de supprimer une arête de $G$.
+
+S'il existe un cycle dans $G$, on choisit une arête de ce cycle, d'après 2.2.11, on obtient $G'$ avec les mêmes composantes connexes que $G$.
+
+Par minimalité de $m$, $G'$ n'est pas un contre-exemple donc a au moins $n-(m-1)$ composantes connexes donc $G$ a au moins $n-n+1>n-m$ composantes connexes donc $G$ n'est pas un contre-exemple : absurde.
+
+- Donc $G$ est acyclique.
+
+Donc d'après 2.2.11, supprimer une arête de $G$ donne $G'$ avec exactement une composante connexe de plus que $G$.
+
+$G'$ est acyclique et n'est pas un contre-exemple par minimalité de $m$, donc $G'$ a exactement $n - (m - 1)$ composantes connexes.
+
+Donc $G$ a exactement $n - m + 1 - 1 = n - m$ composantes connexes.
+
+Donc $G$ n'est pas un contre-exemple : absurde.
+
+---
+
+### 2.2.13. Définition : arbre
+Un arbre est un graphe non orienté connexe et acyclique.
+
+---
+
+### 2.2.14. Proposition
+Soit $G=(S,A)$ un GNO avec $|S|=n$ et $|A|=m$.
+
+Les assertions suivantes sont équivalentes :
+1. $G$ est un arbre
+2. $G$ est connexe avec $m$ minimal, i.e. si on retire une arête de $G$, on perd la connexité
+3. $G$ est acyclique avec $m$ minimal, i.e. si on retire une arête de $G$, on perd l'acyclité
+4. $G$ est connexe avec $m=n-1$
+5. $G$ est acyclique avec $m=n-1$
+
+**Démonstration :**
+(1) $\Rightarrow$ (4) et (5) : $G$ est connexe donc a exactement une nouvelle composante connexe.
+
+$G$ est acyclique donc a exactement $n-m$ composantes connexes d'après 2.2.12 donc $1=n-m$, i.e. $m=n-1$
+
+(4) ou (5) $\Rightarrow$ (1) : d'après 2.2.12., $G$ a au moins $n-m=1$ composantes connexes, exactement ssi $G$ est acyclique donc $G$ est connexe ssi $G$ est acyclique donc (4) ou (5) $\Rightarrow$ (1).
+
+(1) $\Rightarrow$ (2) : c'est 2.2.11. dans le cas acyclique
+
+(2) $\Rightarrow$ (1) : si $G$ n'était pas acyclique, on pourrait supprimer une arête d'un cycle, ce qui contredit la minimalité de $m$ d'après 2.2.11.
+
+(1) $\Rightarrow$ (3) : Si $m$ n'était pas maximal, on pourrait ajouter une arête à $G$ et obtenir $G'$ acyclique et toujours connexe
+
+$G'$ serait un arbre donc par (2), retirer l'arête que l'on vient d'ajouter donnerait un graphe non connexe. Or, c'est $G$, qui est un arbre : absurde.
+
+(3) $\Rightarrow$ (1) : Si $G$ n'est pas connexe, on peut ajouter une arête entre 2 sommets de 2 composantes connexes distinctes sans créer de cycle (d'après 2.2.11) donc $m$ n'est pas maximal : absurde.
+
+---
+
+### Définition : forêt
+Une forêt est un GNO acyclique.
+
+---
+
+### 2.2.16. Remarque
+- les composantes connexes d'une forêt dont des arbres
+- la relation de connexité n'est pas une relation d'équivalence dans les graphes orientés, on perd la symétrie :
+
+ ```mermaid
+ graph LR
+   id1(( )) --> id2(( ))
+ ```
