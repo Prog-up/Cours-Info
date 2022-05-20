@@ -268,7 +268,7 @@ Un graphe biparti est 2-colorable.
 
 ---
 
-## 2.2. Convexité
+## 2.2. Connexité
 ### 2.2.1. Définition : chemin
 Soit $G=(S,A)$ un graphe.
 
@@ -501,3 +501,386 @@ Une forêt est un GNO acyclique.
  graph LR
    id1(( )) --> id2(( ))
  ```
+
+> New
+
+---
+
+### 2.2.17. Définition : connexité forte
+Soit $G = (S, A)$ un GO, et $s, s' \in S$.
+
+- On dit de $s$ et $s'$ sont \textit{fortement connectés}, noté $s \sim_G s$ si il existe un chemin de $s$ à $s'$ et un chemin de $s'$ à $s$ dans $G$.
+
+- On dit que $G$ est `fortement connexe` ssi $\forall s, s'\ s \sim_G s'$.
+
+---
+
+### 2.2.18. Proposition
+Soit $G = (S, A)$ un GO.
+
+Alors $\sim_G$ est une relation d'équivalence.
+
+**Remarque :** 
+Si $G$ est un GNO, $\sim_G = \sim_G$.
+
+---
+
+### 2.2.19. Définition : composantes fortement connexes
+Soit $G = (S, A)$ un GO, et $s \in S$.
+
+La `composante fortement connexe `de $G$ contenant $s$ est la clause d'équivalence de $s$ pour $\sim_G$.
+
+---
+
+### 2.2.20. Exemple
+
+```mermaid
+flowchart LR
+  subgraph  
+    ida((A))
+    idb((B))
+  end
+  subgraph  
+    idc((C))
+    idd((D))
+    ide((E))
+  end
+  subgraph  
+    idf((F))
+    idg((G))
+  end
+  ida --> idb
+  idb --> ida
+  idc --> idd
+  idd --> ide
+  ide --> idc
+  idf --> idg
+  idg --> idf
+  ida --> idc
+  idd --> idf
+  idb --> idf
+```
+
+**Remarque :** 
+Le graphe des composantes fortement connexes est un graphe orienté acyclique.
+Dans un tel graphe, on définit naturellement une relation d'ordre entre sommets : $s \le s'$ ssi il existe un chemin de $s$ à $s'$ (on dit que $s'$ est accessible à partir de $s$).
+
+Dans le cas général, cet ordre n'est pas total :
+
+```mermaid
+flowchart LR
+  id1(( )) --> id2(( )) & id3(( )) --> id4(( ))
+```
+
+On peut choisir un ordre total compatible avec cet ordre partiel en effectuant un tri topologique du graphe (cf. TD 30)).
+
+---
+
+# 3. Représentation des graphes
+
+## 3.0 Remarque
+Il s'agit d'étudier des implémentations effectives des graphes. On suppose dans la suite qu'une numérotation des sommets a été choisie, donc que $S =\llbracket 0;n-1\rrbracket$.
+
+## 3.1. Matrice d'adjacence
+
+### 3.1.1. Définition matrice d'adjacence
+Soit $G=\llbracket 0;A\rrbracket,A$ un graphe.
+
+La `matrice d'adjacence entière` (resp. booléenne) de $G$ est la matrice $A_G = (a_{i,j})_{i, j \llbracket 0;n-1\rrbracket}$ définie par 
+$$\forall i, j \in\llbracket 0;n-1\rrbracket,a_{i,j} =\left\{\begin{array}{ll}
+  1\ (\text{resp. V})\ \text{si}\ \{i, j\} \in A\ \text{(resp. $(i, j) \in A$ dans le cas orienté)}
+  \\
+  0\ (\text{resp. F})\ \text{sinon}
+\end{array}\right.$$
+
+---
+
+### 3.1.2. Exemples
+
+```mermaid
+flowchart LR
+  id0((0)) --- id1((1)) & id3((3)) --- id4((4))
+  id0 --- id4
+  id1 --- id2((2)) --- id4
+```
+
+> À compléter
+
+---
+
+### 3.1.3. Proposition
+Soit $G = (S, A)$ un GNO.
+
+Alors $A_G$ est symétrique.
+
+**Démonstration :**
+$\forall i, j \in\llbracket 0;n-1\rrbracket,$
+$$
+  \begin{array}{rcl}
+      a_{i, j} = 1\ \text{(resp. V)}
+      &\Leftrightarrow & \{i, j\} \in A
+      \\
+      &\Leftrightarrow & \{j, i\} \in A
+      \\
+      &\Leftrightarrow & a_{j, i} = 1\ \text{(resp. V)}\
+  \end{array}
+$$
+
+---
+
+### 3.1.4. Proposition
+Soit $G = (\llbracket 0;n-1\rrbracket, A)$ un graphe, et $A_G$ sa matrice d'adjacence entière.
+
+Alors, $\forall (i, j) \in \llbracket 0;n - 1\rrbracket^2$, en notant $\forall k \in \N,\ a_{i, j}^{(k)}$ le coefficient $(i, j)$ de $A_G^{(k)}$, $a_{i, j}^{(k)}$ est le nombre de chemins de longueur $k$ de $i$ à $j$.
+
+**Démonstration :**
+Par récurrence sur $k$
+
+- $k = 0$ : $A_G^k = I_n$
+  
+  $\forall i, j \in \llbracket0;n - 1\rrbracket$, il existe un chemin de longueur nulle de $i$ à $j$ sii $ i = j$ : ok.
+
+**Hérédité :** 
+$A_G^{k + 1} = A_G^k A_G$
+
+Donc
+&&
+  \forall i, j \in \llbracket 0;n - 1\rrbraket,a_{i,j}^{(k + 1)}
+  = \sum_{l = 0}^{n - 1} a_{i,l}^{(k)} a_{l,j}^{(k)}
+  = \sum_{\substack{l \in \nset0 {n - 1} \\ \set{l, i} \in A}} a_{i,l}^{(k)}
+&&
+
+Or tout chemin de longueur $k + 1$ de $i$ à $j$ se décompose de manière unique en un chemin de $i$ à un sommet $l$ de longueur $k$ suivit  de l'arc / arête de $l$ à $j$.
+
+Donc l'hypothèse de récurrence conclut.
+
+
+---
+
+### 3.1.5. Définition : matrice d'adjacence pondérée
+Soit $G = (S, A, w)$ un graphe pondéré.
+
+La `matrice d'adjacence pondérée` de $G$ est la matrice
+$A_G = (a_{i,j})_{i,j \in \llbracket0;n - 1\rrbracket}$ définie par
+$$
+  \forall i, j \in \rrbracket0;n - 1\rrbracket,\
+  \left\{\!\!
+  \begin{array}{ll}
+      w(\{i, j\})
+      &\text{si}\ \{i, j\} \in A
+      \\
+      +\infty
+      & \text{sinon}
+  \end{array}
+  \right.
+$$
+
+
+---
+
+### 3.1.6. Implémentation
+On utilise un tableau à deux dimensions.
+
+- En OCaml :
+  ```ocaml
+  type graphe = int array array
+  ```
+
+- En C : d'après le programme, on n'utilise que des tableaux de taille statiquement connue.
+
+  **Exemple :**
+  ```c
+  typedef int graphe[10][20];
+  graphe g;
+  g[0][0] = 1;
+  ```
+
+Dans le cas général, on devrait utiliser des pointeurs :
+```ocaml
+typedef int** graphe;
+```
+mais cela nécessiterait d'utiliser $n + 1$ fois la fonction `malloc`.
+
+On préférera linéariser le tableau :
+
+\begin{lstlisting}[language=C, xleftmargin=100pt]
+typedef int* graphe;
+graphe g = (graphe) malloc(n*n*sizeof(int));
+//la case i, j est g[i*n + j]
+free(g);\end{lstlisting}
+
+Avantage : 1 \texttt{malloc}, 1 \texttt{free}.
+
+Inconvénient : risque de se tromper dans les accès.
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Complexité}}
+$\bullet$ Complexité spatiale : $\mathcal O(n^2)$
+
+\begin{indt}{$\bullet$ Complexité temporelle des opérations usuelles :}
+  $-$ Création du graphe : $\mathcal O(n^2)$ ;
+
+  $-$ Test de l'existence  d'une arête / d'un arc de $i$ à $j$ : $\mathcal O(1)$ (un accès dans la matrice) ;
+
+  $-$ Calcul du nombre d'arêtes / d'arcs : $\mathcal O(n^2)$ ;
+
+  $-$ Calcul de la liste des voisins / successeurs d'un sommet : $\mathcal O(n)$ (parcours de la ligne) ;
+
+  $-$ Ajout / suppression d'une arête / d'un arc : $\mathcal O(1)$ (Attention au cas non orienté) ;
+
+  $-$ Ajout / suppression de sommet : $\mathcal O(n^2)$ (reconstruire la matrice).
+
+  \boxed{\rm Exo} : code.
+\end{indt}
+\end{indt}
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsection{Listes d'adjacences}}
+\begin{indt}{\subsubsection{Définition (\textit{listes d'adjacence})}}
+Soit $G = (\nset 0 {n - 1})$ un graphe.
+
+On peut représenter $G$ à l'aide d'un tableau de listes d'adjacence :
+$\forall i \in \nset 0 {n - 1}$, la case d'indice $i$ contient la liste des voisins / successeurs de $i$.
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Exemple}}
+\begin{center}
+  \begin{tabular}{ccp{143pt}}
+      \begin{tikzpicture}[scale=1.5]
+          \node (0) [circle, draw] {0};
+          \node (1) at (1, 0) [circle, draw] {1};
+          \node (2) at (2, 0) [circle, draw] {2};
+          \node (3) at (0, -1) [circle, draw] {3};
+          \node (4) at (1, -1) [circle, draw] {4};
+
+          \draw (0) -- (1) -- (2) -- (4) -- (0) -- (3) -- (4) -- (1);
+      \end{tikzpicture}
+      &
+      \vline
+      &
+      \vspace{-60pt}
+      \begin{tabular}{ccccccccccc}
+          0 & \fbox{$\phantom x$} & $\rightarrow$ & 1 & $\rightarrow$ & 3 & $\rightarrow$ & 4 & $\rightarrow$ 
+          \\
+          1 & \fbox{$\phantom x$} & $\rightarrow$ & 0 & $\rightarrow$ & 2 & $\rightarrow$ & 4 & $\rightarrow$
+          \\
+          2 & \fbox{$\phantom x$} & $\rightarrow$ & 1 & $\rightarrow$ & 4 & $\rightarrow$
+          \\
+          3 & \fbox{$\phantom x$} & $\rightarrow$ & 0 & $\rightarrow$ & 4 & $\rightarrow$
+          \\
+          4 & \fbox{$\phantom x$} & $\rightarrow$ & 0 & $\rightarrow$ & 1 & $\rightarrow$ & 2 & $\rightarrow$ & 3 & $\rightarrow$
+      \end{tabular}
+  \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ccp{100pt}}
+      \begin{tikzpicture}[scale=1.5]
+          \node (0) at (0, 0) [circle, draw] {0};
+          \node (1) at (1, 0) [circle, draw] {1};
+          \node (2) at (0, -1) [circle, draw] {2};
+          \node (3) at (1, -1) [circle, draw] {3};
+
+          \draw[->] (1) to (0);
+          \draw[->] (0) to (2);
+          \draw[->] (2) to [out=10, in=170] (3);
+          \draw[->] (3) to [out=-170, in=-10] (2);
+          \draw[->] (2) to (1);
+          \draw[->] (1) to (3);
+      \end{tikzpicture}
+      &
+      \vline
+      &
+      \vspace{-60pt}
+      \begin{tabular}{ccccccc}
+          0 & \fbox{$\phantom x$} & $\rightarrow$ & 2 & $\rightarrow$
+          \\
+          1 & \fbox{$\phantom x$} & $\rightarrow$ & 0 & $\rightarrow$ & 3 & $\rightarrow$
+          \\
+          2 & \fbox{$\phantom x$} & $\rightarrow$ & 1 & $\rightarrow$ & 3 & $\rightarrow$
+          \\
+          3 & \fbox{$\phantom x$} & $\rightarrow$ & 2 & $\rightarrow$
+      \end{tabular}
+  \end{tabular}
+\end{center}
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Cas des graphes pondérés}}
+On peut utiliser des listes d'adjacence pondérées : chaque liste contient des couples (voisin, poids).
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Implémentation}}
+On utilise un tableau de listes chaînées.
+
+$\bullet$ En OCaml :
+
+\begin{lstlisting}[language=Caml, xleftmargin=100pt]
+type graphe = int list array\end{lstlisting}
+
+$\bullet$ En C :
+
+\begin{lstlisting}[language=C, xleftmargin=100pt]
+struct elem {
+int val;
+struct elem* next;
+};
+typedef struct elem* liste;
+
+typedef liste* graphe;\end{lstlisting}
+
+\vspace{6pt}
+
+Remarque : on peut se passer des listes en utilisant des tableaux : on peut par exemple utiliser une matrice dont les lignes ne sont pas toutes de même longueur en plaçant dans la première case de chaque ligne ne nombre de voisins (\texttt{g[i][0]} est le nombre de voisins de $i$ et les voisins sont \texttt{g[i][1],$\ldots$, g[i[g[i][0]]]})
+
+Problème : la linéarisation de cette matrice n'est pas pratique à manipuler.
+
+Solution : on utilise un tableau \texttt{voisins} qui contient dans l'ordre les voisins des différents sommets et deux tableaux \texttt{debut} et \texttt{fin} tel que les voisins de $i$ sont stockés entre les indices \texttt{debut[i]} (inclus) et \texttt{fin[i]} (exclu).
+\end{indt}
+
+\vspace{12pt}
+
+\begin{indt}{\subsubsection{Complexité}}
+On utilise un tableau de listes chaînées.
+
+On note $n = \abs S$, $m = \abs A$.
+
+$\bullet$ Complexité spatiale : $\mathcal O(n + m)$ ;
+
+\begin{indt}{$\bullet$ Complexité temporelle des opérations usuelles :}
+  $-$ Création de graphe (sans arêtes) : $\mathcal O(n)$ ;
+
+  $-$ Test d'existence de l'arête $\set{i, j}$ / de l'arc $(i, j)$ : $\mathcal O\!\lr{d_{(+)}(i)}$ (parcours de la liste d'adjacence de $i$) ;
+
+  $-$ Calcul du calcul d'arêtes / d'arcs : $\mathcal O(n + m)$ (calcul de la somme des longueurs des listes, divisée par 2 dans le cas non orienté) ;
+
+  $-$ Calcul de la liste des voisins d'un sommet : $\mathcal O(1)$ (accès à la case du sommet) ;
+
+  $-$ Ajout d'une arête / d'un arc : $\mathcal O(1)$ (ajout en tête de liste) ;
+
+  $-$ Suppression d'une arête / d'un arc entre $i$ et $j$ : $\mathcal O\!\lr{d_+(i)}$ dans le cas orienté, $\mathcal O\!\lr{d(i) + d(j)}$ dans le cas non orienté ;
+
+  $-$ Ajout d'un n\oe ud : $\mathcal O(n)$ si tableau statique, $\mathcal O(1)$ amorti si tableau dynamique ;
+
+  $-$ Suppression d'un n\oe ud : $\mathcal O(n + m)$ (création d'un nouveau tableau + renumérotation des n\oe uds).
+\end{indt}
+\end{indt}
+\end{indt}
+\end{indt}
+\end{indt}
+
+
+%Add \label{4.1.8}
+
+
+\end{document}
+%--------------------------------------------End
