@@ -654,7 +654,6 @@ Or tout chemin de longueur $k + 1$ de $i$ à $j$ se décompose de manière uniqu
 
 Donc l'hypothèse de récurrence conclut.
 
-
 ---
 
 ### 3.1.5. Définition : matrice d'adjacence pondérée
@@ -695,89 +694,74 @@ On utilise un tableau à deux dimensions.
   g[0][0] = 1;
   ```
 
-Dans le cas général, on devrait utiliser des pointeurs :
-```ocaml
-typedef int** graphe;
-```
-mais cela nécessiterait d'utiliser $n + 1$ fois la fonction `malloc`.
+Dans le cas général, on devrait utiliser des pointeurs : `typedef int** graphe;` mais cela nécessiterait d'utiliser $n + 1$ fois la fonction `malloc`.
 
 On préférera linéariser le tableau :
 
-\begin{lstlisting}[language=C, xleftmargin=100pt]
+```c
 typedef int* graphe;
 graphe g = (graphe) malloc(n*n*sizeof(int));
 //la case i, j est g[i*n + j]
-free(g);\end{lstlisting}
+free(g);
+```
 
-Avantage : 1 \texttt{malloc}, 1 \texttt{free}.
+Avantage : 1 `malloc`, 1 `free`.
 
 Inconvénient : risque de se tromper dans les accès.
-\end{indt}
 
-\vspace{12pt}
+---
 
-\begin{indt}{\subsubsection{Complexité}}
-$\bullet$ Complexité spatiale : $\mathcal O(n^2)$
+### 3.1.7. Complexité
+- Complexité spatiale : $\mathcal O(n^2)$
+- Complexité temporelle des opérations usuelles :}
+  - Création du graphe : $\mathcal O(n^2)$ ;
+  - Test de l'existence  d'une arête / d'un arc de $i$ à $j$ : $\mathcal O(1)$ (un accès dans la matrice) ;
+  - Calcul du nombre d'arêtes / d'arcs : $\mathcal O(n^2)$ ;
+  - Calcul de la liste des voisins / successeurs d'un sommet : $\mathcal O(n)$ (parcours de la ligne) ;
+  - Ajout / suppression d'une arête / d'un arc : $\mathcal O(1)$ (Attention au cas non orienté) ;
+  - Ajout / suppression de sommet : $\mathcal O(n^2)$ (reconstruire la matrice).
 
-\begin{indt}{$\bullet$ Complexité temporelle des opérations usuelles :}
-  $-$ Création du graphe : $\mathcal O(n^2)$ ;
+**Exercice :** 
+Code
 
-  $-$ Test de l'existence  d'une arête / d'un arc de $i$ à $j$ : $\mathcal O(1)$ (un accès dans la matrice) ;
+---
 
-  $-$ Calcul du nombre d'arêtes / d'arcs : $\mathcal O(n^2)$ ;
+## 3.2. Listes d'adjacences
 
-  $-$ Calcul de la liste des voisins / successeurs d'un sommet : $\mathcal O(n)$ (parcours de la ligne) ;
-
-  $-$ Ajout / suppression d'une arête / d'un arc : $\mathcal O(1)$ (Attention au cas non orienté) ;
-
-  $-$ Ajout / suppression de sommet : $\mathcal O(n^2)$ (reconstruire la matrice).
-
-  \boxed{\rm Exo} : code.
-\end{indt}
-\end{indt}
-\end{indt}
-
-\vspace{12pt}
-
-\begin{indt}{\subsection{Listes d'adjacences}}
-\begin{indt}{\subsubsection{Définition (\textit{listes d'adjacence})}}
-Soit $G = (\nset 0 {n - 1})$ un graphe.
+### 3.2.1. Définition (\textit{listes d'adjacence
+Soit $G = (\llbracket 0;n-1\rrbracket)$ un graphe.
 
 On peut représenter $G$ à l'aide d'un tableau de listes d'adjacence :
-$\forall i \in \nset 0 {n - 1}$, la case d'indice $i$ contient la liste des voisins / successeurs de $i$.
-\end{indt}
+$\forall i \in \llbracket 0;n-1\rrbracket$, la case d'indice $i$ contient la liste des voisins / successeurs de $i$.
 
-\vspace{12pt}
+---
 
-\begin{indt}{\subsubsection{Exemple}}
-\begin{center}
-  \begin{tabular}{ccp{143pt}}
-      \begin{tikzpicture}[scale=1.5]
-          \node (0) [circle, draw] {0};
-          \node (1) at (1, 0) [circle, draw] {1};
-          \node (2) at (2, 0) [circle, draw] {2};
-          \node (3) at (0, -1) [circle, draw] {3};
-          \node (4) at (1, -1) [circle, draw] {4};
+### 3.2.2. Exemple
 
-          \draw (0) -- (1) -- (2) -- (4) -- (0) -- (3) -- (4) -- (1);
-      \end{tikzpicture}
-      &
-      \vline
-      &
-      \vspace{-60pt}
-      \begin{tabular}{ccccccccccc}
-          0 & \fbox{$\phantom x$} & $\rightarrow$ & 1 & $\rightarrow$ & 3 & $\rightarrow$ & 4 & $\rightarrow$ 
-          \\
-          1 & \fbox{$\phantom x$} & $\rightarrow$ & 0 & $\rightarrow$ & 2 & $\rightarrow$ & 4 & $\rightarrow$
-          \\
-          2 & \fbox{$\phantom x$} & $\rightarrow$ & 1 & $\rightarrow$ & 4 & $\rightarrow$
-          \\
-          3 & \fbox{$\phantom x$} & $\rightarrow$ & 0 & $\rightarrow$ & 4 & $\rightarrow$
-          \\
-          4 & \fbox{$\phantom x$} & $\rightarrow$ & 0 & $\rightarrow$ & 1 & $\rightarrow$ & 2 & $\rightarrow$ & 3 & $\rightarrow$
-      \end{tabular}
-  \end{tabular}
-\end{center}
+```mermaid
+flowchart LR
+  id0((0)) --- id1((1)) & id3((3)) --- id4((4))
+  id0 --- id4
+  id1 --- id2((2)) --- id4
+```
+
+$\left|\begin{array}{llll}
+  0 \;\; \square \; \rightarrow \; 1 \; \rightarrow \; 3 \; \rightarrow \; 4 \; \rightarrow
+  \\
+  1 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 2 \; \rightarrow \; 4 \; \rightarrow
+  \\
+  2 \;\; \square \; \rightarrow \; 1 \; \rightarrow \; 4 \; \rightarrow
+  \\
+  3 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 4 \; \rightarrow
+  \\
+  4 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 1 \; \rightarrow \; 2 \; \rightarrow \; 3 \; \rightarrow
+\end{array}\right.$
+
+```mermaid
+flowchart LR
+  id1((1)) --> id0((0)) & id3((3)) --> id2((2))
+  id2 --> id1 & id3
+```
 
 \begin{center}
   \begin{tabular}{ccp{100pt}}
@@ -799,13 +783,13 @@ $\forall i \in \nset 0 {n - 1}$, la case d'indice $i$ contient la liste des vois
       &
       \vspace{-60pt}
       \begin{tabular}{ccccccc}
-          0 & \fbox{$\phantom x$} & $\rightarrow$ & 2 & $\rightarrow$
+          0 & \square & $\rightarrow$ & 2 & $\rightarrow$
           \\
-          1 & \fbox{$\phantom x$} & $\rightarrow$ & 0 & $\rightarrow$ & 3 & $\rightarrow$
+          1 & \square & $\rightarrow$ & 0 & $\rightarrow$ & 3 & $\rightarrow$
           \\
-          2 & \fbox{$\phantom x$} & $\rightarrow$ & 1 & $\rightarrow$ & 3 & $\rightarrow$
+          2 & \square & $\rightarrow$ & 1 & $\rightarrow$ & 3 & $\rightarrow$
           \\
-          3 & \fbox{$\phantom x$} & $\rightarrow$ & 2 & $\rightarrow$
+          3 & \square & $\rightarrow$ & 2 & $\rightarrow$
       \end{tabular}
   \end{tabular}
 \end{center}
