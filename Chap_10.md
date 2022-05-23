@@ -856,15 +856,226 @@ $\bullet$ Complexité spatiale : $\mathcal O(n + m)$ ;
   $-$ Ajout d'un n\oe ud : $\mathcal O(n)$ si tableau statique, $\mathcal O(1)$ amorti si tableau dynamique ;
 
   $-$ Suppression d'un n\oe ud : $\mathcal O(n + m)$ (création d'un nouveau tableau + renumérotation des n\oe uds).
-\end{indt}
-\end{indt}
-\end{indt}
-\end{indt}
-\end{indt}
 
 
-%Add \label{4.1.8}
+> New
 
+# 4. Parcours de graphes
+## 4.1. Généralités
+### 4.1.1. Définition : parcours d'un GNO connexe
+Soit $G=(S,A)$ un GNO connexe.
 
-\end{document}
-%--------------------------------------------End
+On parcours de $G$ partant d'un sommet $s\in S$ est une suite finie de sommets $s_0\dots s_{n-1}$ tel que :
+1. $s_0=s$
+2. $n=|S|$ et $\{s_i;i\in\rrbracket 0;n-1\llbracket\}=S$
+3. $\forall i\in\rrbracket 1;n-1\llbracket,\exists j<i,\{s_i;s_j\}\in A$
+
+---
+
+### 4.1.2. Algorithme générique
+
+**Défintion `bordure` :**
+Soit $G=(S,A)$ un GNO et $T\le S$.
+
+On appelle bordure de T l'ensemble B(T) = ...
+
+> À compléter
+
+Algo : 
+Entrée : $G=(S,A)$ GNO connexe, $s\in S$
+
+Pseudo-code : 
+- $s_0\leftarrow s$
+- Pour $i$ de 1 à $|S|-1$
+  - $s_i\leftarrow$ un élément de $B\{s_0;\dots;s_{i-1}\}$
+- Renvoyer $s_0\dots s_{|S|-1}$
+
+---
+
+### 4.1.3. Proposition
+Soit $G=(S,A)$ un GNO connexe.
+
+Les parcours de $G$ sont exactement les suites produites par l'algorithme générique.
+
+**Démonstration :**
+$\subseteq$ : Soit $s_0\dots s_{n-1}$ un parcours de $G$
+
+Soit $i\in\llbracket 1;n-1\rrbracket$
+
+$s_i\in B(\{s_0;\dots;n-1\})$ car $s_i\notin\{s_0;\dots;n-1\}$ (sinon le 2. de 4.1.1. est faux) et d'après 4.1.1. 3., $\exits j<i, \{s_i;s_j\}\in A$.
+
+Donc l'alpgorithme produit $s_0\dots s_{n-1}$ en choisissant $s_i$ à l'itération $i$ $\forall i\in\llbracket 1;|S|-1\rrbracket$ ...
+
+> À compléter
+
+Or, si $B(\{s_0;\dots;n-1\})=\empty$ avec $i<|S|$, alors il existe un sommet qui n'est pas connecté à $s_0;\dots;n-1$ donc le graphe n'est pas connexe.
+
+---
+
+### 4.1.4. Définition : sous-graphe induit / couvrant
+Soit $G=(S,A)$ un graphe.
+- Le sous-graphe induit par $T\subseteq S$ est le graphe $(T,A_T)$ où $A_T=\{a\in A, \text{les deux extrémités de a sont dans T}\}$
+- Le sous-graphe induit par $A'\subseteq S$ est le graphe $(S',A')$ où $S'=\{s\in S, \text{s une extrémité d'un élément de A'}\}$
+- Un graphe $(S',A')$ de $G$ est dit couvrant ssi $S'=S$.
+
+---
+
+### 4.1.5. Proposition
+Soit $G=(S,A)$ un GNO connexe et $s_0\dots s_{n-1}$ un parcours de $G$.
+
+$\forall i\in\llbracket 1;n-1\rrbracket$, on choisit $t_i\in\{s_0;\dots;i-1\}$ tel que $\{s_i;t_i\}\in A$ (possible d'après 4.1.1. 3.).
+
+Alors le sous-graphe induit par $\{\{s_i;t_i\};i\in\llbracket 1;n-1\rrbracket\}$ est un arbre couvrant de $G$.
+
+**Démonstration :**
+$\forall k\in\llbracket 1;n-1\rrbracket$ on note $G_k$ le sous-graphe induit par $\{\{s_i;t_i\};i\in\llbracket 1;k\rrbracket\}$.
+
+Il suffit de montrer que $G$_{n-1}$ est un arbre à $n$ sommets.
+
+En effet, $n=|S|$ d'après 4.1.1. 2. donc $G_{n-1}$ serait couvrant.
+
+On note par récurrence finie que $\forall k\in\llbracket 1;n-1\rrbracket$, $G_k$ est un arbre à $k+1$ sommets.
+
+**Initialisation :**
+$k=1$ : $G_1$ est le sous-graphe induit par $\{\{s_i;t_i\}\}$
+
+$t_i=s_0\not ={s_1}$ donc $G$ est le graphe :
+
+```mermaid
+flowchar LR
+  id0((s0)) --- id1((s1))
+```
+c'est bien un arbre à $2=1+1$ sommets.
+
+**Hérédités :**
+Soit $k\in\llbracket 1;n-2\rrbracket$$ tel que $G_k$ est un arbre à $k+1$ sommets.
+
+Montrons que $k_{k+1}$ est un arbre à $k+2$ sommets.
+
+$G_{k+1}$ est construit à partir de $G_k$ en ajoutant l'arête $\{s_{k+1};t_{k+1}\}$.
+
+$t_{k+1}$ est un sommet de $G_k$ et pas $s_{k+1}$
+
+donc $G_{k+1}$ a exactement 1 sommet et une arête de plus que $G_k$.
+
+Or, $G_k$ est connexe avec $k+1$ sommets et $k$ arêtes (cf. 2.2.14.)
+
+donc $g_{k+1}$ est connexe avec $k+2$ sommets et $k+1$ arêtes (le seul sommet ajouté au graphe connexe $G_k$ est relié à un sommet de $G_k$ dans $G_{k+1}$)
+
+donc $G_{k+1}$ est un arbre (cf. 2.2.14.) à $k+2$ sommets.
+
+---
+
+### 4.1.6. Exemple
+```mermaid
+flowchar LR
+  id0((0)) === id2((2)) --- id1((1)) === id5((5)) === id3((3)) === id2
+  id2 === id3
+  id0 --- id3
+  id2 --- id4((4)) === id5
+  id0 === id6((6))
+```
+
+- Parcours : 0,2,3,5,6,1,4
+- Antécédents : -,2,3,0,5,5
+- **arbre couvrant**
+
+---
+
+### 4.1.7. Remarque
+- Un problème classique est le calcul d'un arbre couvrant de poids minimal dans un graphe pondéré (où le poids d'un arbre est les sommets des poids de ses arêtes) (cf. MPI)
+- En pratique, on implémente souvent les parcours en déterminant un voisin non visité d'un sommet "couvrant"
+  
+Le sommet couvrant est donc naturellement choisit comme antécédent de ce voisin, ce qui produit un `arbre particulier` associé au parcours.
+
+---
+
+### 4.1.8. Proposition (réciproque de 2.2.6.)
+Soit $G=(S,A)$ un GNO.
+
+Si $G$ ne contient aucun cycle de longueur impaire, alors $G$ est biparti.
+
+**Démonstration :**
+On suppose sans perte de généralité que $G$ est connexe (sinon on travaille séparément sur ses composantes connexes).
+
+Alors $G$ possède un arbre couvrant $T$, dont on distingue un sommet $M$.
+
+Comme $T$ est un arbre, il existe un unique chemin simple dans $T$ entre toute paire de sommets.
+
+**Execice :**
+```mermaid
+flowchar LR
+  id1((s1)) -.- id2(( )) -.- id3(( )) -.- id4((s2))
+  id3 -.- id2
+```
+
+On peut alors particionner $S$ en $(U,V)$ où :
+- $U$ est l'ensemble des sommets $s$ tel que la longueur du chemin de $r$ à $s$ dans $T$ est paire ;
+- $V$ est l'ensemble des sommets $s$ tel que la longueur du chemin de $r$ à $s$ dans $T$ est impaire.
+
+$U\cup V=\empty$ et comme $T$ est couvrant, $U\cap V=S$.
+
+Il reste à montrer que toute arête a une extrémité dans $U$ et l'autre dans $V$.
+
+Supposons qu'il existe une arête $\{s;s'\}\in A$ avec $s\in U$ et $s'\in U$ (le cas de $V$ est similaire).
+
+Il existe un unique chemin simple de $s$ à $s'$ dans $T$.
+- S'il passe par $M$ :
+  ```mermaid
+  flowchar LR
+    subgraph logueur paire
+      id1((s)) -.-|logueur paire| id2((r)) -.-|logueur paire| id3((s'))
+    end
+  ```
+  $\rightarrow$ l'ajout de $\{s;s'\}$ à ce chemin donne un sycle de longueur impaire
+
+- Sinon : on procède de même avec le premier sommet $r'$ commun aux chemins de $s$ à $r$ et de $s'$ à $r$.
+  
+  La somme des longueur des chemins de $s$ à $r'$ et de $s'$ à $r'$ est bien paire car elles sont de même parité (par disjonction de cas selon que $r'\in U$ ou $r'\in V$)
+
+  $\rightarrow$ ajouter l'arête $\{s;s'\}$ donne un cycle de longueur impaire $\rightarrow$ absurde.
+
+```mermaid
+flowchar TB
+  id1((1)) -.- id2((r')) & id5((...))
+  id2 -.- id3((s)) & id4((s'))
+```
+($s$ et $s'$ sont dans U)
+
+---
+
+### 4.1.5. Généralisation aux graphes non connexes
+**Définition : `parcours d'un GNO` :**
+
+Soit $G=(S,A)$ un GNO.
+
+Un parcours de $G$, à partir de $s\in S$, est une suite finie $s_0\dots s_{n-1}\in S$ tel que :
+1. $s_0=s$
+2. $|S|=n$ et $\{s_i;i\in\rrbracket 0;n-1\llbracket\}=S$
+3. $\forall i\in\rrbracket 1;n-1\llbracket$, **si** $\bold{B(s_0\dots s_{i-1})\not ={\empty}}$ alors $s_i\in B(s_0\dots s_{i-1})$.
+
+**Conséquences :**
+- Un parcours est la concaténation de parcours des composantes connexes ;
+- On peut tirer d'un tel parcours uen forêt couvrante du graphe.
+
+---
+
+### 4.1.10. Généralisation aux GO
+On adopte simplement la notion de bordure : si $G=(S,A)$ est un GNO et $R\subseteq S$ :
+$$B(T)=\{s\in S\setminus T, \exists t\in T, (t,s)\in A\}$$
+
+On peut également sélectionner un antécédent pour chaque sommet du parcours.
+
+Si touts les sommets sont accessibles à partir du sommet de départ (à fortiori si $G$ est fortement connexe), alors on obtient une arborescence couvrante de $G$.
+
+**Définiton : `arborescence` :**
+
+Soit $G=(S,A)$ un GO.
+
+$G$ est une arborescence s'il peut être obtenu à partir d'un arbre $(S,A')$ en distinguant un sommet $r\in S$ et en orientant chaque $\{s:s'\}\in A$ en $(s,s')$ si l'unique chemin simple de $r$ à $s'$ passe par $s$, en $(s',s)$ sinon.
+
+On parle également d'arbre enraciné.
+
+On parle également de forêt pour un ensemble d'arborescence disjointes et un parcours d'un GO permet de définir une forêt couvrante en sélectionnant des arcs comme dans le cas non orienté.
+
+On dit que ce sont des arcs de liaisons pour les distinguer des autres catégories d'arcs.
