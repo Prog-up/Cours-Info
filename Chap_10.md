@@ -502,8 +502,6 @@ Une forêt est un GNO acyclique.
    id1(( )) --> id2(( ))
  ```
 
-> New
-
 ---
 
 ### 2.2.17. Définition : connexité forte
@@ -586,11 +584,11 @@ Il s'agit d'étudier des implémentations effectives des graphes. On suppose dan
 ### 3.1.1. Définition matrice d'adjacence
 Soit $G=\llbracket 0;A\rrbracket,A$ un graphe.
 
-La `matrice d'adjacence entière` (resp. booléenne) de $G$ est la matrice $A_G = (a_{i,j})_{i, j \llbracket 0;n-1\rrbracket}$ définie par 
+La `matrice d'adjacence entière` (resp. booléenne) de $G$ est la matrice $A_G = (a_{i,j})_{i, j \llbracket 0;n-1\rrbracket}$ définie par
 $$\forall i, j \in\llbracket 0;n-1\rrbracket,a_{i,j} =\left\{\begin{array}{ll}
-  1\ (\text{resp. V})\ \text{si}\ \{i, j\} \in A\ \text{(resp. $(i, j) \in A$ dans le cas orienté)}
-  \\
-  0\ (\text{resp. F})\ \text{sinon}
+ 1\ (\text{resp. V})\ \text{si}\ \{i, j\} \in A\ \text{(resp. $(i, j) \in A$ dans le cas orienté)}
+ \\
+ 0\ (\text{resp. F})\ \text{sinon}
 \end{array}\right.$$
 
 ---
@@ -599,9 +597,9 @@ $$\forall i, j \in\llbracket 0;n-1\rrbracket,a_{i,j} =\left\{\begin{array}{ll}
 
 ```mermaid
 flowchart LR
-  id0((0)) --- id1((1)) & id3((3)) --- id4((4))
-  id0 --- id4
-  id1 --- id2((2)) --- id4
+ id0((0)) --- id1((1)) & id3((3)) --- id4((4))
+ id0 --- id4
+ id1 --- id2((2)) --- id4
 ```
 
 > À compléter
@@ -616,14 +614,14 @@ Alors $A_G$ est symétrique.
 **Démonstration :**
 $\forall i, j \in\llbracket 0;n-1\rrbracket,$
 $$
-  \begin{array}{rcl}
-      a_{i, j} = 1\ \text{(resp. V)}
-      &\Leftrightarrow & \{i, j\} \in A
-      \\
-      &\Leftrightarrow & \{j, i\} \in A
-      \\
-      &\Leftrightarrow & a_{j, i} = 1\ \text{(resp. V)}\
-  \end{array}
+ \begin{array}{rcl}
+     a_{i, j} = 1\ \text{(resp. V)}
+     &\Leftrightarrow & \{i, j\} \in A
+     \\
+     &\Leftrightarrow & \{j, i\} \in A
+     \\
+     &\Leftrightarrow & a_{j, i} = 1\ \text{(resp. V)}\
+ \end{array}
 $$
 
 ---
@@ -637,17 +635,16 @@ Alors, $\forall (i, j) \in \llbracket 0;n - 1\rrbracket^2$, en notant $\forall k
 Par récurrence sur $k$
 
 - $k = 0$ : $A_G^k = I_n$
-  
   $\forall i, j \in \llbracket0;n - 1\rrbracket$, il existe un chemin de longueur nulle de $i$ à $j$ sii $ i = j$ : ok.
 
-**Hérédité :** 
+**Hérédité :**
 $A_G^{k + 1} = A_G^k A_G$
 
 Donc
 &&
-  \forall i, j \in \llbracket 0;n - 1\rrbraket,a_{i,j}^{(k + 1)}
-  = \sum_{l = 0}^{n - 1} a_{i,l}^{(k)} a_{l,j}^{(k)}
-  = \sum_{\substack{l \in \rrbracket 0;n-1\llbracket \\ \{l, i\} \in A}} a_{i,l}^{(k)}
+ \forall i, j \in \llbracket 0;n - 1\rrbraket,a_{i,j}^{(k + 1)}
+ = \sum_{l = 0}^{n - 1} a_{i,l}^{(k)} a_{l,j}^{(k)}
+ = \sum_{\substack{l \in \rrbracket 0;n-1\llbracket \\ \{l, i\} \in A}} a_{i,l}^{(k)}
 &&
 
 Or tout chemin de longueur $k + 1$ de $i$ à $j$ se décompose de manière unique en un chemin de $i$ à un sommet $l$ de longueur $k$ suivit  de l'arc / arête de $l$ à $j$.
@@ -662,16 +659,16 @@ Soit $G = (S, A, w)$ un graphe pondéré.
 La `matrice d'adjacence pondérée` de $G$ est la matrice
 $A_G = (a_{i,j})_{i,j \in \llbracket0;n - 1\rrbracket}$ définie par
 $$
-  \forall i, j \in \rrbracket0;n - 1\rrbracket,\
-  \left\{\!\!
-  \begin{array}{ll}
-      w(\{i, j\})
-      &\text{si}\ \{i, j\} \in A
-      \\
-      +\infty
-      & \text{sinon}
-  \end{array}
-  \right.
+ \forall i, j \in \rrbracket0;n - 1\rrbracket,\
+ \left\{\!\!
+ \begin{array}{ll}
+     w(\{i, j\})
+     &\text{si}\ \{i, j\} \in A
+     \\
+     +\infty
+     & \text{sinon}
+ \end{array}
+ \right.
 $$
 
 
@@ -681,18 +678,18 @@ $$
 On utilise un tableau à deux dimensions.
 
 - En OCaml :
-  ```ocaml
-  type graphe = int array array
-  ```
+ ```ocaml
+ type graphe = int array array
+ ```
 
 - En C : d'après le programme, on n'utilise que des tableaux de taille statiquement connue.
 
-  **Exemple :**
-  ```c
-  typedef int graphe[10][20];
-  graphe g;
-  g[0][0] = 1;
-  ```
+ **Exemple :**
+ ```c
+ typedef int graphe[10][20];
+ graphe g;
+ g[0][0] = 1;
+ ```
 
 Dans le cas général, on devrait utiliser des pointeurs : `typedef int** graphe;` mais cela nécessiterait d'utiliser $n + 1$ fois la fonction `malloc`.
 
@@ -714,14 +711,14 @@ Inconvénient : risque de se tromper dans les accès.
 ### 3.1.7. Complexité
 - Complexité spatiale : $\mathcal O(n^2)$
 - Complexité temporelle des opérations usuelles :}
-  - Création du graphe : $\mathcal O(n^2)$ ;
-  - Test de l'existence  d'une arête / d'un arc de $i$ à $j$ : $\mathcal O(1)$ (un accès dans la matrice) ;
-  - Calcul du nombre d'arêtes / d'arcs : $\mathcal O(n^2)$ ;
-  - Calcul de la liste des voisins / successeurs d'un sommet : $\mathcal O(n)$ (parcours de la ligne) ;
-  - Ajout / suppression d'une arête / d'un arc : $\mathcal O(1)$ (Attention au cas non orienté) ;
-  - Ajout / suppression de sommet : $\mathcal O(n^2)$ (reconstruire la matrice).
+ - Création du graphe : $\mathcal O(n^2)$ ;
+ - Test de l'existence  d'une arête / d'un arc de $i$ à $j$ : $\mathcal O(1)$ (un accès dans la matrice) ;
+ - Calcul du nombre d'arêtes / d'arcs : $\mathcal O(n^2)$ ;
+ - Calcul de la liste des voisins / successeurs d'un sommet : $\mathcal O(n)$ (parcours de la ligne) ;
+ - Ajout / suppression d'une arête / d'un arc : $\mathcal O(1)$ (Attention au cas non orienté) ;
+ - Ajout / suppression de sommet : $\mathcal O(n^2)$ (reconstruire la matrice).
 
-**Exercice :** 
+**Exercice :**
 Code
 
 ---
@@ -740,37 +737,37 @@ $\forall i \in \llbracket 0;n-1\rrbracket$, la case d'indice $i$ contient la lis
 
 ```mermaid
 flowchart LR
-  id0((0)) --- id1((1)) & id3((3)) --- id4((4))
-  id0 --- id4
-  id1 --- id2((2)) --- id4
+ id0((0)) --- id1((1)) & id3((3)) --- id4((4))
+ id0 --- id4
+ id1 --- id2((2)) --- id4
 ```
 
 $\left|\begin{array}{llll}
-  0 \;\; \square \; \rightarrow \; 1 \; \rightarrow \; 3 \; \rightarrow \; 4 \; \rightarrow
-  \\
-  1 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 2 \; \rightarrow \; 4 \; \rightarrow
-  \\
-  2 \;\; \square \; \rightarrow \; 1 \; \rightarrow \; 4 \; \rightarrow
-  \\
-  3 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 4 \; \rightarrow
-  \\
-  4 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 1 \; \rightarrow \; 2 \; \rightarrow \; 3 \; \rightarrow
+ 0 \;\; \square \; \rightarrow \; 1 \; \rightarrow \; 3 \; \rightarrow \; 4 \; \rightarrow
+ \\
+ 1 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 2 \; \rightarrow \; 4 \; \rightarrow
+ \\
+ 2 \;\; \square \; \rightarrow \; 1 \; \rightarrow \; 4 \; \rightarrow
+ \\
+ 3 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 4 \; \rightarrow
+ \\
+ 4 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 1 \; \rightarrow \; 2 \; \rightarrow \; 3 \; \rightarrow
 \end{array}\right.$
 
 ```mermaid
 flowchart LR
-  id1((1)) --> id0((0)) & id3((3)) --> id2((2))
-  id2 --> id1 & id3
+ id1((1)) --> id0((0)) & id3((3)) --> id2((2))
+ id2 --> id1 & id3
 ```
 
 $\left|\begin{array}{lll}
-  0 \;\; \square \; \rightarrow \; 2 \; \rightarrow
-  \\
-  1 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 3 \; \rightarrow
-  \\
-  2 \;\; \square \; \rightarrow \; 1 \; \rightarrow \; 3 \; \rightarrow
-  \\
-  3 \;\; \square \; \rightarrow \; 2 \; \rightarrow
+ 0 \;\; \square \; \rightarrow \; 2 \; \rightarrow
+ \\
+ 1 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 3 \; \rightarrow
+ \\
+ 2 \;\; \square \; \rightarrow \; 1 \; \rightarrow \; 3 \; \rightarrow
+ \\
+ 3 \;\; \square \; \rightarrow \; 2 \; \rightarrow
 \end{array}\right.$
 
 ---
@@ -800,13 +797,13 @@ typedef struct elem* liste;
 typedef liste* graphe;
 ```
 
-**Remarque :** 
+**Remarque :**
 On peut se passer des listes en utilisant des tableaux : on peut par exemple utiliser une matrice dont les lignes ne sont pas toutes de même longueur en plaçant dans la première case de chaque ligne ne nombre de voisins (\texttt{g[i][0]} est le nombre de voisins de $i$ et les voisins sont \texttt{g[i][1],$\ldots$, g[i[g[i][0]]]})
 
-**Problème :** 
+**Problème :**
 La linéarisation de cette matrice n'est pas pratique à manipuler.
 
-**Solution :** 
+**Solution :**
 On utilise un tableau `voisins` qui contient dans l'ordre les voisins des différents sommets et deux tableaux `debut` et `fin` tel que les voisins de $i$ sont stockés entre les indices `debut[i]` (inclus) et `fin[i]` (exclu).
 
 ---
@@ -819,14 +816,14 @@ On note $n = |S|$, $m = |A|$.
 - **Complexité spatiale :** $\mathcal O(n + m)$ ;
 
 - Complexité temporelle des opérations usuelles :
-  - Création de graphe (sans arêtes) : $\mathcal O(n)$ ;
-  - Test d'existence de l'arête $\{i, j\}$ / de l'arc $(i, j)$ : $\mathcal O(d_{(+)}(i))$ (parcours de la liste d'adjacence de $i$) ;
-  - Calcul du calcul d'arêtes / d'arcs : $\mathcal O(n + m)$ (calcul de la somme des longueurs des listes, divisée par 2 dans le cas non orienté) ;
-  - Calcul de la liste des voisins d'un sommet : $\mathcal O(1)$ (accès à la case du sommet) ;
-  - Ajout d'une arête / d'un arc : $\mathcal O(1)$ (ajout en tête de liste) ;
-  - Suppression d'une arête / d'un arc entre $i$ et $j$ : $\mathcal O(d_+(i))$ dans le cas orienté, $\mathcal O(d(i) + d(j))$ dans le cas non orienté ;
-  - Ajout d'un n\oe ud : $\mathcal O(n)$ si tableau statique, $\mathcal O(1)$ amorti si tableau dynamique ;
-  - Suppression d'un n\oe ud : $\mathcal O(n + m)$ (création d'un nouveau tableau + renumérotation des n\oe uds).
+ - Création de graphe (sans arêtes) : $\mathcal O(n)$ ;
+ - Test d'existence de l'arête $\{i, j\}$ / de l'arc $(i, j)$ : $\mathcal O(d_{(+)}(i))$ (parcours de la liste d'adjacence de $i$) ;
+ - Calcul du calcul d'arêtes / d'arcs : $\mathcal O(n + m)$ (calcul de la somme des longueurs des listes, divisée par 2 dans le cas non orienté) ;
+ - Calcul de la liste des voisins d'un sommet : $\mathcal O(1)$ (accès à la case du sommet) ;
+ - Ajout d'une arête / d'un arc : $\mathcal O(1)$ (ajout en tête de liste) ;
+ - Suppression d'une arête / d'un arc entre $i$ et $j$ : $\mathcal O(d_+(i))$ dans le cas orienté, $\mathcal O(d(i) + d(j))$ dans le cas non orienté ;
+ - Ajout d'un n\oe ud : $\mathcal O(n)$ si tableau statique, $\mathcal O(1)$ amorti si tableau dynamique ;
+ - Suppression d'un n\oe ud : $\mathcal O(n + m)$ (création d'un nouveau tableau + renumérotation des n\oe uds).
 
 # 4. Parcours de graphes
 ## 4.1. Généralités
@@ -842,7 +839,7 @@ On parcours de $G$ partant d'un sommet $s\in S$ est une suite finie de sommets $
 
 ### 4.1.2. Algorithme générique
 
-**Défintion `bordure` :**
+**Définition `bordure` :**
 Soit $G=(S,A)$ un GNO et $T\le S$.
 
 On appelle bordure de $T$ l'ensemble $B(T)=\{s\in S\setminus T|\exists t\in T|\{s;t\}\in A\}$.
@@ -850,23 +847,23 @@ On appelle bordure de $T$ l'ensemble $B(T)=\{s\in S\setminus T|\exists t\in T|\{
 **Exemple :**
 ```mermaid
 flowchart LR
-  subgraph T
-    id4((4)) --- id2((2)) --- id5((5)) --- id4
-  end
-  subgraph B(T)
-    id1((1)) --- id0((0)) --- id3((3))
-  end
-  id6((6)) --- id1 --- id2 --- id0
-  id5 --- id3
+ subgraph T
+   id4((4)) --- id2((2)) --- id5((5)) --- id4
+ end
+ subgraph B(T)
+   id1((1)) --- id0((0)) --- id3((3))
+ end
+ id6((6)) --- id1 --- id2 --- id0
+ id5 --- id3
 ```
 
-**Algorithme :** 
+**Algorithme :**
 Entrée : $G=(S,A)$ GNO connexe, $s\in S$
 
 **Pseudo-code : **
 - $s_0\leftarrow s$
 - Pour $i$ de 1 à $|S|-1$
-  - $s_i\leftarrow$ un élément de $B\{s_0;\dots;s_{i-1}\}$
+ - $s_i\leftarrow$ un élément de $B\{s_0;\dots;s_{i-1}\}$
 - Renvoyer $s_0\dots s_{|S|-1}$
 
 ---
@@ -928,7 +925,7 @@ $t_i=s_0\not ={s_1}$ donc $G$ est le graphe :
 
 ```mermaid
 flowchart LR
-  id0((s0)) --- id1((s1))
+ id0((s0)) --- id1((s1))
 ```
 c'est bien un arbre à $2=1+1$ sommets.
 
@@ -954,11 +951,11 @@ donc $G_{k+1}$ est un arbre (cf. 2.2.14.) à $k+2$ sommets.
 ### 4.1.6. Exemple
 ```mermaid
 flowchart LR
-  id0((0)) === id2((2)) --- id1((1)) === id5((5)) === id3((3)) === id2
-  id2 === id3
-  id0 --- id3
-  id2 --- id4((4)) === id5
-  id0 === id6((6))
+ id0((0)) === id2((2)) --- id1((1)) === id5((5)) === id3((3)) === id2
+ id2 === id3
+ id0 --- id3
+ id2 --- id4((4)) === id5
+ id0 === id6((6))
 ```
 
 - Parcours : 0,2,3,5,6,1,4
@@ -970,8 +967,7 @@ flowchart LR
 ### 4.1.7. Remarque
 - Un problème classique est le calcul d'un arbre couvrant de poids minimal dans un graphe pondéré (où le poids d'un arbre est les sommets des poids de ses arêtes) (cf. MPI)
 - En pratique, on implémente souvent les parcours en déterminant un voisin non visité d'un sommet "couvrant"
-  
-Le sommet couvrant est donc naturellement choisit comme antécédent de ce voisin, ce qui produit un `arbre particulier` associé au parcours.
+ Le sommet couvrant est donc naturellement choisi comme antécédent de ce voisin, ce qui produit un `arbre particulier` associé au parcours.
 
 ---
 
@@ -987,14 +983,14 @@ Alors $G$ possède un arbre couvrant $T$, dont on distingue un sommet $M$.
 
 Comme $T$ est un arbre, il existe un unique chemin simple dans $T$ entre toute paire de sommets.
 
-**Execice :**
+**Exercice :**
 ```mermaid
 flowchart LR
-  id1((s1)) -.- id2(( )) -.- id3(( )) -.- id4((s2))
-  id3 -.- id2
+ id1((s1)) -.- id2(( )) -.- id3(( )) -.- id4((s2))
+ id3 -.- id2
 ```
 
-On peut alors particionner $S$ en $(U,V)$ où :
+On peut alors partitionner $S$ en $(U,V)$ où :
 - $U$ est l'ensemble des sommets $s$ tel que la longueur du chemin de $r$ à $s$ dans $T$ est paire ;
 - $V$ est l'ensemble des sommets $s$ tel que la longueur du chemin de $r$ à $s$ dans $T$ est impaire.
 
@@ -1006,24 +1002,23 @@ Supposons qu'il existe une arête $\{s;s'\}\in A$ avec $s\in U$ et $s'\in U$ (le
 
 Il existe un unique chemin simple de $s$ à $s'$ dans $T$.
 - S'il passe par $M$ :
-  ```mermaid
-  flowchart LR
-    subgraph logueur paire
-      id1((s)) -.-|logueur paire| id2((r)) -.-|logueur paire| id3((s'))
-    end
-  ```
-  $\rightarrow$ l'ajout de $\{s;s'\}$ à ce chemin donne un sycle de longueur impaire
+ ```mermaid
+ flowchart LR
+   subgraph longueur paire
+    id1((s)) -.-|longueur paire| id2((r)) -.-|logueur paire| id3((s'))
+   end
+ ```
+ $\rightarrow$ l'ajout de $\{s;s'\}$ à ce chemin donne un cycle de longueur impaire
 
 - Sinon : on procède de même avec le premier sommet $r'$ commun aux chemins de $s$ à $r$ et de $s'$ à $r$.
-  
   La somme des longueur des chemins de $s$ à $r'$ et de $s'$ à $r'$ est bien paire car elles sont de même parité (par disjonction de cas selon que $r'\in U$ ou $r'\in V$)
 
-  $\rightarrow$ ajouter l'arête $\{s;s'\}$ donne un cycle de longueur impaire $\rightarrow$ absurde.
+ $\rightarrow$ ajouter l'arête $\{s;s'\}$ donne un cycle de longueur impaire $\rightarrow$ absurde.
 
 ```mermaid
-flowchar TB
-  id1((1)) -.- id2((r')) & id5((...))
-  id2 -.- id3((s)) & id4((s'))
+flowchart TB
+ id1((1)) -.- id2((r')) & id5((...))
+ id2 -.- id3((s)) & id4((s'))
 ```
 ($s$ et $s'$ sont dans U)
 
@@ -1041,7 +1036,7 @@ Un parcours de $G$, à partir de $s\in S$, est une suite finie $s_0\dots s_{n-1}
 
 **Conséquences :**
 - Un parcours est la concaténation de parcours des composantes connexes ;
-- On peut tirer d'un tel parcours uen forêt couvrante du graphe.
+- On peut tirer d'un tel parcours une forêt couvrante du graphe.
 
 ---
 
@@ -1053,7 +1048,7 @@ On peut également sélectionner un antécédent pour chaque sommet du parcours.
 
 Si touts les sommets sont accessibles à partir du sommet de départ (à fortiori si $G$ est fortement connexe), alors on obtient une arborescence couvrante de $G$.
 
-**Définiton : `arborescence` :**
+**Définition : `arborescence` :**
 
 Soit $G=(S,A)$ un GO.
 
@@ -1064,3 +1059,5 @@ On parle également d'arbre enraciné.
 On parle également de forêt pour un ensemble d'arborescence disjointes et un parcours d'un GO permet de définir une forêt couvrante en sélectionnant des arcs comme dans le cas non orienté.
 
 On dit que ce sont des arcs de liaisons pour les distinguer des autres catégories d'arcs.
+
+> 3.1.2. à compléter
