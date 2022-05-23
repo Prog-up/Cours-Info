@@ -849,7 +849,7 @@ On appelle bordure de $T$ l'ensemble $B(T)=\{s\in S\setminus T|\exists t\in T|\{
 
 **Exemple :**
 ```mermaid
-flowchar LR
+flowchart LR
   subgraph T
     id4((4)) --- id2((2)) --- id5((5)) --- id4
   end
@@ -927,7 +927,7 @@ $k=1$ : $G_1$ est le sous-graphe induit par $\{\{s_i;t_i\}\}$
 $t_i=s_0\not ={s_1}$ donc $G$ est le graphe :
 
 ```mermaid
-flowchar LR
+flowchart LR
   id0((s0)) --- id1((s1))
 ```
 c'est bien un arbre à $2=1+1$ sommets.
@@ -953,7 +953,7 @@ donc $G_{k+1}$ est un arbre (cf. 2.2.14.) à $k+2$ sommets.
 
 ### 4.1.6. Exemple
 ```mermaid
-flowchar LR
+flowchart LR
   id0((0)) === id2((2)) --- id1((1)) === id5((5)) === id3((3)) === id2
   id2 === id3
   id0 --- id3
@@ -989,7 +989,7 @@ Comme $T$ est un arbre, il existe un unique chemin simple dans $T$ entre toute p
 
 **Execice :**
 ```mermaid
-flowchar LR
+flowchart LR
   id1((s1)) -.- id2(( )) -.- id3(( )) -.- id4((s2))
   id3 -.- id2
 ```
@@ -1007,7 +1007,7 @@ Supposons qu'il existe une arête $\{s;s'\}\in A$ avec $s\in U$ et $s'\in U$ (le
 Il existe un unique chemin simple de $s$ à $s'$ dans $T$.
 - S'il passe par $M$ :
   ```mermaid
-  flowchar LR
+  flowchart LR
     subgraph logueur paire
       id1((s)) -.-|logueur paire| id2((r)) -.-|logueur paire| id3((s'))
     end
