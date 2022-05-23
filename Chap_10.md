@@ -647,7 +647,7 @@ Donc
 &&
   \forall i, j \in \llbracket 0;n - 1\rrbraket,a_{i,j}^{(k + 1)}
   = \sum_{l = 0}^{n - 1} a_{i,l}^{(k)} a_{l,j}^{(k)}
-  = \sum_{\substack{l \in \nset0 {n - 1} \\ \set{l, i} \in A}} a_{i,l}^{(k)}
+  = \sum_{\substack{l \in \rrbracket 0;n-1\llbracket \\ \{l, i\} \in A}} a_{i,l}^{(k)}
 &&
 
 Or tout chemin de longueur $k + 1$ de $i$ à $j$ se décompose de manière unique en un chemin de $i$ à un sommet $l$ de longueur $k$ suivit  de l'arc / arête de $l$ à $j$.
@@ -763,102 +763,70 @@ flowchart LR
   id2 --> id1 & id3
 ```
 
-\begin{center}
-  \begin{tabular}{ccp{100pt}}
-      \begin{tikzpicture}[scale=1.5]
-          \node (0) at (0, 0) [circle, draw] {0};
-          \node (1) at (1, 0) [circle, draw] {1};
-          \node (2) at (0, -1) [circle, draw] {2};
-          \node (3) at (1, -1) [circle, draw] {3};
+$\left|\begin{array}{lll}
+  0 \;\; \square \; \rightarrow \; 2 \; \rightarrow
+  \\
+  1 \;\; \square \; \rightarrow \; 0 \; \rightarrow \; 3 \; \rightarrow
+  \\
+  2 \;\; \square \; \rightarrow \; 1 \; \rightarrow \; 3 \; \rightarrow
+  \\
+  3 \;\; \square \; \rightarrow \; 2 \; \rightarrow
+\end{array}\right.$
 
-          \draw[->] (1) to (0);
-          \draw[->] (0) to (2);
-          \draw[->] (2) to [out=10, in=170] (3);
-          \draw[->] (3) to [out=-170, in=-10] (2);
-          \draw[->] (2) to (1);
-          \draw[->] (1) to (3);
-      \end{tikzpicture}
-      &
-      \vline
-      &
-      \vspace{-60pt}
-      \begin{tabular}{ccccccc}
-          0 & \square & $\rightarrow$ & 2 & $\rightarrow$
-          \\
-          1 & \square & $\rightarrow$ & 0 & $\rightarrow$ & 3 & $\rightarrow$
-          \\
-          2 & \square & $\rightarrow$ & 1 & $\rightarrow$ & 3 & $\rightarrow$
-          \\
-          3 & \square & $\rightarrow$ & 2 & $\rightarrow$
-      \end{tabular}
-  \end{tabular}
-\end{center}
-\end{indt}
+---
 
-\vspace{12pt}
-
-\begin{indt}{\subsubsection{Cas des graphes pondérés}}
+### 3.2.3. Cas des graphes pondérés
 On peut utiliser des listes d'adjacence pondérées : chaque liste contient des couples (voisin, poids).
-\end{indt}
 
-\vspace{12pt}
+---
 
-\begin{indt}{\subsubsection{Implémentation}}
+### 3.2.4. Implémentation
 On utilise un tableau de listes chaînées.
 
-$\bullet$ En OCaml :
+- En OCaml :
+```ocaml
+type graphe = int list array
+```
 
-\begin{lstlisting}[language=Caml, xleftmargin=100pt]
-type graphe = int list array\end{lstlisting}
+- En C :
 
-$\bullet$ En C :
-
-\begin{lstlisting}[language=C, xleftmargin=100pt]
+```c
 struct elem {
 int val;
 struct elem* next;
 };
 typedef struct elem* liste;
 
-typedef liste* graphe;\end{lstlisting}
+typedef liste* graphe;
+```
 
-\vspace{6pt}
+**Remarque :** 
+On peut se passer des listes en utilisant des tableaux : on peut par exemple utiliser une matrice dont les lignes ne sont pas toutes de même longueur en plaçant dans la première case de chaque ligne ne nombre de voisins (\texttt{g[i][0]} est le nombre de voisins de $i$ et les voisins sont \texttt{g[i][1],$\ldots$, g[i[g[i][0]]]})
 
-Remarque : on peut se passer des listes en utilisant des tableaux : on peut par exemple utiliser une matrice dont les lignes ne sont pas toutes de même longueur en plaçant dans la première case de chaque ligne ne nombre de voisins (\texttt{g[i][0]} est le nombre de voisins de $i$ et les voisins sont \texttt{g[i][1],$\ldots$, g[i[g[i][0]]]})
+**Problème :** 
+La linéarisation de cette matrice n'est pas pratique à manipuler.
 
-Problème : la linéarisation de cette matrice n'est pas pratique à manipuler.
+**Solution :** 
+On utilise un tableau `voisins` qui contient dans l'ordre les voisins des différents sommets et deux tableaux `debut` et `fin` tel que les voisins de $i$ sont stockés entre les indices `debut[i]` (inclus) et `fin[i]` (exclu).
 
-Solution : on utilise un tableau \texttt{voisins} qui contient dans l'ordre les voisins des différents sommets et deux tableaux \texttt{debut} et \texttt{fin} tel que les voisins de $i$ sont stockés entre les indices \texttt{debut[i]} (inclus) et \texttt{fin[i]} (exclu).
-\end{indt}
+---
 
-\vspace{12pt}
-
-\begin{indt}{\subsubsection{Complexité}}
+### 3.2.5. Complexité
 On utilise un tableau de listes chaînées.
 
-On note $n = \abs S$, $m = \abs A$.
+On note $n = |S|$, $m = |A|$.
 
-$\bullet$ Complexité spatiale : $\mathcal O(n + m)$ ;
+- **Complexité spatiale :** $\mathcal O(n + m)$ ;
 
-\begin{indt}{$\bullet$ Complexité temporelle des opérations usuelles :}
-  $-$ Création de graphe (sans arêtes) : $\mathcal O(n)$ ;
-
-  $-$ Test d'existence de l'arête $\set{i, j}$ / de l'arc $(i, j)$ : $\mathcal O\!\lr{d_{(+)}(i)}$ (parcours de la liste d'adjacence de $i$) ;
-
-  $-$ Calcul du calcul d'arêtes / d'arcs : $\mathcal O(n + m)$ (calcul de la somme des longueurs des listes, divisée par 2 dans le cas non orienté) ;
-
-  $-$ Calcul de la liste des voisins d'un sommet : $\mathcal O(1)$ (accès à la case du sommet) ;
-
-  $-$ Ajout d'une arête / d'un arc : $\mathcal O(1)$ (ajout en tête de liste) ;
-
-  $-$ Suppression d'une arête / d'un arc entre $i$ et $j$ : $\mathcal O\!\lr{d_+(i)}$ dans le cas orienté, $\mathcal O\!\lr{d(i) + d(j)}$ dans le cas non orienté ;
-
-  $-$ Ajout d'un n\oe ud : $\mathcal O(n)$ si tableau statique, $\mathcal O(1)$ amorti si tableau dynamique ;
-
-  $-$ Suppression d'un n\oe ud : $\mathcal O(n + m)$ (création d'un nouveau tableau + renumérotation des n\oe uds).
-
-
-> New
+- Complexité temporelle des opérations usuelles :
+  - Création de graphe (sans arêtes) : $\mathcal O(n)$ ;
+  - Test d'existence de l'arête $\{i, j\}$ / de l'arc $(i, j)$ : $\mathcal O(d_{(+)}(i))$ (parcours de la liste d'adjacence de $i$) ;
+  - Calcul du calcul d'arêtes / d'arcs : $\mathcal O(n + m)$ (calcul de la somme des longueurs des listes, divisée par 2 dans le cas non orienté) ;
+  - Calcul de la liste des voisins d'un sommet : $\mathcal O(1)$ (accès à la case du sommet) ;
+  - Ajout d'une arête / d'un arc : $\mathcal O(1)$ (ajout en tête de liste) ;
+  - Suppression d'une arête / d'un arc entre $i$ et $j$ : $\mathcal O(d_+(i))$ dans le cas orienté, $\mathcal O(d(i) + d(j))$ dans le cas non orienté ;
+  - Ajout d'un n\oe ud : $\mathcal O(n)$ si tableau statique, $\mathcal O(1)$ amorti si tableau dynamique ;
+  - Suppression d'un n\oe ud : $\mathcal O(n + m)$ (création d'un nouveau tableau + renumérotation des n\oe uds).
 
 # 4. Parcours de graphes
 ## 4.1. Généralités
@@ -877,14 +845,25 @@ On parcours de $G$ partant d'un sommet $s\in S$ est une suite finie de sommets $
 **Défintion `bordure` :**
 Soit $G=(S,A)$ un GNO et $T\le S$.
 
-On appelle bordure de T l'ensemble B(T) = ...
+On appelle bordure de $T$ l'ensemble $B(T)=\{s\in S\setminus T|\exists t\in T|\{s;t\}\in A\}$.
 
-> À compléter
+**Exemple :**
+```mermaid
+flowchar LR
+  subgraph T
+    id4((4)) --- id2((2)) --- id5((5)) --- id4
+  end
+  subgraph B(T)
+    id1((1)) --- id0((0)) --- id3((3))
+  end
+  id6((6)) --- id1 --- id2 --- id0
+  id5 --- id3
+```
 
-Algo : 
+**Algorithme :** 
 Entrée : $G=(S,A)$ GNO connexe, $s\in S$
 
-Pseudo-code : 
+**Pseudo-code : **
 - $s_0\leftarrow s$
 - Pour $i$ de 1 à $|S|-1$
   - $s_i\leftarrow$ un élément de $B\{s_0;\dots;s_{i-1}\}$
@@ -902,11 +881,17 @@ $\subseteq$ : Soit $s_0\dots s_{n-1}$ un parcours de $G$
 
 Soit $i\in\llbracket 1;n-1\rrbracket$
 
-$s_i\in B(\{s_0;\dots;n-1\})$ car $s_i\notin\{s_0;\dots;n-1\}$ (sinon le 2. de 4.1.1. est faux) et d'après 4.1.1. 3., $\exits j<i, \{s_i;s_j\}\in A$.
+$s_i\in B(\{s_0;\dots;n-1\})$ car $s_i\notin\{s_0;\dots;n-1\}$ (sinon le 2. de 4.1.1. est faux) et d'après 4.1.1. 3., $\exists j<i, \{s_i;s_j\}\in A$.
 
-Donc l'alpgorithme produit $s_0\dots s_{n-1}$ en choisissant $s_i$ à l'itération $i$ $\forall i\in\llbracket 1;|S|-1\rrbracket$ ...
+Donc l'algorithme produit $s_0 \ldots s_{n - 1}$ en choisissant $s_i$ à l'itération $i,\ \forall i \in \rrbracket 1;|S|-1\llbracket$
 
-> À compléter
+$\supseteq$ Soit $s_0 \ldots s_{n - 1}$ une séquence générique produite par l'algorithme générique.
+
+$\forall i \in \rrbracket 1;n-1\llbracket, \exists j < i\ |\ \{s_i, s_j\} \in A$ car $s_i \in B(\{s_0 \ldots s_{n - 1}\})$
+
+Les $(s_i)_{i \in \llbracket0;n-1\rrbracket}$ sont 2 à 2 distinctes par définition de la bordure.
+
+Il reste à montrer que $n = |S|$, i.e. que $\forall i \in \rrbracket 1;n-1\llbracket,\ B(\{s_0 \ldots s_{i - 1}\}) \neq \varnothing$.
 
 Or, si $B(\{s_0;\dots;n-1\})=\empty$ avec $i<|S|$, alors il existe un sommet qui n'est pas connecté à $s_0;\dots;n-1$ donc le graphe n'est pas connexe.
 
