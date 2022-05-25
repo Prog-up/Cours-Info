@@ -577,15 +577,15 @@ On peut choisir un ordre total compatible avec cet ordre partiel en effectuant u
 # 3. Représentation des graphes
 
 ## 3.0 Remarque
-Il s'agit d'étudier des implémentations effectives des graphes. On suppose dans la suite qu'une numérotation des sommets a été choisie, donc que $S =\llbracket 0;n-1\rrbracket$.
+Il s'agit d'étudier des implémentations effectives des graphes. On suppose dans la suite qu'une numérotation des sommets a été choisie, donc que $S =[\![ 0;n-1]\!]$.
 
 ## 3.1. Matrice d'adjacence
 
 ### 3.1.1. Définition matrice d'adjacence
-Soit $G=\llbracket 0;A\rrbracket,A$ un graphe.
+Soit $G=[\![ 0;A]\!],A$ un graphe.
 
-La `matrice d'adjacence entière` (resp. booléenne) de $G$ est la matrice $A_G = (a_{i,j})_{i, j \llbracket 0;n-1\rrbracket}$ définie par
-$$\forall i, j \in\llbracket 0;n-1\rrbracket,a_{i,j} =\left\{\begin{array}{ll}
+La `matrice d'adjacence entière` (resp. booléenne) de $G$ est la matrice $A_G = (a_{i,j})_{i, j [\![ 0;n-1]\!]}$ définie par
+$$\forall i, j \in[\![ 0;n-1]\!],a_{i,j} =\left\{\begin{array}{ll}
  1\ (\text{resp. V})\ \text{si}\ \{i, j\} \in A\ \text{(resp. $(i, j) \in A$ dans le cas orienté)}
  \\
  0\ (\text{resp. F})\ \text{sinon}
@@ -612,7 +612,7 @@ Soit $G = (S, A)$ un GNO.
 Alors $A_G$ est symétrique.
 
 **Démonstration :**
-$\forall i, j \in\llbracket 0;n-1\rrbracket,$
+$\forall i, j \in[\![ 0;n-1]\!],$
 $$
  \begin{array}{rcl}
      a_{i, j} = 1\ \text{(resp. V)}
@@ -627,24 +627,24 @@ $$
 ---
 
 ### 3.1.4. Proposition
-Soit $G = (\llbracket 0;n-1\rrbracket, A)$ un graphe, et $A_G$ sa matrice d'adjacence entière.
+Soit $G = ([\![ 0;n-1]\!], A)$ un graphe, et $A_G$ sa matrice d'adjacence entière.
 
-Alors, $\forall (i, j) \in \llbracket 0;n - 1\rrbracket^2$, en notant $\forall k \in \N,\ a_{i, j}^{(k)}$ le coefficient $(i, j)$ de $A_G^{(k)}$, $a_{i, j}^{(k)}$ est le nombre de chemins de longueur $k$ de $i$ à $j$.
+Alors, $\forall (i, j) \in [\![ 0;n - 1]\!]^2$, en notant $\forall k \in \N,\ a_{i, j}^{(k)}$ le coefficient $(i, j)$ de $A_G^{(k)}$, $a_{i, j}^{(k)}$ est le nombre de chemins de longueur $k$ de $i$ à $j$.
 
 **Démonstration :**
 Par récurrence sur $k$
 
 - $k = 0$ : $A_G^k = I_n$
-  $\forall i, j \in \llbracket0;n - 1\rrbracket$, il existe un chemin de longueur nulle de $i$ à $j$ sii $ i = j$ : ok.
+  $\forall i, j \in [\![0;n - 1]\!]$, il existe un chemin de longueur nulle de $i$ à $j$ sii $ i = j$ : ok.
 
 **Hérédité :**
 $A_G^{k + 1} = A_G^k A_G$
 
 Donc
 &&
- \forall i, j \in \llbracket 0;n - 1\rrbraket,a_{i,j}^{(k + 1)}
+ \forall i, j \in [\![ 0;n - 1\rrbraket,a_{i,j}^{(k + 1)}
  = \sum_{l = 0}^{n - 1} a_{i,l}^{(k)} a_{l,j}^{(k)}
- = \sum_{\substack{l \in \rrbracket 0;n-1\llbracket \\ \{l, i\} \in A}} a_{i,l}^{(k)}
+ = \sum_{\substack{l \in [\![ 0;n-1]\!] \\ \{l, i\} \in A}} a_{i,l}^{(k)}
 &&
 
 Or tout chemin de longueur $k + 1$ de $i$ à $j$ se décompose de manière unique en un chemin de $i$ à un sommet $l$ de longueur $k$ suivit  de l'arc / arête de $l$ à $j$.
@@ -657,9 +657,9 @@ Donc l'hypothèse de récurrence conclut.
 Soit $G = (S, A, w)$ un graphe pondéré.
 
 La `matrice d'adjacence pondérée` de $G$ est la matrice
-$A_G = (a_{i,j})_{i,j \in \llbracket0;n - 1\rrbracket}$ définie par
+$A_G = (a_{i,j})_{i,j \in [\![0;n - 1]\!]}$ définie par
 $$
- \forall i, j \in \rrbracket0;n - 1\rrbracket,\
+ \forall i, j \in ]\!]0;n - 1]\!],\
  \left\{\!\!
  \begin{array}{ll}
      w(\{i, j\})
@@ -726,10 +726,10 @@ Code
 ## 3.2. Listes d'adjacences
 
 ### 3.2.1. Définition (\textit{listes d'adjacence
-Soit $G = (\llbracket 0;n-1\rrbracket)$ un graphe.
+Soit $G = ([\![ 0;n-1]\!])$ un graphe.
 
 On peut représenter $G$ à l'aide d'un tableau de listes d'adjacence :
-$\forall i \in \llbracket 0;n-1\rrbracket$, la case d'indice $i$ contient la liste des voisins / successeurs de $i$.
+$\forall i \in [\![ 0;n-1]\!]$, la case d'indice $i$ contient la liste des voisins / successeurs de $i$.
 
 ---
 
@@ -798,7 +798,7 @@ typedef liste* graphe;
 ```
 
 **Remarque :**
-On peut se passer des listes en utilisant des tableaux : on peut par exemple utiliser une matrice dont les lignes ne sont pas toutes de même longueur en plaçant dans la première case de chaque ligne ne nombre de voisins (\texttt{g[i][0]} est le nombre de voisins de $i$ et les voisins sont \texttt{g[i][1],$\ldots$, g[i[g[i][0]]]})
+On peut se passer des listes en utilisant des tableaux : on peut par exemple utiliser une matrice dont les lignes ne sont pas toutes de même longueur en plaçant dans la première case de chaque ligne ne nombre de voisins `g[i][0]` est le nombre de voisins de $i$ et les voisins sont `g[i][1],$\dots$, g[i[g[i][0]]]`
 
 **Problème :**
 La linéarisation de cette matrice n'est pas pratique à manipuler.
@@ -832,8 +832,8 @@ Soit $G=(S,A)$ un GNO connexe.
 
 On parcours de $G$ partant d'un sommet $s\in S$ est une suite finie de sommets $s_0\dots s_{n-1}$ tel que :
 1. $s_0=s$
-2. $n=|S|$ et $\{s_i;i\in\rrbracket 0;n-1\llbracket\}=S$
-3. $\forall i\in\rrbracket 1;n-1\llbracket,\exists j<i,\{s_i;s_j\}\in A$
+2. $n=|S|$ et $\{s_i;i\in[\![ 0;n-1]\!]\}=S$
+3. $\forall i\in[\![ 1;n-1]\!],\exists j<i,\{s_i;s_j\}\in A$
 
 ---
 
@@ -860,7 +860,7 @@ flowchart LR
 **Algorithme :**
 Entrée : $G=(S,A)$ GNO connexe, $s\in S$
 
-**Pseudo-code : **
+**Pseudo-code :**
 - $s_0\leftarrow s$
 - Pour $i$ de 1 à $|S|-1$
  - $s_i\leftarrow$ un élément de $B\{s_0;\dots;s_{i-1}\}$
@@ -876,19 +876,19 @@ Les parcours de $G$ sont exactement les suites produites par l'algorithme géné
 **Démonstration :**
 $\subseteq$ : Soit $s_0\dots s_{n-1}$ un parcours de $G$
 
-Soit $i\in\llbracket 1;n-1\rrbracket$
+Soit $i\in[\![ 1;n-1]\!]$
 
 $s_i\in B(\{s_0;\dots;n-1\})$ car $s_i\notin\{s_0;\dots;n-1\}$ (sinon le 2. de 4.1.1. est faux) et d'après 4.1.1. 3., $\exists j<i, \{s_i;s_j\}\in A$.
 
-Donc l'algorithme produit $s_0 \ldots s_{n - 1}$ en choisissant $s_i$ à l'itération $i,\ \forall i \in \rrbracket 1;|S|-1\llbracket$
+Donc l'algorithme produit $s_0 \ldots s_{n - 1}$ en choisissant $s_i$ à l'itération $i,\ \forall i \in [\![ 1;|S|-1]\!]$
 
 $\supseteq$ Soit $s_0 \ldots s_{n - 1}$ une séquence générique produite par l'algorithme générique.
 
-$\forall i \in \rrbracket 1;n-1\llbracket, \exists j < i\ |\ \{s_i, s_j\} \in A$ car $s_i \in B(\{s_0 \ldots s_{n - 1}\})$
+$\forall i \in [\![ 1;n-1]\!], \exists j < i\ |\ \{s_i, s_j\} \in A$ car $s_i \in B(\{s_0 \ldots s_{n - 1}\})$
 
-Les $(s_i)_{i \in \llbracket0;n-1\rrbracket}$ sont 2 à 2 distinctes par définition de la bordure.
+Les $(s_i)_{i \in [\![0;n-1]\!]}$ sont 2 à 2 distinctes par définition de la bordure.
 
-Il reste à montrer que $n = |S|$, i.e. que $\forall i \in \rrbracket 1;n-1\llbracket,\ B(\{s_0 \ldots s_{i - 1}\}) \neq \varnothing$.
+Il reste à montrer que $n = |S|$, i.e. que $\forall i \in [\![ 1;n-1]\!],\ B(\{s_0 \ldots s_{i - 1}\}) \neq \varnothing$.
 
 Or, si $B(\{s_0;\dots;n-1\})=\empty$ avec $i<|S|$, alors il existe un sommet qui n'est pas connecté à $s_0;\dots;n-1$ donc le graphe n'est pas connexe.
 
@@ -905,32 +905,35 @@ Soit $G=(S,A)$ un graphe.
 ### 4.1.5. Proposition
 Soit $G=(S,A)$ un GNO connexe et $s_0\dots s_{n-1}$ un parcours de $G$.
 
-$\forall i\in\llbracket 1;n-1\rrbracket$, on choisit $t_i\in\{s_0;\dots;i-1\}$ tel que $\{s_i;t_i\}\in A$ (possible d'après 4.1.1. 3.).
+$\forall i\in[\![ 1;n-1]\!]$, on choisit $t_i\in\{s_0;\dots;i-1\}$ tel que $\{s_i;t_i\}\in A$ (possible d'après 4.1.1. 3.).
 
-Alors le sous-graphe induit par $\{\{s_i;t_i\};i\in\llbracket 1;n-1\rrbracket\}$ est un arbre couvrant de $G$.
+Alors le sous-graphe induit par $\{\{s_i;t_i\};i\in[\![ 1;n-1]\!]\}$ est un arbre couvrant de $G$.
 
 **Démonstration :**
-$\forall k\in\llbracket 1;n-1\rrbracket$ on note $G_k$ le sous-graphe induit par $\{\{s_i;t_i\};i\in\llbracket 1;k\rrbracket\}$.
+$\forall k\in[\![ 1;n-1]\!]$ on note $G_k$ le sous-graphe induit par $\{\{s_i;t_i\};i\in[\![ 1;k]\!]\}$.
 
-Il suffit de montrer que $G$_{n-1}$ est un arbre à $n$ sommets.
+Il suffit de montrer que $G_{n-1}$ est un arbre à $n$ sommets.
 
 En effet, $n=|S|$ d'après 4.1.1. 2. donc $G_{n-1}$ serait couvrant.
 
-On note par récurrence finie que $\forall k\in\llbracket 1;n-1\rrbracket$, $G_k$ est un arbre à $k+1$ sommets.
+On note par récurrence finie que $\forall k\in[\![ 1;n-1]\!]$, $G_k$ est un arbre à $k+1$ sommets.
 
 **Initialisation :**
 $k=1$ : $G_1$ est le sous-graphe induit par $\{\{s_i;t_i\}\}$
 
 $t_i=s_0\not ={s_1}$ donc $G$ est le graphe :
 
+> Mermaid error avant
+
 ```mermaid
 flowchart LR
- id0((s0)) --- id1((s1))
+  id0((s0)) --- id1((s1))
 ```
+
 c'est bien un arbre à $2=1+1$ sommets.
 
 **Hérédités :**
-Soit $k\in\llbracket 1;n-2\rrbracket$$ tel que $G_k$ est un arbre à $k+1$ sommets.
+Soit $k\in[\![ 1;n-2]\!]$$ tel que $G_k$ est un arbre à $k+1$ sommets.
 
 Montrons que $k_{k+1}$ est un arbre à $k+2$ sommets.
 
@@ -1031,8 +1034,8 @@ Soit $G=(S,A)$ un GNO.
 
 Un parcours de $G$, à partir de $s\in S$, est une suite finie $s_0\dots s_{n-1}\in S$ tel que :
 1. $s_0=s$
-2. $|S|=n$ et $\{s_i;i\in\rrbracket 0;n-1\llbracket\}=S$
-3. $\forall i\in\rrbracket 1;n-1\llbracket$, **si** $\bold{B(s_0\dots s_{i-1})\not ={\empty}}$ alors $s_i\in B(s_0\dots s_{i-1})$.
+2. $|S|=n$ et $\{s_i;i\in[\![ 0;n-1]\!]\}=S$
+3. $\forall i\in[\![ 1;n-1]\!]$, **si** $\bold{B(s_0\dots s_{i-1})\not ={\empty}}$ alors $s_i\in B(s_0\dots s_{i-1})$.
 
 **Conséquences :**
 - Un parcours est la concaténation de parcours des composantes connexes ;
@@ -1061,3 +1064,202 @@ On parle également de forêt pour un ensemble d'arborescence disjointes et un p
 On dit que ce sont des arcs de liaisons pour les distinguer des autres catégories d'arcs.
 
 > 3.1.2. à compléter
+
+---
+
+### 4.1.11. Catégoriation des arcs
+Soit $G=(S,A)$ un GO, $s_0\dots s_n{n-1}$ un parcours de $G$.
+
+On note $I=\{[\![ 1;n_1]\!],B(\{s_0\dots s_{i-1}\})=\not ={\empty}\}$
+
+$\forall i\in I$, on choisit $t_i\in\{s_0\dots s_{i-1}\}$ tel que $(t_i,s_i)\in A$ (on choisit les arcs de liaison).
+
+Soit $(u,v)\in A$
+- $(u,v)$ est un arc de liaison s'il existe $i\in I$ tel que $\left\{\begin{array}{ll}
+  u=t_i
+  \\
+  v=s_i
+  \end{array}\right.$
+- $(u,v)$ est un arc arrière si $v$ est un ancêtre de $u$ dans une arborescence de la forêt définie par les arcs de liaison, i.e. $\exists i<j, \left\{\begin{array}{ll}
+  s_i=u
+  \\
+  s_j=u
+  \end{array}\right., \exists k_1<k_2<\dots<k_l$ où $l\ge 2$ tel que $\left\{\begin{array}{lll}
+  k_1=i
+  \\
+  k_l=j
+  \\
+  \forall r\in[\![ 2;l]\!],s_{k_{r-1}}=t_{k_r}
+  \end{array}\right.$
+- $(u,v)$ est un arc avant si $v$ est un descendant non direct de $u$ dans une arborescence de la forêt définie par les arcs de liaisons, i.e. $\exists i<j, \left\{\begin{array}{ll}
+  v=s_j
+  \\
+  u=s_i
+  \end{array}\right.\exists k_1<k_2<\dots<k_l$ où $l>2$ tel que $\left\{\begin{array}{lll}
+  k_1=i
+  \\
+  k_l=j
+  \\
+  \forall r\in[\![ 2;l]\!],s_{k_{r-1}}=t_{k_r}
+  \end{array}\right.$
+- $(u,v)$ est un arc transverse s'il n'entre pas dans les catégories précédentes.
+
+  **Exemple :**
+  ```mermaid
+  flowchart LR
+    ida(( )) -->|arcs de laison| idb(( ))
+    idc(( )) ==>|arcs arrières| idd(( ))
+    ide(( )) -.->|arcs transerverses|idf(( ))
+    id0((0)) --> id1((1)) --> id2((2)) --> id3((3))
+    id4((4)) --> id5((5)) --> id6((6)) --> id7((7))
+    id7 --> id8((8))
+    id8 --> id10((10))
+    id1 -->|arc avant|id3
+    id4 ==> id0
+    id5 ==> id2
+    id7 ==> id2
+    id8 ==> id7
+    id10 ==> id7
+    id7 -.-> id5
+    id7 -.- id6
+  ```
+
+## 4.2. Parcours en profondeur
+### 4.2.1. Retour sur l'algorithme générique
+Cet algorithme nécessite de déterminer la bordure d'un ensemble de sommets construits `incrémentalement`. Cela implique que l'on peut déterminer cette bordure sans la recalculer de zéro : il suffit d'y ajouter les voisins non encore visités du dernier sommet extrait, à chaque itération.
+
+**Algo :**
+Entrée : $G=(S,A)$ un graphe et $s\in S$
+
+Pseudo-code :
+- $B\leftarrow\{s\}$
+- $i\leftarrow 0$
+- $V\leftarrow\{s\}$
+- Tant que $B\not ={\empty}$
+- $s_i\leftarrow$ un élément que l'on extrait de $B$
+- $i\leftarrow i+1$
+- Pour chaque voisin $v$ de $s_i$ :
+  - Si $v\notin V$ :
+    - $V\leftarrow V\cup\{v\}$
+    - $B\leftarrow B\cup\{v\}$
+- Renvoyer $s_0\dots s_{i-1}$
+
+---
+
+### 4.2.2. Remarque
+Cet algorithme facilite la construction d'un arborescence pour le parcours obtenu : par exemple, le père de chaque sommet $v$ est le sommet $s_i$ qui a provoqué l'insertion de $v$ dans $B$.
+
+L'ordre d'extraction des sommets est donc déterminant pour la structure du parcours $\rightarrow$ le choix des structures de données est important.
+
+---
+
+### 4.2.3. Parcours en profondeur
+On obtient en parcours en profondeur si l'on extrait toujours le dernier sommet insérée : $B$ se comporte comme une pile. L'ensemble $V$ peut être représenté par un tableau de booléens (sa fonction indicatrice). On utilise pour $G$ les listes d'adjacence car la seule opération sur $G$ est le parcours de l'ensemble des voisins d'u sommet.
+
+**Implémentation :**
+En ajoutant une fonction de traitement des sommets :
+```ocaml
+let dfs (traitement : int -> unit) (g : graphe) (s : int) : unit =
+  let b = Stack.create () in
+  let v = Array.make (Array.length g) false in
+  Stack.push s b;
+  v.(s) <- true;
+  while not (Stack.is_empty b) do
+    let s = Stack.pop b in
+    traitement s;
+    List.iter (fun s' -> if not v.(s') then begin v.(s') <- true; Stack.push s' b end) g.(s)
+  done
+```
+**Complexité :**
+- Spaciale : $\mathcal{O}(|S|)$ ($v$ de taille $|S|$ et $b$ de taille au plus $|S|$ car chaque sommet accessible depuis $s$ y est inséré exactement une fois) ;
+- Temporelle : $s_i$ traitement est de complexité $\mathcal{O}(1),\mathcal{O}(|S|+|A|)$ ($\mathcal{O}(|S|)$ pour créer $v+\sum_{s' accessible depuis s} d_{(+)}(s')$).
+
+---
+
+### 4.2.4. Exemple :
+
+> À compléter
+
+---
+
+### 4.2.5. Remarque
+On verra dans le TP 30 (du cours) une implémentation récursive du parcours où l'on manipule pas explicitement $B$ car c'est la pile des appels récursifs.
+
+<p align="center">
+<img src="Pictures/Graphe14.png" alt="drawing" width="300">
+</p>
+
+> Déplacer le dessin
+
+---
+
+### 4.2.6. Application : test d'accessibilité
+```ocaml
+let est_accessible_depuis (g:graphe) (s:int) (s':int):bool=
+  let res = ref false in
+  dfs (fun v -> res := !res || v = s') g s;
+  !res
+```
+autre version, qui est plus efficace dans le meilleur cas :
+```ocaml
+exception Trouve
+let est_accessible_depuis (g:graphe) (s:int) (s':int):bool=
+  try 
+    dfs (fun v -> if v = s' then raise Trouve) g s;
+    false
+  with
+    |Trouve -> true
+```
+
+---
+
+### 4.2.7. Application : test de connexité
+```ocaml
+let est_connexe (g:graphe):bool =
+  let n = ref 0 in (*n est le nombre de sommets rencontrés*)
+  dfs (fun _ -> incr n) g 0;
+  !n = Array.lenght g
+```
+
+---
+
+### 4.2.8. Application : calcul des composantes connexes
+**Idée :**
+On attribue un numéro à chaque composante et enn marge de ce numéro les sommets de la composante lors d'un parcours. On lance des parcours tant qu'il reste des sommets non numérotés.
+
+```ocaml
+let composantes_connexes (g:graphe) : int array =
+  let n = Array.length g in
+  let composante = Array.make n (-1) in
+  let c = ref 0 in
+  for i = 0 to n-1 do
+    of comoosante.(i) = -1 then begin
+      dfs (fun v -> composante.(v) <- !c) g i;
+      incr c
+    end
+  done;
+  composante
+```
+
+**Complexité :**
+$\mathcal{O}(|S|^2)$ dans le pire cas (à cause de la création de $v$ dans chaque appel à dfs)
+
+**Exercice :**
+On peut obtenir une complexité $\mathcal{O}(|S|+|A|)$ en ne créant pas un tableau à chaque nouveau parcours (remarque : not v.(s) $\leftrightarrow$ composante.(s)=1)
+
+## 4.3. Parcours en largeur 
+### 4.3.1. Idée
+On obtient un parcours en largeur en visitant tous les voisins d'un sommet avant de poursuivre plus en profondeur $\rightarrow$ il faut extraire de $B$ les sommets par ordre d'insertion donc $B$ se comporte comme une file.
+
+**Implémentation :**
+Comme bfs avec Quine à la place de Stack
+
+**Remarque :**
+- même complexité ($\mathcal{O}(|S|+|A|)$)
+- on parcours les sommets par ordre de distance au sommet de départ
+
+---
+
+### 4.3.2. Exemple
+
+> À compléter
