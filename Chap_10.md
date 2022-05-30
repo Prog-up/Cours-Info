@@ -402,7 +402,7 @@ On note $G'=(S,A\setminus \{\{s_1;s_2\}\})$, $C la composante connexe de $G$ con
 
 Alors il existe un cycle dans $G$ passant pas $\{s_1:s_2\}$, alors $C_1=C_2=C$.
 
-Sinon, $C_1\cap C_2=\empty$ et $C_1\cup C_2=C$
+Sinon, $C_1\cap C_2=\varnothing$ et $C_1\cup C_2=C$
 
 **Démonstration :**
 - $C_1\cup C_2=C$ :
@@ -415,7 +415,7 @@ On considère $i=\min\{i\in[\![0;k]\!],n_i,s_1$ ou $n_i=s_2$ (existe car $n_k=s_
 
 Alors $n_0\dots n_i$ est une chemin dans $G'$ de $s$ à $s_1$ ou $s_2$ donc $s\in C_1$ ou $s\in C_2$
 
-- Soit $C_1=C_2$, soit $C_1\cap C_2=\empty$ car $C_1$ et $C_2$ sont des clauses d'équivalence pour $\sim_{G'}$
+- Soit $C_1=C_2$, soit $C_1\cap C_2=\varnothing$ car $C_1$ et $C_2$ sont des clauses d'équivalence pour $\sim_{G'}$
 - $C_1=C_2$ ssi $\{s_1;s_2\}$ appartient à un cycle de $G$
 
 $\Rightarrow s_1\in C_2$ donc il existe un chemin $s_2 s_3\dots s_n s_1$ dans $G'$, que l'on suppose élémentaire (on peut toujours rendre simple un chemin).
@@ -850,7 +850,7 @@ flowchart LR
  subgraph T
    id4((4)) --- id2((2)) --- id5((5)) --- id4
  end
- subgraph B(T)
+ subgraph "B(T)"
    id1((1)) --- id0((0)) --- id3((3))
  end
  id6((6)) --- id1 --- id2 --- id0
@@ -890,7 +890,7 @@ Les $(s_i)_{i \in [\![0;n-1]\!]}$ sont 2 à 2 distinctes par définition de la b
 
 Il reste à montrer que $n = |S|$, i.e. que $\forall i \in [\![ 1;n-1]\!],\ B(\{s_0 \ldots s_{i - 1}\}) \neq \varnothing$.
 
-Or, si $B(\{s_0;\dots;n-1\})=\empty$ avec $i<|S|$, alors il existe un sommet qui n'est pas connecté à $s_0;\dots;n-1$ donc le graphe n'est pas connexe.
+Or, si $B(\{s_0;\dots;n-1\})=\varnothing$ avec $i<|S|$, alors il existe un sommet qui n'est pas connecté à $s_0;\dots;n-1$ donc le graphe n'est pas connexe.
 
 ---
 
@@ -997,7 +997,7 @@ On peut alors partitionner $S$ en $(U,V)$ où :
 - $U$ est l'ensemble des sommets $s$ tel que la longueur du chemin de $r$ à $s$ dans $T$ est paire ;
 - $V$ est l'ensemble des sommets $s$ tel que la longueur du chemin de $r$ à $s$ dans $T$ est impaire.
 
-$U\cup V=\empty$ et comme $T$ est couvrant, $U\cap V=S$.
+$U\cup V=\varnothing$ et comme $T$ est couvrant, $U\cap V=S$.
 
 Il reste à montrer que toute arête a une extrémité dans $U$ et l'autre dans $V$.
 
@@ -1035,7 +1035,7 @@ Soit $G=(S,A)$ un GNO.
 Un parcours de $G$, à partir de $s\in S$, est une suite finie $s_0\dots s_{n-1}\in S$ tel que :
 1. $s_0=s$
 2. $|S|=n$ et $\{s_i;i\in[\![ 0;n-1]\!]\}=S$
-3. $\forall i\in[\![ 1;n-1]\!]$, **si** $\bold{B(s_0\dots s_{i-1})\not ={\empty}}$ alors $s_i\in B(s_0\dots s_{i-1})$.
+3. $\forall i\in[\![ 1;n-1]\!]$, **si** $\bold{B(s_0\dots s_{i-1})\not ={\varnothing}}$ alors $s_i\in B(s_0\dots s_{i-1})$.
 
 **Conséquences :**
 - Un parcours est la concaténation de parcours des composantes connexes ;
@@ -1070,7 +1070,7 @@ On dit que ce sont des arcs de liaisons pour les distinguer des autres catégori
 ### 4.1.11. Catégoriation des arcs
 Soit $G=(S,A)$ un GO, $s_0\dots s_n{n-1}$ un parcours de $G$.
 
-On note $I=\{[\![ 1;n_1]\!],B(\{s_0\dots s_{i-1}\})=\not ={\empty}\}$
+On note $I=\{[\![ 1;n_1]\!],B(\{s_0\dots s_{i-1}\})=\not ={\varnothing}\}$
 
 $\forall i\in I$, on choisit $t_i\in\{s_0\dots s_{i-1}\}$ tel que $(t_i,s_i)\in A$ (on choisit les arcs de liaison).
 
@@ -1135,7 +1135,7 @@ Pseudo-code :
 - $B\leftarrow\{s\}$
 - $i\leftarrow 0$
 - $V\leftarrow\{s\}$
-- Tant que $B\not ={\empty}$
+- Tant que $B\not ={\varnothing}$
 - $s_i\leftarrow$ un élément que l'on extrait de $B$
 - $i\leftarrow i+1$
 - Pour chaque voisin $v$ de $s_i$ :
@@ -1143,6 +1143,10 @@ Pseudo-code :
     - $V\leftarrow V\cup\{v\}$
     - $B\leftarrow B\cup\{v\}$
 - Renvoyer $s_0\dots s_{i-1}$
+
+<p align="center">
+<img src="Pictures/Graphe14.png" alt="drawing" width="300">
+</p>
 
 ---
 
@@ -1177,19 +1181,19 @@ let dfs (traitement : int -> unit) (g : graphe) (s : int) : unit =
 ---
 
 ### 4.2.4. Exemple :
-
-> À compléter
+```mermaid
+flowchart LR
+	0 --> 1 --> 2 --> 3 --> 7
+	0 --> 4 --> 5
+	1 --> 6 --> 7
+	2 --> 6
+```
+Parcours en profondeur : 0, 1, 2, 3, 7, 5, 6, 4
 
 ---
 
 ### 4.2.5. Remarque
 On verra dans le TP 30 (du cours) une implémentation récursive du parcours où l'on manipule pas explicitement $B$ car c'est la pile des appels récursifs.
-
-<p align="center">
-<img src="Pictures/Graphe14.png" alt="drawing" width="300">
-</p>
-
-> Déplacer le dessin
 
 ---
 
@@ -1200,7 +1204,7 @@ let est_accessible_depuis (g:graphe) (s:int) (s':int):bool=
   dfs (fun v -> res := !res || v = s') g s;
   !res
 ```
-autre version, qui est plus efficace dans le meilleur cas :
+Autre version, qui est plus efficace dans le meilleur cas :
 ```ocaml
 exception Trouve
 let est_accessible_depuis (g:graphe) (s:int) (s':int):bool=
@@ -1263,3 +1267,181 @@ Comme bfs avec Quine à la place de Stack
 ### 4.3.2. Exemple
 
 > À compléter
+```mermaid
+flowchart LR
+	0 --> 1 --> 2 --> 3 --> 7
+	0 --> 4 --> 5
+	1 --> 6 --> 7
+	2 --> 6
+```
+**Parcours en profondeur :** 0, 1, 4, 2, 5, 6, 3, 7
+
+Les sommets sont parcourus par ordre de distance au premier sommet.
+
+---
+
+### 4.3.3. Application
+Calcul de plus courts chemins dans un graphe non pondéré.
+
+**Idée :**
+Comme les sommets sont parcourus par ordre de distance au sommet de départ une arborescence bien choisie d'un parcours en largeur donne des plus courts chemins du sommet de départ vers les sommets accessibles depuis ce sommet.
+
+```mermaid
+flowchart LR
+	id1((x)):::red
+	id1 --- id2((x)) --- id3((x)) --- id4((x)) --- id6((x)) --- id7((x)) -.- id8(( ))
+	classDef red stroke:#FF0000
+```
+
+On représente l'arborescence à l'aide d'un tableau de prédécesseurs : le prédécesseurs d'un sommet donné est le père de ce sommet dans l'arborescence choisie.
+
+```ocaml
+let plus_courts_chemin (g : graphe) (s : int) : int array =
+	let pred = Array make (Array.length g) (-1) in
+	pred.(s) <- s;
+	bfs (fun s -> List.iter (fun s' -> if pred.(s') = -1 then pred.(s') <- s) g.(s))
+		g s;
+	pred
+```
+
+**Complexité :** 
+$\mathcal O(|S|+|A|)$ (au lieu de faire un parcours des voisins de chaque sommet, on en fait 2).
+
+---
+
+### 4.3.4. Proposition : correction de plus_courts_chemin
+On suppose sans perte de généralité que $G$ est connexe.
+
+$\forall s'\in S$, on note :
+- $d_{s'}$ la distance de $s$ à $s'$ (i.e. la longueur d'un plus court chemin de $s$ à $s'$)
+- $l_{s'}$ la longueur du chemin de $s$ à $s'$ obtenu à l'aide du tableau pred
+- $n_{s'}$ le rang d'insertion de $s'$ dans la file (convention : $n_s=0$)
+
+Alors $\forall s'\in S$ :
+1. $d_{s'}=l_{s'}$
+2. $\forall s''\in S,$ si $d_{s''}<d_{s'}$ alors $n_{s''}<n_{s'}$
+
+**Démonstration :**
+Par récurrence forte sur le rang d'insertion :
+- $n_{s'}=0$ : alors $s'=s$, $l_s=d_s$ et 2. est trivial (il n'existe pas de sommet $s''$ avec $d_{s''}<0$)
+
+**Hérédité :**
+On suppose la propriété vraie jusqu'au rang $n$ et on note $s'$ le sommet de rang $n_{s'}=n+1$
+1. On sait que $d_{s'}\le l_{s'}$ par définition. Supposons $d_{s'}<l_{s'}$.
+
+	On considère un plus court chemin de $s$ à $s'$, noté $s\rightsquigarrow s''\rightarrow s'$, et on note $p=pred.(s')$.
+	On sait que :
+	- $d_{s'}=1+d_{s''_{(**)}}$ (sinon le chemin choisi ne serait pas un plus court chemin)
+	- $l_{s'}=1+lp_{(***)}$
+	- $n_p<n_{s'}$ ($s'$ est inséré lorsque $p$ est extrait)
+
+	Par hypothère de récurrence, on sait alors que $d_p=l_p$, d'où $d_{s''}<d_p$ (avec $(*),(**)$ et $(***)$) donc par hypothère de récurrence, $n_{s''}<n_p$ donc lorsque $s''$ est extrait, $s'$ n'a pas encore de prédécesseur et $s''$ devrait être le prédécesseur de $s'\rightarrow$ absurde donc $d_{s'}=l_{s'}$
+	
+2. Supposons qu'il existe $s''\in S$ tel que $d_{s''}<d_{s'}$ et $n_{s''}<n_{s'}$ (cas d'égalité impossible)
+
+	$$(\neg(\forall x, A(x)\rightarrow B(x))\equiv\exists x, A(x)\wedge\neg B(x))$$
+
+	On considère un plus court chemin $s\rightsquigarrow q\rightarrow s''$ et on note $p=pred.(s')$
+
+	$m_p<n_{s'}$ donc on dispose de l'hypothère de récurrence pour $p$.
+
+	donc $d_p=l_p\overset{(1)} = l_{s'}-1>d_{s'}-1=d_q$
+
+	donc, par hypothère de récurrence, $n_q<n_p$
+
+	Alors, comme le prédécesseur de $s''$ est définie au plus tard au moment de l'extraction de $q$, $s''$ est inséré dans la file avant tous les successeurs de $p$, dont $s'\rightarrow$ absurde.
+	
+# 5. Plus courts chemins dans un graphe pondéré
+
+## 5.1. Contexte
+
+### 5.1.1. Intro
+Certaines applications nécessitent de travailler dans des graphes pondérés (ex : 1.2.1. et 1.2.4.). Dans ce contexte, le poids d'un arc représente le coût d'un certain choix et on ne cherche plus à minimiser le nomre d'arcs mais pultôt le coût global des choix.
+
+---
+
+### 5.1.2. Définition : poids d'un chemin
+
+Soit $G=(S,A,w)$ un graphe pondéré et $p=s_0\dots s_n$ un chemin dans $G$.
+
+Le `poids` de $p$ est $\mathrm w(p)=\displaystyle\sum^{n-1}_{i=1}\mathrm w(\{s_i;s_{i+1}\})$ (resp. $\mathrm w(\{s_i;s_{i+1}\})$ dans le cas orienté).
+
+---
+
+### 5.1.3. Remarque
+Soit $G=(S,A,\mathrm w)$ un graphe pondéré.
+
+S'il existe un cycle $c$ dans $G$ de poids $\mathrm w(c)<0$, on ne peut pas vraiment parler de plus courts chemins dans $G$ : $\forall s\in c$ et $\forall p=s_0\dots s_n$ tel que $\exists i\in [\![0;n]\!]$ vérifiant $s_i=s$, on peut construire un chemin $p'$ de poids $\mathrm w(p')<\mathrm w(p)$, de $s_0$ à $s_n$ en insérant dans $p$, à la position $i$, le cycle $c$ réordonné pour avoir un cycle de $s$ à lui-même en insérant dans $p$, à la position $i$, le cycle $c$ réordonné pour avoir un cycle de $s$ ) lui-même.
+
+$\rightarrow$ on interdira les graphes contenant un cycle de poids $<0$.
+
+```mermaid
+flowchart LR
+	id0((s_0)) -.- idi((s_i=s)) -.- idn((s_n))
+	idi -.-|<0|idi
+```
+
+---
+
+### 5.1.4. Définition : plus court chemin / distance
+Soit $G=(S,A,\mathrm w)$ un graphe pondéré sens cycle de poids $<0$.
+
+Un chemin $p=s_0\dots s_n$ est un `plus court chemin` de $s_0$ à $s_n$ si $\forall p'$ chemin de $s_0$ à $s_n$, $\mathrm w(p)\le\mathrm w(p')$.
+
+$\forall s,s'\in S$, la distance de $s$ à $s'$ est $\mathrm d(s,s')=\min\{\mathrm w(p), p\text{ chemin de s à s'}$ (ou $+\infty$ s'il n'y a pas de chemin de $s$ à $s'$).
+
+**Démonstration :** (de l'existance du $\min$)
+On note $\mathrm d=\min\{s,s'\}$, i.e. $\forall p$ chemin de $s$ à $s'$, $\mathrm w(p)\ge \mathrm d$
+
+Si $p$ est simple, c'est vrai pae définition.
+
+Si $p$ n'est pas simple, alors en notant $p=s_0\dots s_n,\exists 0\le i\le j\le n$ tel que $s_i=s_j$.
+
+Donc on peut couper le circuit de $s_i$ à $s_j$, de poids $\ge 0$, et obtenir $p'=s_0\dots s_is_{j+1}\dots s_n$ tel que $\mathrm w(p')\le |p'|<|p|.$
+
+En procédant par induction bien fondée avec les chemins simles comme cas de base, on montre qu'il existe un chemin simple $p''$ de $s_0$ à $s_n$ tel que $\underbrace{\mathrm w(p'')}_{\ge 1}\le\mathrm w(p)$
+
+---
+
+### 5.1.5. Exercice
+Montrons que $\mathrm d$ satisfait l'inégalité triangulaire.
+
+---
+
+### 5.1.6. Problème
+On s'intéresse aux problèmes suivants :
+1. Déterminer des plus courts chemins entre tous les couples de sommets
+2. Déterminer des plus courts chemins d'un sommet donné vers tous les sommets
+
+**Remarque :**
+Résoudre l'un de ces problèmes permet de résoudre l'autre, mais il existe des algos spécialisés pour chacun des 2 problèmes.
+
+## 5.2. Algorithme de Floyd-Narshall
+
+### 5.2.1. Principe
+On cherche à résoudre le problème 5.1.6. 1. dans un graphe pondéré  $G=(S,A,\mathrm w)$ sans cycle de poids $<0$, en cherchant des chemins simples (possible grâce au point 5.1.4.).
+
+**L'idée de l'`algorithme de Floyd-Narshall` est la suivante :** on procède par programmation dynamique en cherchant $\forall k\in[\![0;|S|]\!],\forall s, s'\in S$, un plus court chemin de $s$ à $s'$ n'utilisant que des sommets intermédiaires d'indice strictement inférieur à $k$ (étant donné une numérotation des sommets).
+
+---
+
+### 5.2.2. Relation de récurrence
+- Cas de base ($k=0$) : comme il n'y a pas de sommet d'indice $<0$, il ne peut pas y avoir de sommet intermédiaire, donc les plus courts chemins sont les arcs / arêtes.
+
+En notant $\forall s,s'\in S,\mathrm d^{(k)}(s,s')$ la longueur d'un plus court chemin de $s$ à $s'$ n'utilisant que des sommets intermédiares d'indice $<k$, on sait que $d^{(0)}(s,s')=\mathrm w(\{s;s'\})$ avec la convention $\mathrm w(\{s;s'\})=+\infty$ si $\{s;s'\}\notin A$ (idem avec des couples dans le cas orienté).
+
+- Hérédité : Soit $s,s'\in S$
+
+	Un plus court chemin de $s$ à $s'$ n'utilisant que des sommets intermédiares d'indice $<k+1$ peut ne pas passer par le sommet d'indice $k$ et dasn ce cas réalise $d^{(0)}(s,s')$.
+
+	Si un tel chemin passe par $k$, on peut supposer qu'il y passe uen seule fois jusqu'au cherche des chemins simples.
+
+	Les portions de chemins de $s$ à $k$ et de $k$ à $s'$ sont alors des plus court chemins (sinon le chemin initial ne serait pas un plus court chemin : propriété de sous-structure optimale) n'utilisant que des sommets intermédiaires d'indice $< k$.
+
+	Ainsi, $d^{(k + 1)}(s, s') = \min(d^{(k)}(s, s'), d^{(k)}(s, k) + d^{(k)}(k, s'))$.
+
+**Résolution du problème :**
+C'est $d^{(|S|)}$ qui nous intéresse car tous les sommets intermédiaires sont autorisés.
+
+**Exercice :**
+Relation de récurrence sur $p^{(k)}(s, s')$, le prédécesseur de $s'$ sur un plus court chemin de $s$ à $s'$ n'utilisant que des sommets intermédiaires d'indice $< k$.

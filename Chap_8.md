@@ -108,7 +108,7 @@ Un langage du premier ordre est défini par une signature $\Sigma$, composée de
 ### 2.2.2. Exemple
 Le langage de la théorie des ensembles est défini par la signature suivante :
 - symboles de fonction :
-- $\empty$ (arité 0)
+- $\varnothing$ (arité 0)
 - $\{.\}$ (arité 1)
 - $.\cup.$ et $.\cap .$ (arité 2)
 - $.^c$ (arité 1)
@@ -146,7 +146,7 @@ On parle de logique du 1er ordre car on ne peut quantifier que sur des variables
 
 ---
 ### 2.2.4. Exemple
-En théorie des ensemble, la formule $(\forall A.\forall B.A\cap B\subseteq A)\wedge\empty\subseteq A$ est représentée de manière arborescente par :
+En théorie des ensemble, la formule $(\forall A.\forall B.A\cap B\subseteq A)\wedge\varnothing\subseteq A$ est représentée de manière arborescente par :
 
 <p align="center">
 <img src="Pictures/Graphe2.png" alt="drawing" width="300">
@@ -710,7 +710,7 @@ Si on retire tous les littéraux d'une clause, alors elle n'est pas satisfiable 
 Entrée : ensemble de clauses disjointes $C$
 
 Algo :
-- Si $C=\empty$ :
+- Si $C=\varnothing$ :
   - alors renvoyer vraie
 - Si la clause vide $\in C$ :
   - alors renvoyer faux
@@ -791,7 +791,7 @@ Un algorithme de recherche par brute force s'écrit simplement ainsi :
 - Échec de la recherche
 
 **Version "toutes solutions" :**
-- $S\leftarrow\empty$
+- $S\leftarrow\varnothing$
 - Pour toute valeur $v$
  - Si $v$ satisfait les contraintes
    - alors $S\leftarrow S\cup\{v\}$

@@ -616,7 +616,7 @@ On sélectionne en priorité les tâches de pénalité maximale que l'on planifi
 **Algo :**
 Trier les tâches par pénalité décroissante et les renommer $t_0,...,t_{n-1}$
 
-$T^+\leftarrow\empty$
+$T^+\leftarrow\varnothing$
 
 Marquer toutes les dates de $\llbracket 0,n-1\rrbracket$ comme disponibles
 
