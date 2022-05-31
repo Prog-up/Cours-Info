@@ -172,7 +172,7 @@ On pourrait aussi utiliser les multi-ensembles pour autoriser les multi-arêtes 
 - **Corollare (hondshaking lemma) :** Tout GNO sans boucle possède un nombre pair de sommets de degré impair.
 
   **Démonstration :** 
-  $$2\N \ni 2|A| = \sum_{s \in S} d(s) = \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\N}} d(s)}_{\in 2\N} + \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\N + 1}} d(s)}_{\substack{\text{de la parité du nombre} \\ \text{de sommets de degré impair}}}$$
+  $$2\mathbb N \ni 2|A| = \sum_{s \in S} d(s) = \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\mathbb N}} d(s)}_{\in 2\mathbb N} + \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\mathbb N + 1}} d(s)}_{\substack{\text{de la parité du nombre} \\ \text{de sommets de degré impair}}}$$
 
   **Contre-exemple en cas de boucle :**
 
@@ -629,7 +629,7 @@ $$
 ### 3.1.4. Proposition
 Soit $G = ([\![ 0;n-1]\!], A)$ un graphe, et $A_G$ sa matrice d'adjacence entière.
 
-Alors, $\forall (i, j) \in [\![ 0;n - 1]\!]^2$, en notant $\forall k \in \N,\ a_{i, j}^{(k)}$ le coefficient $(i, j)$ de $A_G^{(k)}$, $a_{i, j}^{(k)}$ est le nombre de chemins de longueur $k$ de $i$ à $j$.
+Alors, $\forall (i, j) \in [\![ 0;n - 1]\!]^2$, en notant $\forall k \in \mathbb N,\ a_{i, j}^{(k)}$ le coefficient $(i, j)$ de $A_G^{(k)}$, $a_{i, j}^{(k)}$ est le nombre de chemins de longueur $k$ de $i$ à $j$.
 
 **Démonstration :**
 Par récurrence sur $k$
