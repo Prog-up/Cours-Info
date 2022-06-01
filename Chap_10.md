@@ -172,7 +172,7 @@ On pourrait aussi utiliser les multi-ensembles pour autoriser les multi-arêtes 
 - **Corollare (hondshaking lemma) :** Tout GNO sans boucle possède un nombre pair de sommets de degré impair.
 
   **Démonstration :** 
-  $$2\N \ni 2|A| = \sum_{s \in S} d(s) = \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\N}} d(s)}_{\in 2\N} + \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\N + 1}} d(s)}_{\substack{\text{de la parité du nombre} \\ \text{de sommets de degré impair}}}$$
+  $$2\mathbb N \ni 2|A| = \sum_{s \in S} d(s) = \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\mathbb N}} d(s)}_{\in 2\mathbb N} + \underbrace{\sum_{\substack{s \in S \\ d(s) \in 2\mathbb N + 1}} d(s)}_{\substack{\text{de la parité du nombre} \\ \text{de sommets de degré impair}}}$$
 
   **Contre-exemple en cas de boucle :**
 
@@ -323,11 +323,11 @@ Vocabulaire différent selon les auteurs.
 
 ### 2.2.4. Définition : circuit / cycles / chemin eulériens
 Soit $G=(S,A)$ un graphe, $p=s_0,\dots,s_n$ un chemin dans $G$
-- $p$ est un circuit ssi $p$ est un chemin fermé de longueur non-nulle
-- $p$ est un cycle ssi $p$ est un circuit élémentaire
-- $G$ acyclique s'il ne contient aucun cycle
-- $p$ est un chemin eulérien ssi $p$ passe exactement une fois par chaque arête / arc, i.e. si $\{\{s_i;s_{i+1}\},i\in [\![0;n-1]\!]\}=A$ et $|A|=n$ (resp. $(s_i;s_{i+1})$)
-- $G$ est eulérien ssi $G$ contient un chemin fermé eulérien
+- $p$ est un `circuit` ssi $p$ est un chemin fermé de longueur non-nulle
+- $p$ est un `cycle` ssi $p$ est un circuit élémentaire
+- $G$ `acyclique` s'il ne contient aucun cycle
+- $p$ est un `chemin eulérien` ssi $p$ passe exactement une fois par chaque arête / arc, i.e. si $\{\{s_i;s_{i+1}\},i\in [\![0;n-1]\!]\}=A$ et $|A|=n$ (resp. $(s_i;s_{i+1})$)
+- $G$ est `eulérien` ssi $G$ contient un chemin fermé eulérien
 
 ---
 
@@ -629,7 +629,7 @@ $$
 ### 3.1.4. Proposition
 Soit $G = ([\![ 0;n-1]\!], A)$ un graphe, et $A_G$ sa matrice d'adjacence entière.
 
-Alors, $\forall (i, j) \in [\![ 0;n - 1]\!]^2$, en notant $\forall k \in \N,\ a_{i, j}^{(k)}$ le coefficient $(i, j)$ de $A_G^{(k)}$, $a_{i, j}^{(k)}$ est le nombre de chemins de longueur $k$ de $i$ à $j$.
+Alors, $\forall (i, j) \in [\![ 0;n - 1]\!]^2$, en notant $\forall k \in \mathbb N,\ a_{i, j}^{(k)}$ le coefficient $(i, j)$ de $A_G^{(k)}$, $a_{i, j}^{(k)}$ est le nombre de chemins de longueur $k$ de $i$ à $j$.
 
 **Démonstration :**
 Par récurrence sur $k$
@@ -839,10 +839,10 @@ On parcours de $G$ partant d'un sommet $s\in S$ est une suite finie de sommets $
 
 ### 4.1.2. Algorithme générique
 
-**Définition `bordure` :**
+**Définition bordure :**
 Soit $G=(S,A)$ un GNO et $T\le S$.
 
-On appelle bordure de $T$ l'ensemble $B(T)=\{s\in S\setminus T|\exists t\in T|\{s;t\}\in A\}$.
+On appelle `bordure` de $T$ l'ensemble $B(T)=\{s\in S\setminus T|\exists t\in T|\{s;t\}\in A\}$.
 
 **Exemple :**
 ```mermaid
@@ -1051,11 +1051,11 @@ On peut également sélectionner un antécédent pour chaque sommet du parcours.
 
 Si touts les sommets sont accessibles à partir du sommet de départ (à fortiori si $G$ est fortement connexe), alors on obtient une arborescence couvrante de $G$.
 
-**Définition : `arborescence` :**
+**Définition : arborescence :**
 
 Soit $G=(S,A)$ un GO.
 
-$G$ est une arborescence s'il peut être obtenu à partir d'un arbre $(S,A')$ en distinguant un sommet $r\in S$ et en orientant chaque $\{s:s'\}\in A$ en $(s,s')$ si l'unique chemin simple de $r$ à $s'$ passe par $s$, en $(s',s)$ sinon.
+$G$ est une `arborescence` s'il peut être obtenu à partir d'un arbre $(S,A')$ en distinguant un sommet $r\in S$ et en orientant chaque $\{s:s'\}\in A$ en $(s,s')$ si l'unique chemin simple de $r$ à $s'$ passe par $s$, en $(s',s)$ sinon.
 
 On parle également d'arbre enraciné.
 
@@ -1068,9 +1068,9 @@ On dit que ce sont des arcs de liaisons pour les distinguer des autres catégori
 ---
 
 ### 4.1.11. Catégoriation des arcs
-Soit $G=(S,A)$ un GO, $s_0\dots s_n{n-1}$ un parcours de $G$.
+Soit $G=(S,A)$ un GO, $s_0\dots s_{n-1}$ un parcours de $G$.
 
-On note $I=\{[\![ 1;n_1]\!],B(\{s_0\dots s_{i-1}\})=\not ={\varnothing}\}$
+On note $I=\{[\![ 1;n_1]\!],B(\{s_0\dots s_{i-1}\})\not ={\varnothing}\}$
 
 $\forall i\in I$, on choisit $t_i\in\{s_0\dots s_{i-1}\}$ tel que $(t_i,s_i)\in A$ (on choisit les arcs de liaison).
 
@@ -1186,6 +1186,7 @@ flowchart LR
 	0 --> 1 --> 2 --> 3 --> 7
 	0 --> 4 --> 5
 	1 --> 6 --> 7
+	1 --> 5
 	2 --> 6
 ```
 Parcours en profondeur : 0, 1, 2, 3, 7, 5, 6, 4
@@ -1229,7 +1230,7 @@ let est_connexe (g:graphe):bool =
 
 ### 4.2.8. Application : calcul des composantes connexes
 **Idée :**
-On attribue un numéro à chaque composante et enn marge de ce numéro les sommets de la composante lors d'un parcours. On lance des parcours tant qu'il reste des sommets non numérotés.
+On attribue un numéro à chaque composante et en marge de ce numéro les sommets de la composante lors d'un parcours. On lance des parcours tant qu'il reste des sommets non numérotés.
 
 ```ocaml
 let composantes_connexes (g:graphe) : int array =
@@ -1237,7 +1238,7 @@ let composantes_connexes (g:graphe) : int array =
   let composante = Array.make n (-1) in
   let c = ref 0 in
   for i = 0 to n-1 do
-    of comoosante.(i) = -1 then begin
+    of composante.(i) = -1 then begin
       dfs (fun v -> composante.(v) <- !c) g i;
       incr c
     end
@@ -1272,6 +1273,7 @@ flowchart LR
 	0 --> 1 --> 2 --> 3 --> 7
 	0 --> 4 --> 5
 	1 --> 6 --> 7
+	1 --> 5
 	2 --> 6
 ```
 **Parcours en profondeur :** 0, 1, 4, 2, 5, 6, 3, 7
@@ -1445,3 +1447,168 @@ C'est $d^{(|S|)}$ qui nous intéresse car tous les sommets intermédiaires sont 
 
 **Exercice :**
 Relation de récurrence sur $p^{(k)}(s, s')$, le prédécesseur de $s'$ sur un plus court chemin de $s$ à $s'$ n'utilisant que des sommets intermédiaires d'indice $< k$.
+
+$$\left\{\begin{array}{ll}
+ p^{(0)}(s,s')=s
+ \\
+ p^{(k+1)}(s,s')=\left\{\begin{array}{ll}
+ p^{(k)}(s,s')\text{ si } d^{(k+1)}(s,s')=d^{(k)}(s,s')
+ \\
+ p^{(k)}(s,s')\text{ sinon}
+\end{array}\right.
+\end{array}\right.$$
+
+---
+
+### 5.2.3. Exemple
+```mermaid
+flowchart LR
+	0 -->|-2|2 -->|2|3 -->|-1|1 -->|4|0
+	1 -->|3|2
+```
+
+> À compléter
+
+**Remarque :**
+Dans la matrice d'adjacence pondéré, on peut choisir de placer des 0 sur la diagonale puisque le plus court chemin d'un sommet à lui-même est le chemin vide.
+
+---
+
+### 5.2.4. Implémentation en C
+- **Structures de données :** On choisit une matrice pour $d^{(k)}$, $p^{(k)}$ et aussi pour $G$ (matrice d'adjacence pondérée, car c'est directement $d^{(0)}$). On pourrait utiliser des listes d'adjacences car la complexité de calcul de $d^{(0)}$ à partir de ces listes est donnée par la complexité du reste de l'algorithme.
+
+On supposera que la matrice est linéarisée.
+```c
+typedef double* graphe;
+int* floyd_warsshall (graphe g, int n){
+	double* d = (double*) malloc (n*n*sizeof(double));
+	double* p = (int*) malloc (n*n*sizeof(int));
+	for(int i=0 ; i<n ; i++){
+		for(int j=0 ; j<n ; j++){}
+			d[i*n+j] = g[i*n+j];
+			p[i*n+j] = i;
+		}
+		for(int j=0 ; j<n ; j++){
+			for(int j=0 ; j<n ; j++){
+				for(int j=0 ; j<n ; j++){
+					if(d[i*n+k]+d[k*n+j]<d[i*n+j]){
+						d[i*n+j] = d[i*n+k] + d[k*n+j];
+						p[i*n+j] = p[k*n+j];
+					}
+				}
+			}
+		}
+	}
+	free(d);
+return p;
+}
+```
+**Complexité :**
+- Temporelle : $\mathcal O(|S|³)$
+- Spaciale : $\mathcal O(|S|²)$
+
+## 5.3. Algorithme de Dÿkstra
+
+### 5.3.1. Principe
+On cherche à résoudre le problème 5.1.6. 2. dans un graphe pondéré $G=(S,A,\mathrm w)$ où $\mathrm w\rightarrow\mathbb R⁺$. On étudie donc, étant donné $s\in S$, à calculer $d(s,s')$, $\forall s'\in S$.
+
+L'algorithme de Dÿkstra est un algorithme glouton qui se présente comme une variante du parcours en largeur : on parcours les sommets par ordre de distance à $s$ coissante, mais ici la distance est définie par la pondération du graphe. La file du parcours en largeur est remplacée par une file de priorité dont les priorité sont des estimations des distances (puisque ces dernières ne sont pas connues).
+
+---
+
+### 5.3.2. Algorithme glouton
+$\forall s'\in S$, on note $\mathrm w(s')$ l'estimation de $\mathrm d(s,s')$.
+
+Initialement, $\left\{\begin{array}{ll}
+	 \mathrm w(s)=0
+	 \\
+	 \mathrm w(s')=+\infty, \forall s'\not = s
+\end{array}\right.$
+
+0n construit incrémentalement un ensemble $E\subseteq S$ tel que $\forall s'\in E,\mathrm w(s')=\mathrm d(s,s')$.
+
+Initialement, $E=\varnothing$ puis à chaque itération, on insère dans $E$ un sommet $s'\in S\setminus E$ tel que $\mathrm w(s')$ est minimal (choix glouton). Lors de l'insertion de $s'$ dans $E$, on observe les voisins de $s'$ pour essayer d'améliorer l'estimation pour ces sommets : $\forall s''\in S\setminus E$ voisins de $s'$, on remplace $\mathrm w(s'')$ par $\min(\mathrm w(s''),\underbrace{\mathrm d(s,s')}_{=\mathrm w(s')}+\underbrace{\mathrm w(\{s',s''\})}_{\text{resp. }(s',s'')\text{ dans le cas orienté}}$.
+
+En parallèle, on met à jour un tableau de prédécesseurs pour représenter les plus courts chemins.
+
+**Remarque :**
+$S\setminus E$ se comporte comme une file de priorité $\min$ où $\mathrm w(s')$ est la priorité de l'élément $s'$. Quitte à compléter $G$ avec des arêtes / arcs du poids $+\infty$, c'est aussi la bordure utilisée dans l'algorithme générique de parcours.
+
+---
+
+### 5.3.3. Exemple
+```mermaid
+flowchart LR
+	1 -->|6|3
+	0 -->|5| 1 -->|1|2 -->|6|4 -->|1|3 -->|3|0
+	0 -->|3|2
+	2 -->|2|1
+	3 -->|7|4
+	0 ==>|2|2 ==> 4 ==> 3
+	0 ==> 1
+```
+$s=0$
+
+|$s'$|0|1|2|3|4|
+|:-:|:-:|:-:|:-:|:-:|:-:|
+|$\mathrm w(s')$|0|5|3|10|9|
+|$\mathrm p(s')$|0|0|0|4|2|
+
+E : 0, 2, 1, 4, 3
+
+---
+
+### 5.3.4. Correction de l'algorithme de Dÿkstra
+On démontre l'invariant suivant : $\left\{\begin{array}{ll}
+	 \forall s'\in E, \mathrm w(s')=\mathrm d(s,s')
+	 \\
+	 \forall s''\in S\setminus(E\cup\{s\}), \mathrm w(s'')=\min_{s'\in E}(\mathrm d(s,s')+\mathrm w(\{s',s''\}))
+\end{array}\right.$
+- Initialement : $E=\varnothing,\forall s''\in S\setminus\{s\},\mathrm w(s'')=+\infty=\min\varnothing$ (par convention) $\rightarrow$ l'invariant est vrai :
+	- à la première itération, $s'=s$
+	  $\mathrm w(s)=0=\mathrm(s,s)$ (car les poids sont positifs)
+	  $\forall s''\not =s,\mathrm w(s'')$ ne charge pas si $s$ et $s''$ ne sont pas adjacents $\rightarrow$ ok pour le calcul du $\min$ et $\mathrm w(s'')$ devient $\mathrm w(\{s,s''\})$ si $s$ et $s''$ sont adjacents $\rightarrow$ encore ok
+	- aux itérations suivantes : on suppose que $\left\{\begin{array}{ll}
+		 \forall s'\in E, \mathrm w(s')=\mathrm d(s,s')
+		 \\
+		 \forall s''\in S\setminus(E\cup\{s\}), \mathrm w(s'')=\min_{s'\in E}(\mathrm d(s,s')+\mathrm w(\{s',s''\}))
+	\end{array}\right.$
+
+On choisit $s'\in S\setminus E$ tel que $\mathrm w(s')l$ est minimal pour l'insérer dans $E$.
+
+Montrons que $\mathrm w(s')=\mathrm d(s,s')$.
+
+On considère un chemin de poids $\min$ de $s$ à $s'$. Il s'écrit
+
+> À compléter
+
+donc $\mathrm d(s,s')\ge\mathrm w(s')$.
+
+Or $\mathrm w(s')$ est le poids d'un chemin de $s$ à $s'$ : $\mathrm w(s')=\min_{u\in E}(\mathrm d(s,u)+\mathrm w(\{u;s'\}))$ donc en choississant $u\in E$ qui réalise ce minimum et en concaténant un plus court chemin de $s$ à $u$ et l'arête $\{u,s'\}$, on obtient un chemi de $s$ à $s'$ de poids $\mathrm w(s')$
+
+donc $\mathrm w(s')\ge\mathrm d(s,s')$ d'où $\mathrm d(s,s')=\mathrm w(s')$
+
+$\forall s''\in S\setminus(E\cup\{s,s'\})$, si $s'$ et $s''$ ne sont pas adjacents, alors $\mathrm w(s'')$ est inchangé $\rightarrow$ ok pour le calcul du $\min$
+
+si $s'$ et $s''$ sont adjacent, $\mathrm w(s'')$ devient :
+$$\begin{array}{lll}
+	\min(\mathrm w(s''),\mathrm d(s,s')+\mathrm w(\{s';s''\})) & =\min(\min_{u\in E}(\mathrm d(s,u)+\mathrm w(\{u;s''\})),\mathrm d(s,s')+\mathrm w(\{s';s''\}))
+	\\
+	& =\min_{s\in E\cup\{s\}}(\mathrm d(s,s')+\mathrm w(\{s';s''\})
+\end{array}$$
+
+> À compléter
+
+- **Correction :** à la fin de l'algorithme, $E=S$ donc l'invariant donne $\forall s'\in S,\mathrm w(s')=\mathrm d(s,s')$ donc si les mises à jour de prédécesseurs sont cohérentes avec le calcul des $\mathrm w(s')$, alors on obtient des plus courts chemins de $s$ vers tous les sommets.
+
+---
+
+### 5.3.5. Implémentation
+- **Structures de données :** On utilise une file de priorité $\min$ pour $S\setminus E$ qui doit permettre la mise à jour des priorités. On utilise des tableaux pour $\mathrm w$ et les prédécesseurs. On représente $G$ par des listes d'adjacence pondérés car à chaque itération on a besoin de parcours les voisins d'un sommet donné.
+
+```c
+struct arc{
+	double poids;
+	int cible;
+};
+```
