@@ -602,6 +602,13 @@ flowchart LR
  id1 --- id2((2)) --- id4
 ```
 
+```mermaid
+flowchart LR
+	id1((1)) --> id0((0)) & id3((3))
+	id2((2)) --> id1 & id3
+	id0 & id3 --> id2
+```
+
 > À compléter
 
 ---
@@ -923,8 +930,6 @@ $k=1$ : $G_1$ est le sous-graphe induit par $\{\{s_i;t_i\}\}$
 
 $t_i=s_0\not ={s_1}$ donc $G$ est le graphe :
 
-> Mermaid error avant
-
 ```mermaid
 flowchart LR
   id0((s0)) --- id1((s1))
@@ -1062,8 +1067,6 @@ On parle également d'arbre enraciné.
 On parle également de forêt pour un ensemble d'arborescence disjointes et un parcours d'un GO permet de définir une forêt couvrante en sélectionnant des arcs comme dans le cas non orienté.
 
 On dit que ce sont des arcs de liaisons pour les distinguer des autres catégories d'arcs.
-
-> 3.1.2. à compléter
 
 ---
 
@@ -1467,7 +1470,62 @@ flowchart LR
 	1 -->|3|2
 ```
 
-> À compléter
+$$\begin{array}{cc}
+d^{(0)} :
+\begin{pmatrix}
++\infty & +\infty & -2 & +\infty
+\\
+4 & +\infty & 3 & +\infty
+\\
++\infty & +\infty & +\infty & 2
+\\
++\infty & -1 & +\infty & +\infty
+\end{pmatrix}
+&
+d^{(1)} :
+\begin{pmatrix}
++\infty & +\infty & -2 & +\infty
+\\
+4 & +\infty & \boxed{2} & +\infty
+\\
++\infty & +\infty & +\infty & 2
+\\
++\infty & -1 & +\infty & +\infty
+\end{pmatrix}
+\\
+d^{(2)} :
+\begin{pmatrix}
++\infty & +\infty & -2 & +\infty
+\\
+4 & +\infty & 2 & +\infty
+\\
++\infty & +\infty & +\infty & 2
+\\
+\boxed{-3} & -1 & \boxed{1} & +\infty
+\end{pmatrix}
+&
+d^{(3)} :
+\begin{pmatrix}
++\infty & +\infty & -2 & \boxed 0
+\\
+4 & +\infty & 2 & \boxed 4
+\\
++\infty & +\infty & +\infty & 2
+\\
+-3 & -1 & 1 & \boxed 3
+\end{pmatrix}
+\end{array}$$
+
+$$d^{(4)} :
+\begin{pmatrix}
+\boxed 3 & \boxed{-1} & -2 & 0
+\\
+4 & \boxed 3 & 2 & 4
+\\
+\boxed 5 & \boxed 1 & \boxed 3 & 2
+\\
+-3 & -1 & 1 & 3
+\end{pmatrix}$$
 
 **Remarque :**
 Dans la matrice d'adjacence pondéré, on peut choisir de placer des 0 sur la diagonale puisque le plus court chemin d'un sommet à lui-même est le chemin vide.
@@ -1507,12 +1565,16 @@ return p;
 - Temporelle : $\mathcal O(|S|³)$
 - Spaciale : $\mathcal O(|S|²)$
 
-## 5.3. Algorithme de Dÿkstra
+## 5.3. Algorithme de Dijkstra
 
 ### 5.3.1. Principe
 On cherche à résoudre le problème 5.1.6. 2. dans un graphe pondéré $G=(S,A,\mathrm w)$ où $\mathrm w\rightarrow\mathbb R⁺$. On étudie donc, étant donné $s\in S$, à calculer $d(s,s')$, $\forall s'\in S$.
 
-L'algorithme de Dÿkstra est un algorithme glouton qui se présente comme une variante du parcours en largeur : on parcours les sommets par ordre de distance à $s$ coissante, mais ici la distance est définie par la pondération du graphe. La file du parcours en largeur est remplacée par une file de priorité dont les priorité sont des estimations des distances (puisque ces dernières ne sont pas connues).
+L'algorithme de Dijkstra est un algorithme glouton qui se présente comme une variante du parcours en largeur : on parcours les sommets par ordre de distance à $s$ coissante, mais ici la distance est définie par la pondération du graphe. La file du parcours en largeur est remplacée par une file de priorité dont les priorité sont des estimations des distances (puisque ces dernières ne sont pas connues).
+
+<p align="center">
+<img src="Pictures/Graphe15.png" alt="drawing" width="300">
+</p>
 
 ---
 
@@ -1558,7 +1620,7 @@ E : 0, 2, 1, 4, 3
 
 ---
 
-### 5.3.4. Correction de l'algorithme de Dÿkstra
+### 5.3.4. Correction de l'algorithme de Dijkstra
 On démontre l'invariant suivant : $\left\{\begin{array}{ll}
 	 \forall s'\in E, \mathrm w(s')=\mathrm d(s,s')
 	 \\
@@ -1578,9 +1640,22 @@ On choisit $s'\in S\setminus E$ tel que $\mathrm w(s')l$ est minimal pour l'ins�
 
 Montrons que $\mathrm w(s')=\mathrm d(s,s')$.
 
-On considère un chemin de poids $\min$ de $s$ à $s'$. Il s'écrit
+On considère un chemin de poids $\min$ de $s$ à $s'$. Il s'écrit $p = s \rightsquigarrow u \rightarrow v \rightsquigarrow s'$, où $v$ est le premier sommet du chemin tel que $v \notin E$
 
-> À compléter
+$$\begin{array}{rcl}
+	d(s, s') =
+	w(p) &=&
+	\underbrace{w(s \rightsquigarrow u)}_{= d(s, u)}
+	+ w(\set{u, v})
+	+ \underbrace{w(v \rightsquigarrow s')}_{\ge 0}
+	\\
+	&\ge&
+	\displaystyle \min_{u \in E}(d(s, u) + w(\set{u, v}))
+	\\
+	&=& w(v)\ \text{car $v \notin E$ (et $v \neq s$ car $s \in E$)}
+	\\
+	&\ge& w(s')\ \text{par définition de $s'$}
+\end{array}$$
 
 donc $\mathrm d(s,s')\ge\mathrm w(s')$.
 
@@ -1591,13 +1666,13 @@ donc $\mathrm w(s')\ge\mathrm d(s,s')$ d'où $\mathrm d(s,s')=\mathrm w(s')$
 $\forall s''\in S\setminus(E\cup\{s,s'\})$, si $s'$ et $s''$ ne sont pas adjacents, alors $\mathrm w(s'')$ est inchangé $\rightarrow$ ok pour le calcul du $\min$
 
 si $s'$ et $s''$ sont adjacent, $\mathrm w(s'')$ devient :
-$$\begin{array}{lll}
-	\min(\mathrm w(s''),\mathrm d(s,s')+\mathrm w(\{s';s''\})) & =\min(\min_{u\in E}(\mathrm d(s,u)+\mathrm w(\{u;s''\})),\mathrm d(s,s')+\mathrm w(\{s';s''\}))
+$$\begin{array}{rcl}
+	&&\displaystyle \min(w(s''), d(s, s') + w(\set{s', s""}))
 	\\
-	& =\min_{s\in E\cup\{s\}}(\mathrm d(s,s')+\mathrm w(\{s';s''\})
+	&=& \displaystyle \min({\min_{u \in E}(d(s, u) + w(\set{u, s''})), d(s, s') + w(\set{s', s''})})
+	\\
+	&=& \displaystyle \min_{u \in E \cup \set{s'}} (d(s, u + w(\set{u, s''})))
 \end{array}$$
-
-> À compléter
 
 - **Correction :** à la fin de l'algorithme, $E=S$ donc l'invariant donne $\forall s'\in S,\mathrm w(s')=\mathrm d(s,s')$ donc si les mises à jour de prédécesseurs sont cohérentes avec le calcul des $\mathrm w(s')$, alors on obtient des plus courts chemins de $s$ vers tous les sommets.
 
@@ -1607,8 +1682,74 @@ $$\begin{array}{lll}
 - **Structures de données :** On utilise une file de priorité $\min$ pour $S\setminus E$ qui doit permettre la mise à jour des priorités. On utilise des tableaux pour $\mathrm w$ et les prédécesseurs. On représente $G$ par des listes d'adjacence pondérés car à chaque itération on a besoin de parcours les voisins d'un sommet donné.
 
 ```c
-struct arc{
-	double poids;
-	int cible;
+struct arc {
+double poids;
+int cible;
 };
+
+struct elem {
+struct arc val;
+struct elem* next;
+};
+
+typedef struct elem* liste;
+typedef liste* graphe;
 ```
+
+On suppose implémenté un type `fp` (file de priorité) proposant les primitives suivantes :
+- **fp create(double* w, int n) :** Crée une file contenant $\{0;n-1\}$ avec les priorités w[i] ;
+- **bool is\_empty(fp f) :** Test de vacuité ;
+- **int take\_min(fp, f) :** Extraction de l'élément de priorité $\min$ ;
+- **void update(fp f, int i, double w) :** Définit $w$ comme la nouvelle priorité de $i\in f$.
+
+```c
+int* dijkstra(graphe g, int n, int s){
+	double* w = (double*)malloc(n*siezof(double));
+	for(int i=0 ; i<n ; i++){
+		if(i==s)
+			w[i] = 0;
+		else
+			w[i] = INFINITY;
+	}
+	fp f = create(w, n);
+	int* p = (int*)malloc(n*sizeof(int));
+	for(int i=0 ; i<n ; i++)
+		p[i] = -1;
+	while(!is_empty(f)){
+		int u = take_min(f);
+		liste l = g[u];
+		while(l!=NULL){
+			struct arc a = l->val;
+			if(w[u]+a.poids<w[a.cible]){
+				w[a.cible] = w[u]+a.poids;
+				p.[a.cible] = u;
+				updaye(f, a.cible, w[a.cible]);
+			}
+			l = l->next;
+		}
+	}
+	// libéaration de la mémoire occupée par f si nécessaire, via un destructeur (non prévu)
+	free(w);
+	return p; 
+}
+```
+**Complexité :**
+- Spaciale : $\mathrm O(|S|)$
+- Temporelle : cela dépend de l'implémentation du type fp.
+	- Implémentation naïve : tableau $w$ des priorités + tableau de booléens + nombre d'éléments (test de vacuité en temps constant) :
+		- Initialisation : $\mathrm O(|S|)$
+		- Test de vacuité  : $\mathrm O(1)$ (répété $|S|+1$ fois)$
+		- Extraction du min : $\mathrm O(|S|)$ (répété $|S|$ fois)
+		- Mise à jeu de priorité : $\mathrm O(1)$ (répété $d_{(+)}(u)$ fois, $\forall u\in S$)
+		- Au total : $\mathrm O(|S|)+\mathrm O(1)+\mathrm O(|S|²)+\underbrace{\mathrm O(\displaystyle\sum_{u\in S}d_{(+)}}_{=\mathrm O(|A|)=\mathrm O(|S|²)})=\mathrm O(|S|²)$
+	- Implémentation à l'aide d'un tas :
+		- Initialisation : $\mathrm O(|S|)$ (via une contruction par forêt)
+		- Test de vacuité : $\mathrm O(1)$ répété $|S|+1 fois$
+		- Extraction du min : $\mathrm O(\log|S|)$ (répété $|S|$ fois)
+		- Mise à jeu de priorité : $\mathrm O(\log|S|)$ (percolation) (répété $d_{(+)}(u)$ fois, $\forall u\in S$)
+		- Au total : $\mathrm O(|S|)+\mathrm O(|S|)+\mathrm O(|S|\log|S|)+\underbrace{\mathrm O((\log|S|)\displaystyle\sum_{u\in S}d_{(+)}}_{=\mathrm O(|A|)})=\mathrm O((|S|+|A|)\log|S|)$
+
+Si le graphe est dense, i.e. $|A|=\mathrm O(|S|²)$, on obtient $\mathrm O(|S|²\log|S|)\rightarrow$ c'est pire. Cela peut être meilleur s'il y a peu d'arêtes, par exemple si $|A|=\mathrm O(|S|)$ ce qui donne $\mathrm O(|S|\log|S|)$.
+
+**H.P. :** 
+Avec une implémentation à l'aide de tas de Fibonacci, o obtient $\mathrm O(|S|\log|S|+|A|)$.
