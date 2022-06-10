@@ -732,7 +732,7 @@ Code
 
 ## 3.2. Listes d'adjacences
 
-### 3.2.1. Définition (\textit{listes d'adjacence
+### 3.2.1. Définition : listes d'adjacence
 Soit $G = ([\![ 0;n-1]\!])$ un graphe.
 
 On peut représenter $G$ à l'aide d'un tableau de listes d'adjacence :
@@ -805,7 +805,7 @@ typedef liste* graphe;
 ```
 
 **Remarque :**
-On peut se passer des listes en utilisant des tableaux : on peut par exemple utiliser une matrice dont les lignes ne sont pas toutes de même longueur en plaçant dans la première case de chaque ligne ne nombre de voisins `g[i][0]` est le nombre de voisins de $i$ et les voisins sont `g[i][1],$\dots$, g[i[g[i][0]]]`
+On peut se passer des listes en utilisant des tableaux : on peut par exemple utiliser une matrice dont les lignes ne sont pas toutes de même longueur en plaçant dans la première case de chaque ligne ne nombre de voisins `g[i][0]` est le nombre de voisins de $i$ et les voisins sont g[i][1],$\dots$, g[i[g[i][0]]].
 
 **Problème :**
 La linéarisation de cette matrice n'est pas pratique à manipuler.
@@ -1013,7 +1013,7 @@ Il existe un unique chemin simple de $s$ à $s'$ dans $T$.
  ```mermaid
  flowchart LR
    subgraph longueur paire
-    id1((s)) -.-|longueur paire| id2((r)) -.-|logueur paire| id3((s'))
+    id1((s)) -.-|longueur paire| id2((r)) -.-|longueur paire| id3((s'))
    end
  ```
  $\rightarrow$ l'ajout de $\{s;s'\}$ à ce chemin donne un cycle de longueur impaire
