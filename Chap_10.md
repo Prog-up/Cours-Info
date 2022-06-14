@@ -1747,9 +1747,7 @@ int* dijkstra(graphe g, int n, int s){
 		- Test de vacuité : $\mathrm O(1)$ répété $|S|+1 fois$
 		- Extraction du min : $\mathrm O(\log|S|)$ (répété $|S|$ fois)
 		- Mise à jeu de priorité : $\mathrm O(\log|S|)$ (percolation) (répété $d_{(+)}(u)$ fois, $\forall u\in S$)
-		- Au total : $\mathrm O(|S|)+\mathrm O(|S|)+\mathrm O(|S|\log|S|)+\underbrace{\mathrm O((\log|S|)\displaystyle\sum_{u\in S}d_{(+)}}_{=\mathrm O(|A|)})=\mathrm O((|S|+|A|)\log|S|)$
-
-Si le graphe est dense, i.e. $|A|=\mathrm O(|S|²)$, on obtient $\mathrm O(|S|²\log|S|)\rightarrow$ c'est pire. Cela peut être meilleur s'il y a peu d'arêtes, par exemple si $|A|=\mathrm O(|S|)$ ce qui donne $\mathrm O(|S|\log|S|)$.
-
+ 
+ 
 **H.P. :** 
 Avec une implémentation à l'aide de tas de Fibonacci, o obtient $\mathrm O(|S|\log|S|+|A|)$.
