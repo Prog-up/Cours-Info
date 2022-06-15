@@ -192,3 +192,130 @@ Si on trouve une occurence de $x$ (u=x), alors on tombe dans le deuxième cas du
 		- $i\leftarrow i+\mathrm d_2(j)-m$
 	- Sinon :
 		- $i\leftarrow i+\max(\mathrm d(t_{i+j})-(m-1-j),\mathrm d_2(j)-(m-j-1))$
+
+**Exemple :**
+
+> Insert ex
+
+**Complexité :**
+On admet que $d_2$ peut être précalculée en temps $\mathcal O(m)$.
+
+Dans le pire des cas la recherche est encore en $\mathcal O(nm)$ (exemple : $x=a^m$$ et $t=a^n$).
+
+**Remarque :**
+Il existe une version plus complexe avec n prétraitement qui permet une complexité $\mathcal O(n+m)$ `H.P.`
+
+## 1.3. Algorithme de Karp-Rabin
+### 1.3.1. Principe
+L'idée de l'algorithme de Karp-Rabin est d'éviter les comparaisons en temps linéaire entre le motif et le contenu d'une fenêtre en utilisant une fonction de hachage. On parle d'emprunte pour désigner le haché d'une chaîne de caractères par la fonction de hachage choisie et on compare les empruntes du motif et du contenu de la fenêtre. Pour contrer le problème des collisions, un cas d'égalité des empruntes on compare aussi les deux chaînes de caractères.
+
+**Algorithme :**
+Entrée : texte $t=t_0\dots t_{n-1}$, motif $x=x_0\dots x_{m-1}$ (+$h$ la fonction de hachage choisie à l'avance)
+
+Pseudo-code :
+- $h_x\leftarrow\mathrm h(x_0\dots x_{m-1})$
+- $h_t\leftarrow\mathrm h(t_0\dots t_{m-1})$
+- Pour $i$ de $0$ à $n-m$ :
+  - Si $h_x=h_t$ et (paresseux) $x_0\dots x_{m-1}=t_0\dots t_{m-1}$ :
+    - Occurence de $x$ à la position $i$
+  - Si $i<n-m$ :
+    - $h_t\leftarrow\mathrm h(t_{i+1}\dots t_{i+m})$
+
+---
+
+### 1.3.2. Choix de la fonction de hachage
+**Plusieurs contraintes :**
+- On doit pouvoir comparer des empruntes en temps constant : en pratique, les empruntes sont des entiers machines donc ce n'est pas un problème.
+- Il doit y avoir peu de collisions `avec le haché du motif`
+- On doit pouvoir calculer l'emprunte de la fenêtre à l'itération suivante sans lire tous ses caractères (sinon on retrouve la complexité de l'algorithme naïf).
+
+On peut par exemple utiliser une fonction de hachage déroulante, i.e. une fonction $h$ telle qu'il est possible de calculer en temps constant $\mathrm h(u_1\dots u_m)$ à partir de $\mathrm h(u_0\dots u_{m-1})$.
+
+> Insert Graph 1)
+
+**Exemple :**
+On concidère quz les caractères sont codés sur un octet, i.e. on les assimile à des entiers compris entre $0$ et $m-1$ (avec $r=2^8$). On peut voir une chaîne de caractères de longueur $m$, cmme l'écriture en base $r$ d'un entier compris entre $0$ et $r^m-1$.
+
+$$\mathrm P(u_0\dots u_{m-1})=\sum^{n-1}_{i=0}u_ir^{m-1-i}=u_0r^{m-1}+u_1r^{m-2}+\dots+u_{m-1}$$
+
+On choisit un nombre premier $p$ et on définit $\mathrm h(u)=\mathrm P(u)\text{mod }p$
+
+$$\begin{array}{lll}
+	\mathrm h(u_0\dots u_{m-1})&=\displaystyle\sum^{m}_{i=1}u_ir^{m-1-i+1}\text{mod }p
+	\\
+	&=\displaystyle(\sum^{m-i}_{i=1}u_ir^{m-i}+u_m)\text{mod }p
+	\\
+	&=\displaystyle(r(\sum^{m-1-i}_{i=1}u_ir^{m-i}-u_or^{n-1})+u_m)\text{mod }p
+	\\
+	&=(r(\mathrm h(u_0\dots u_{m-1})-u_or^{n-1})+u_m)\text{mod }p
+\end{array}$$
+
+$$\delta(u_0,u_m):e\mapsto(r(e-u_0r^{n-1})+u_m)\text{mod }p$$
+
+**Remarque :**
+Si on précalcule $r^{m-1}$ alors $\delta(u_0,u_m)$ est bien calculable en temps constant.
+
+Complexité du précalcul : $\mathcal O(\log m)$ avec l'exponentiation rapide (modulo).
+
+---
+
+### 1.3.3. Implémentation en OCaml
+```ocaml
+let hash (r:int)(p:int)(s:string):int=
+	let e = ref O in
+	for i=0 to String.length s-1 do
+		e := (r*!e+(Char.code s.[i])) mod p (*schéma de Horner*)
+	done;
+	!e
+
+let delta (r:int)(p:int)(rm:int)(u0:char)(un=char)(e:int):int=
+	(r*(e-(Char.code u0)*rm)+Char.code um)mod p
+
+let harp_rabin (t:int)(x:string):int=
+	let n = String.length t and m=String.length x in
+	let l = ref[] in
+	let r = 256 and p = Ox7fffffff in (*p=(2^31)-1*)
+	let rm = fast_exp_mod r (n-1) p in (*(r^n-1) mod p*)
+	let hx = hash r p x and e = ref (hash r p (String.sub 0 m t)) in
+	for i=0 to n-m do
+		if hx=!e && x=String.sub i m t
+		then l := i::!l;
+		if i<n-m then e := delta r p rm t.[i] t.[i+m] !e
+	done;
+	!l
+```
+
+---
+
+### 1.3.4. Etude de la complexité
+- Complexité de l'initialisation :
+  - calcul de $rm$ : $\mathcal O(\log m)$
+  - calcul de $hx$ et $e=\mathrm h(t_0\dots t_{n-1})$ : $\mathcal O(m)$
+  - $\mathcal O(m)$ au total pour l'initialisation
+- Complexité de la boucle :
+  - à chaque itération : 1 comparaison et 1 calcul de delta en $\mathcal O(1)$
+  - en cas d'égalité d'empruntes : 1 extraction + comparaison de chaîne d taille $m$ : $\mathcal O(m)$
+  - Au total : $\mathcal O(m)+(n-m)\times\mathcal O(1)+\#\text{égalités d'empruntes}\times\mathcal 0(m)=\mathcal O(n+m\#\text{égalités d'empruntes})$
+  - Avec $t=a^n$ et $x=a^m$, on a égalité à chaque itération et on obtient une complexité $\mathcal O((n-m)m)$
+
+Exemple de ce cas où le pire cas est atteint sans occurence de $x$ dans $t$ : $x=aa$, $t=arar\dots ar$
+
+$p=17$ et $r=26$
+
+$\mathrm h(aa)=0=\mathrm h(ar)=\mathrm h(ra)$
+
+**Remarque :**
+Dans la publication de Karp et Rabin, l'idée est de choisir un nombre premier $p$ au hasard parmi un ensemble prédéfini pour limiter le risque de collision.
+
+**Admis :**
+Si on choisit deux chaînes de taille $m$ aléatoirement uniformément, la probabilité de collision avec la fonction de hachage choisie est de l'ordre de $\frac{1}{p}$ ($<10^{-9}$ si $p=2^{31}-1$).
+
+**Attention :**
+En pratique les chaînes étudiées ne sont pas du tout choisies uniformément.
+
+---
+
+### 1.3.5. Extension à la recherche de plusieurs motifs
+Même si cet algorithme est moins efficace que l'algorithme de Bayer-Moore pour la recherche d'un seul motif, il devient plus intéressant pour la recherche de Plusieurs motifs car on peut l'adapter pour éviter de lancer une recherche par motif. En choisissant une structure d'ensemble adaptée, il est possible de vérifier en temps constant si l'emprunte d'une sous-chaîne est égale à l'emprunte des motifs (test d'appartenance).
+
+$\rightarrow$ Il suffit de remplacer le test d'égalité d'empruntes par un test d'appartenance à l'ensemble des empruntes des motifs (précalculées) dans l'algorithme de Karp-Robin.
