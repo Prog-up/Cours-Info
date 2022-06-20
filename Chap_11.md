@@ -319,3 +319,160 @@ En pratique les chaînes étudiées ne sont pas du tout choisies uniformément.
 Même si cet algorithme est moins efficace que l'algorithme de Bayer-Moore pour la recherche d'un seul motif, il devient plus intéressant pour la recherche de Plusieurs motifs car on peut l'adapter pour éviter de lancer une recherche par motif. En choisissant une structure d'ensemble adaptée, il est possible de vérifier en temps constant si l'emprunte d'une sous-chaîne est égale à l'emprunte des motifs (test d'appartenance).
 
 $\rightarrow$ Il suffit de remplacer le test d'égalité d'empruntes par un test d'appartenance à l'ensemble des empruntes des motifs (précalculées) dans l'algorithme de Karp-Robin.
+
+# 2. Algorithmes de compression
+
+## 2.1. Contexte
+
+### 2.1.1. Principe
+On dispose d'une texte (en fait, d'un fichier, quel que soit son contenu, puisque c'est une séquence finie d'octets) et on souhaite réduire l'espace mémoire qu'il occupe via un changement d'encodage. On s'intéresse ici à la compression sans perte, i.e. on doit pouvoir retrouver l'intégralité de l'information initiale à partir du texte compressé. Formellement, on note $\Sigma$ l'ensemble des symboles authorisés dans le texte, appelé alphabet (en pratique $\Sigma=\{0;1\}$) et $\Sigma^*$ l'ensemble des séquences des séquences finies d'éléments de $\Sigma$. On Cherche alors une fonction de $\Sigma^*$ dans $\Sigma^*$, nommée compression, telle qu'il existe decompression : $\Sigma^*\rightarrow\Sigma^*$ tel que $\forall t\in\Sigma^*\mathtt{decopression}(\mathtt{compression}(t))=t$.
+
+---
+
+### 2.1.2. Remarque
+On ne peut pas avoir $\forall t\in\Sigma^*|\mathtt{compression}(t)|<|t|$.
+
+En effet, la condition $\mathtt{decompression}\circ\mathtt{compression}=\mathtt{id}$ impose que compression soit injective. Mais dans ce cas, on aurait une fonction injective de l'ensemble des textes d'une taille donnée vers l'ensemble des textes de taille strictement inférieure : impossible car le cardinal du second ensemble est strictement inférieur à celui du premier.
+
+Il existe donc toujours des textes dont la version compressée est plus grande que la version décompressé. L'important est alors de trouver des algorithmes qui compressent efficacement les textes qui sont pertinents pour l'utilisateur.
+
+---
+
+### 2.1.3. Algorithmes au programme
+On va étudier l'algorithme de Huffman, qui exploite des données sur la fréquence d'apprition des caractères dans le texte pour déterminer un encodage, et l'algorithme de Lempel-Ziv-Welch, qui ne nécessite pas la connaissance de l'intégralité du texte pour calculer un encodage car il construit incrémentalement un dictionnaire de codes pour les motifs apparaissants dans le texte.
+
+## 2.2. Algorithme de Huffman
+
+### 2.2.1. Principe
+L'idée principale de cet algorithme est d'associer un code plus court aux caractères les plus fréquents pour diminuer la taille du texte.
+
+**Exemple :**
+$abaabc$ nécessite 12 bits avec un code de taille fixe (3 lettres $\leadsto$ 2 bits par caractère) mais seulement 9 bits avec un code de taille variable (exemple : $a=0,b=10,c=11$).
+
+**Remarque :**
+Pour pouvoir décompresser sans ambiguité un encodage taille variable, on ne peut pas encoder un caractère avec un préfixe du code d'un autre caractère. On appelle cela un code préfixe.
+
+L'algorithme de Huffman est un algorithme qui, étant donné un texte, produit un code préfixe optimal pour la compression de ce texte, en termes de la taille du texte compressé.
+
+---
+
+### 2.2.2. Représentation de l'encodage des symboles
+On s'intéresse uniquement à des encodages binaires. Un code peut être représenté à l'aide d'un arbre binaire (strict) : dans cet arbre, les caractères sont placés aux feuilles et le chemin de la racine vers une feuille donne le code du caractère correspondant (descendre à gauche correspond au bit 0 et descence à droite au bit 1).
+
+**Exemple :**
+Le code de $a=0$, $b=10$, $c=11$ est représenté par :
+
+```mermaid
+flowchart TB
+	id0(( )) --- id1((a)) & id2(( ))
+	id2 --- id3((b)) & id4((c))
+```
+Donne $a=00$, $b=01$, $c=10$ et $d=11$
+
+$\rightarrow$ pour avoir un code optionnel, l'arbre doit être binaire strict
+
+**Remarque :**
+La longueur du code d'un caractère est la profondeur de la feuille correspondante dans l'arbre représentant l'encodage. Déterminer un code préfixe optimal revient à chercher un minimum pour $\varphi(t)=\sum_{x\in\text{feuilles}(t)}\mathrm f(x)\times\mathrm p(x,t)$ où :
+- $\mathrm p(x,t)$ est la profondeur de la feuille $x$ dans l'arbre $t$ ;
+- $\mathrm f(x)$ est la fréquence du caractère $x$ dans le texte.
+
+---
+
+### 2.2.3. Encodage et décodage
+On concidère un arbre binaire $t$ représentant un code préfixe et on suppose que l'on travaille sur l'alphabet des octets (type char).
+- Pour décoder une séquence de bits, il suffit de descendre dans l'arbre selon les bits lus et, lorsque l'on atteint une feuille, de produire le caractère correspondant et poursuivre le lecture en repartant de la racine.
+
+	**Code :**
+	```ocaml
+	type arbre = Feuille of char |Noeud of arbre * arbre
+	```
+
+	On représente un bit par un booléen (false pour 0 et true pour 1).
+
+	```ocaml
+	let decode (l:bool list) (t:arbre):char list =
+		let rec aux (l:bool list) (a:arbre):char list =
+			match l, a with
+			|_, Feuille c -> c::aux l t (*Attention à l'ordre*)
+			|[], _ -> []
+			|b::q, Noeud(g,l) -> if b then aux q d else aux q g
+		in aux l t
+	```
+
+	**Complexité :**
+	$\mathcal O(\#\text{bits dans le texte compressé})$
+
+- Pour un texte, étant donnée un arbre représentant un encodage pour chacun des caractère du texte, on ne veut pas parcourir l'arbre à chaque caractère pour déterminer son code. On calcule donc d'abord une table d'encodage associant à chaque caractère son code. On peut la calculer avec un unique parcours de l'arbre :
+
+	```ocaml
+	let codes (t:arbre):bool list array =
+		let a = Array.make 256 [] in (*on travaille sur les octets*)
+		let rec aux (t:arbre) (acc:bool list):unit =
+			match t with
+			|Feuille c -> a.(Char.code c) <- List.rev acc (*chemin accumulé à l'envers*)
+			|Noeud(g,d) -> aux g (false::acc); aux d (true::acc)
+		in aux t [];
+		a
+	```
+
+	**Complexité :**
+	Chaque noeud interne est traité en $\mathcal O(1)$ et chaque feuille $x$ est traité en $\mathcal O(\mathrm p(x,t))$
+
+
+En notant $n$ le nombre de caractères encodés ($n\le |\Sigma|$), il y a $n$ feuilles et $n-1$ noeuds internes car l'arbre est binaire strict (cf Chap 6.1.1.10). La hauteur de l'arbre est comprise entre $\lceil \log_2(n) \rceil$ et $n$.
+
+Dans la complexité est en $\Omega(n\log n)$ et en $\mathcal O(n^2)$.
+
+Une fois la table d'encodage calculée, il suffit de remplacer chaque caractère par son code :
+
+```ocaml
+let encode (l:char) (t:arbre):bool list =
+	let a = codes t in
+	List.flatten (List.map (fun c -> a.(Char.code c)) l)
+```
+
+---
+
+### 2.2.4. Arbre de Huffman
+Il reste à déterminer comment calculer un arbre représentant un code préfixe adapté à la compression d'un arbre donné. L'algorithme de Huffman est algorithme glouton déterminant un arbre optimal. Cet algorithme part d'une forêt de feuilles et les fusionne 2 à 2 jusqu'à l'obtention d'un unique arbre. La fusion de deux arbres est la construction d'un nouveau noeud dont les arbres sont les fils.
+
+**Exemple :**
+
+$~~~~~~~~~~a~b~c\\~~~~~~~~~~~~~\Downarrow$ 
+```mermaid
+flowchart TB
+	id0((a))
+	id(( ))--- id1((b)) & id2((c))
+``` 
+$~~~~~~~~~~~~\Downarrow$
+
+```mermaid
+flowchart TB
+	id0(( )) --- id1((a)) & id2(( ))
+	id2 --- id3((b)) & id4((c))
+```
+
+L'idée du choix glouton est la suivante : la fusion incrémente la longueur du code des feuilles des deux arbres concernés donc les arbres contenant les caractères les moins fréquents doivent subir le plus de fusion donc être fusionnés en priorité.
+
+On généralise la fonction $\mathrm f$ de 2.2.2. aux arbres en définissant $\displaystyle\mathrm f(t)=\sum_{x\in\text{feuilles}(t)}\mathrm f(x)$.
+
+L'algorithme de Huffman s'écrit alors ainsi :
+Entrée : texte $s$
+Pseudo-code :
+- $\mathrm{occ}\leftarrow$ table des occurrences des caractères de $s$
+- $F\leftarrow$ ensemble des feuilles $c$ où $c$ est tel que $\mathrm{occ}(c)>0$
+- Tant que $|F|\ge 2$ :
+  - Extraire $t_1$ de $F$ tel que $\mathrm f(t_1)$ est minimale
+  - Extraire $t_2$ de $F$ tel que $\mathrm f(t_2)$ est minimale
+  - $F\leftarrow F\bigcup$
+  - $F \leftarrow F \cup \{\mathtt{fusion}(t_1, t_2)\}$
+- Renvoyer l'unique élément de $F$
+
+**Implémentation :**
+La forêt $F$ se comporte comme une file de priorité min où la priorité d'un arbre $t$ est $f(t)$.
+
+On suppose donné un type \texttt{fp} associé aux primitives suivantes :
+- $\texttt{create : unit -> fp}$ qui crée une file de priorité vide ;
+- $\texttt{add : arbre -> int -> fp -> unit}$ qui insère un arbre avec la priorité (entière) donnée dans la file ;
+- $\texttt{take\_min : fp -> arbre*int}$ qui extrait un arbre de priorité min et qui renvoie aussi sa priorité ;
+- $\texttt{size : fp -> int}$ qui renvoie la taille de la file.
