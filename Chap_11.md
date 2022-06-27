@@ -444,7 +444,7 @@ flowchart TB
    id0((a))
    id(( ))--- id1((b)) & id2((c))
 ```
-$~~~~~~~~~~~~\Downarrow$
+$~~~~~~~~~~~~~\Downarrow$
 
 ```mermaid
 flowchart TB
@@ -456,16 +456,16 @@ L'idée du choix glouton est la suivante : la fusion incrémente la longueur du 
 
 On généralise la fonction $\mathrm f$ de 2.2.2. aux arbres en définissant $\displaystyle\mathrm f(t)=\sum_{x\in\text{feuilles}(t)}\mathrm f(x)$.
 
-L'algorithme de Huffman s'écrit alors ainsi :
+**L'algorithme de Huffman s'écrit alors ainsi :**
 Entrée : texte $s$
 Pseudo-code :
 - $\mathrm{occ}\leftarrow$ table des occurrences des caractères de $s$
 - $F\leftarrow$ ensemble des feuilles $c$ où $c$ est tel que $\mathrm{occ}(c)>0$
 - Tant que $|F|\ge 2$ :
- - Extraire $t_1$ de $F$ tel que $\mathrm f(t_1)$ est minimale
- - Extraire $t_2$ de $F$ tel que $\mathrm f(t_2)$ est minimale
- - $F\leftarrow F\bigcup$
- - $F \leftarrow F \cup \{\mathtt{fusion}(t_1, t_2)\}$
+   - Extraire $t_1$ de $F$ tel que $\mathrm f(t_1)$ est minimale
+   - Extraire $t_2$ de $F$ tel que $\mathrm f(t_2)$ est minimale
+   - $F\leftarrow F\bigcup$
+   - $F \leftarrow F \cup \{\mathtt{fusion}(t_1, t_2)\}$
 - Renvoyer l'unique élément de $F$
 
 **Implémentation :**
@@ -474,6 +474,300 @@ La forêt $F$ se comporte comme une file de priorité min où la priorité d'un 
 On suppose donné un type \texttt{fp} associé aux primitives suivantes :
 - $\texttt{create : unit -> fp}$ qui crée une file de priorité vide ;
 - $\texttt{add : arbre -> int -> fp -> unit}$ qui insère un arbre avec la priorité (entière) donnée dans la file ;
-- $\texttt{take\_min : fp -> arbre*int}$ qui extrait un arbre de priorité min et qui renvoie aussi sa priorité ;
+- $\texttt{take\_min : fp -> arbre * int}$ qui extrait un arbre de priorité min et qui renvoie aussi sa priorité ;
 - $\texttt{size : fp -> int}$ qui renvoie la taille de la file.
 
+**Code :**
+```ocaml
+let huffman (s:char list):arbre =
+   let occ = Array.make 256 0 in (*on travaille sur des octets*)
+   List.iter (fun c -> occ.(Char.code c) <- 1 + occ.(Char.code c)) s;
+   let f = create () in
+   for i = 0 to 255 do
+      if occ.(i) <> 0 then
+         add (Feuille(Char.chr i)) occ.(i) f
+   done;
+   while size f > 1 do
+      let t1, f1 = take_min f in
+      let t2, f2 = take_min f in
+      add (Noeud(t1, t2)) (f1 + f2) f
+   done;
+   fst (take_min f)
+```
+
+**Complexité :**
+On note $\mathrm n(s)$ le nombre de caractères distincts de $s$.
+- Comptage des occurences : $\mathcal O(s)$
+- Création de la file : avec une implémentation par tas : $\mathcal O(\mathrm n(s)\underbrace{\log\mathrm n(s)}_{\text{une insertion en }\mathcal O(\mathrm n(s))})$
+- Une itération de la boucle : $\mathcal O(\log\mathrm n(s))$, il y a $\mathcal O(\mathrm n(s))$ itérations.
+
+**Au total :** $\mathcal O(|s|+\mathrm n(s)\log(\mathrm n(s)))=\mathcal O(|s|)$ car $\mathrm n(s)\le 256$ car on travaille sur des octets.
+
+---
+
+### 2.2.5. optimalité de l'arbre de Huffman
+**Rappel :**
+On cherche à trouver un arbre $t$ minimisant $\displaystyle\varphi(t)=\sum_{x\in\text{feuille}(t)}\mathrm f(x)\mathrm p(x,t)$ où $\mathrm f(x)$ est la fréquence d'apparition de $x$ dans le texte et $\mathrm p(x,t)$ la profondeur de $x$ dans t.
+
+On généralise $\mathrm f$ aux arbres par $\displaystyle\mathrm f(t)=\sum_{x\in\text{feuille}(t)}\mathrm f(x)$ et $\varphi$ aux forêts par $\displaystyle\varphi(F)=\sum_{t\in F}\varphi(t)$.
+
+**Lemme :**
+En notant $F'$ la forêt obtenue après un tour de boucle appliqué à $F$, i.e. $F'=(F\setminus\{t_1;t_2\})\cup\{\text{Noeud}(t_1;t_2)\}$ où $t_1$ et $t_2$ sont 2 éléments de $F$ qui minimisent $f$.
+
+On a : $\varphi(F')=\varphi(F)+\mathrm f(t_1)+\mathrm f(t_2)$.
+
+**Démonstration :**
+
+$\begin{array}{ll}
+   \varphi(F')&=\displaystyle\sum_{t\in F'}\varphi(t)
+   \\
+   &=\displaystyle\underbrace{\sum_{t\in F}\varphi(t)}_{\varphi(F)}-\varphi(t_1)-\varphi(t_2)+\varphi(\text{Noeud}(t_1,t_2))
+\end{array}$
+
+Or, $\begin{array}{ll}
+   \varphi(\text{Noeud}(t_1,t_2))&=\displaystyle\sum_{x\in\text{feuille}(t_1)et \bigcup\text{Feuille}(t_2)}\mathrm f(x)\mathrm p(x,\text{Noeud}(t_1,t_2))
+   \\
+   &=\displaystyle\sum_{x\in\text{feuille}(t_1)}\mathrm f(x)\underbrace{\mathrm p(x,\text{Noeud}(t_1,t_2)})
+\end{array}$
+
+> À compléter
+
+d'où $\varphi(F')=\varphi(F)+\mathrm f(t_1)+\mathrm f(t_2)$
+
+**Proposition :**
+Si les lettres les moins fréquentes à $a$ et $b$ sont soeur dans l'arbre et de profondeur maximale.
+
+**Démonstration :**
+On considère un arbre optimal $t_{\text{opt}}$ et on note $c$ et $d$ deux feuilles soeurs de profondeur maximale dans $t_{\text{opt}}$ (possible car $t_{\text{opt}}$ est binaire strict).
+
+Sans perte de généralité, suppose $\mathrm f(a)\le\mathrm f(b)$ et $\mathrm f(c)\le\mathrm f(d)$.
+
+Par définition de $a$ et $b$, on sait que $\mathrm f(a)\le\mathrm f(c)$ et $\mathrm f(b)\le\mathrm f(d)$.
+
+En échangeant dans $t_{\text{opt}}$ la feuille $a$ et la feuille $c$, on obtient $t$ tel que :
+$\begin{array}{ll}
+\varphi(t)&=\varphi(t_{\text{opt}})-\mathrm f(a)\mathrm p(a,t_{\text{opt}})-\mathrm f(c)\mathrm p(c,t_{\text{opt}})+\mathrm f(a)\mathrm p(c,t_{\text{opt}})+\mathrm f(c)\mathrm p(a,t_{\text{opt}})
+\\
+&=\varphi(t_{\text{opt}})+(\underbrace{\mathrm f(a)-\mathrm f(c)}_{\le 0})(\underbrace{\mathrm p(c,t_{\text{opt}})-\mathrm p(a,t_{\text{opt}})}_{\ge 0})
+\end{array}$
+
+Donc $\varphi(t)\le\varphi(t_{\text{opt}})$.
+
+En échangeant de même les feuilles $b$ et $d$ dans $t$, on otient $t'$ avec $a$ et $b$ feuilles soeursde profondeur maximale et tel que $\varphi(t')\le\varphi(t)\le\varphi(t,t_{\text{opt}})$ donc tel que $t'$ est optimal.
+
+
+**Théorème :**
+L'algorithme de Hoffman renvoie un arbre optimal.
+
+**Démonstration :**
+On procède par récurrence sur le nombre de caractères distincts dans le texte :
+- si le texte est écrit à l'aide d'un unique caractère : il n'y a qu'un seul arbre possible donc l'algorithme est optimal ;
+- si l'algorithme est optimal pour les textes à $n$ caractères distincts, considérons un texte à $n+1\ge 2$ caractères distincts. Notons $a$ et $b$ les deux caractères les moins fréquents dans ce texte.
+
+La première étape de l'algorithme de Huffman consiste à fusionner les feuilles associées à $a$ et $b$. Cela revient à considérer un nouveau texte où $a$ et $b$ sont remplacées par un nouveau caractère $z$ dont la fréquence d'apparition est donc $\mathrm f(a)+\mathrm f(b)=\mathrm f(\text{Noeud}(a,b))$.
+
+Ce nouveau texte ayant $n$ caractères distincts, on sait que l'algo de Huffman produit un arbre $t_{\text{opt}}$ optimal pour ce texte par hypothèse de récurrence.
+
+L'arbre $t$ obtenu par l'algorithme de Huffman pour le texte initial est $t_{\text{opt}}$ où la feuille associée à $z$ est remplacée par le $\text{Noeud}(a,b)$.
+
+$\varphi(t)=\varphi(t_{\text{opt}})+\mathrm f(a)+\mathrm f(b)$ (même démonstration que le lemme).
+
+On sait qu'il existe une solution optimale $t_{\text{opt}}'$ tel que $a$ et $b$ sont des feuilles soeurs de profondeur maximale.
+
+On construit $t'$ en remplaçant dans $t_{\text{opt}}'$ $\text{Noeud(a,b)}$ par $\text{Feuille}(z)$.
+
+Donc $\varphi(t_{\text{opt}}')=\varphi(t')+\mathrm f(a)+\mathrm f(b)\ge\varphi(t_{\text{opt}})+\mathrm f(a)+\mathrm f(b)=\varphi(t)$ donc $t$ est optimal.
+
+---
+
+### 2.2.6. Aspects partiques
+- **Lecture / écriture :** en pratique, on lit et on écrit dans un fichier octet par octet.
+
+  Or, le codage calculé par l'algorithme de Huffman n'est pas de taille fixe donc on aurait plutôt besoin de lire / écrire bit par bit.
+
+  Un solution simple pour l'écriture consiste à accumuler les bits en attendant d'en avoir assez. Il suffit d'un entier pour implémenter cet accumulateur : si $n=\langle b_1\dots b_k\rangle_2$ avec $k<8$, on peut ajouter le bit $b_{k+1}$ en calculant $\langle b_1\dots b_kb_{k+1}\rangle_2=2n+b_{k+1}$.
+
+  **Problème n°1 :**
+  S'il n'y a pas assez de bits pour construire un octet en fin de fichier.
+
+  **Solution n°1 :**
+  On complète avec des 0 à la fin pour finir l'octet (cela s'appelle du padding).
+
+  **Problème n°2 :**
+  Comment ne pas confondre ces 0 avec le code d'un caractère ?
+
+  **Solution n°2 :**
+  On ajoute un octet supplémentaire en fin de fichier qui représente le nombre de 0 ajouté.
+
+  Pour la décompression, il faut déterminer quand on arrive à l'avant-dernier octet pour savoir qu'il faut lire l'octet suivant afin de connaître le nombre de 0 à ignorer dans cet avant-dernier octet. Pour cela, on peut lire le fichier avec 2 octets d'avance pour repérer la fin du fichier, ou alors on peut déterminer à l'avance la taille du fichier et compter le nombre d'octets lus.
+
+- **Stockage de l'arbre :** la connaissance de l'arbre de Huffman est nécessaire pour pouvoir décompresser le fichier. Il faut donc pouvoir le stocker sous la forme d'un fichierqui sera transmis avec le fichier compressé.
+
+  La transformation de l'arbre en fichier s'appelle sérialisation de l'arbre.
+
+  Comme l'arbre de Huffman est binaire strict, il est aisé de le sérialiser : on définit $\text{repr}(t)$ par induction structurelle sur $t$ :
+
+  - $\text{repr}(\text{Feuille},c)=0\underbrace{\text{code}(c)}_{\text{octet représentant }c}$
+
+  - $\text{repr}(g,d)=1\text{ repr}(g)\text{ repr}(d)$
+
+  ```ocaml
+  let rec output_tree (f:out_channel) (t:arbre) : unit =
+     match t with
+     |Feuille c -> output.byte f 0 ; output_byte f (Char.code c)
+     |Noeud (g,d) -> output_byte f 1; output_tree f g; output_tree f d
+
+  let rec input_tree (f:in_channel) : arbre = (*désérialisation*)
+     match input_byte f with
+     |0 -> Feuille(Char.chr (input_byte f))
+     |_ -> let g = input_tree f in
+           let d = input_tree f in
+           Noeud (g,d)
+  ```
+
+  **Remarque :** 
+  La sérialisation est bien-sûr plus générale que son application aux arbres binaires. contrainte importante : il faut connaître a priori l'encodage utilisé dans la sérialisation pour être capable de désérialiser.
+
+  Il existe des formats standards pour la sérialisation, qui peuvent être générique, par exemple le format JSON, ou bien dédiés à certaines applications, comme le format DIMACS CNF ou le langage DOT pour représenter les graphes.
+
+  **Exemple :**
+  ```
+  graph G {
+    a -- b -- c;
+    a -- d;
+  }
+  ```
+
+  $~~~~~~~~~~~~~\Downarrow$
+
+   G=
+   ```mermaid
+   graph
+      a --- b --- c
+      a --- d
+   ```
+
+## 2.3. Algorithme de Lempel-Ziv-Welch (LZW)
+
+### 2.3.1. Introduction
+L'algorithme de Huffman a 2 inconvénients principaux :
+- il est nécessaire de connaître à l'avance l'intégralité du texte pour construire l'encodage ;
+- le texte compressé ne suffit pas pour effectuer la décompression, il est nécessaire de l'accompagner par un fichier représentant l'arbre d'encodage.
+
+L'algorithme de LZW répond à ces 2 problèmes :
+- il est possible de compresser un flux de données via la construction incrémentale d'un dictionnaire de codes pour les motifs apparaissant dans le texte ;
+- il n'y a pas besoin d'informations supplémentaires pour décompresser car il est possible de reconstruire le dictionnaire à la volée lors de la lecture du flux compressé.
+
+---
+
+### 2.3.2. Principe
+On construit incrémentalement le dictionnaire en garantissant que pour chaque motif introduit, tous ses préfixes sont déjà présents dans le dictionnaire. En particulier, le dictionnaire est initialé en stockant son code pour chaque caractère posible (via la table ACII). Les codes choisis pour les motifs sont consécutifs et ne dépendent que de l'ordre d'apparition des motif dans le texte. C'est ce qui permet de reconstruire le dictionnaire lors de la décompression en fonction de l'ordre d'apparition des codes.
+
+---
+
+### 2.3.3. Compression
+On note :
+- $t_0,\dots,t_{n-1}$ le texte
+- $d\leftarrow$ dictionnaire construit à partir de la table ASCII (entier entre 0 et 255 associé à chaque caractère, i.e. octet possible)
+- $m\leftarrow t_0$
+- Pour $i$ de $1$ à $n-1$ :
+  - Si $\mathrm d(mt_i)$ est défini :
+    - $m\leftarrow mt_i$
+  - Sinon :
+    - Produire $\mathrm d(m)$ en sortie
+    - Ajouter $mt_i$ à $\mathrm d(\text{avec le dernier code dans }d\text{ plus 1})$
+    - $m\leftarrow t_i$$
+- Produire $\mathrm d(m)$ en sortie
+
+**Rappel :**
+Le code ASCII de $a$ est 97 et $b$ est 98.
+
+**Exemple :**
+$t=aababaaab$
+
+|$\bold i$|0|1|2|3|4|5|6|7|8|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|$\bold m$|$a$|$a$|$b$|$a$|$ab$|$a$|$aa$|$a$|$ab$|
+|**Sortie**|97|97|98||257||256||257|
+
+Dictionnaire :
+- (aa,256)
+- (ab,257)
+- (ba,258)
+- (aba,259)
+- (aaa,260)
+
+**Attention :**
+Ce n'est pas un code préfixe donc les codes doivent être de taille fixe pour permettre la décompression.
+
+**Problème :**
+Si tous les codes sont sur $k$ bits, le dictionnaire peut contenir au plus $2^k$ entrées donc il y a un risque de saturation.
+
+Pour résoudre ce problème, il y a plusieurs options :
+- On efface la dictionnaire lorsqu'il arive à saturation et on repart de zéro comme si on travaillait sur un nouveau fichier. On produit un code spécial pour signaler efficacement. Un code peut donc représenter plusieurs motifs selon sa position dans le texte compressé ;
+- On ajoute un bit aux codes, ce qui revient à doubler la taille du dictionnaire (comme un tableau dynamique). Comme l'algorithme de décompression recontruit incrémentalement le dictionnaire, la saturation est détectée et on sait quand il faut lire des codes de taille $k+1$.
+
+---
+
+### 2.3.4. Décompression
+On reconstruit le dictionnaire en parallèle de la lecture des codes. Le premier code est nécessairement le code ASCII du premier caractère du fichier. Pour les codes suivants, on a besoin de se souvenir du dernier code lu : notons $c_0$ le dernier code lu et $c_1$ le code en cours de lecture. Le code $c_1$ correspond à un mot de la forme $xs$ où $x$ est un caractère et $s$ un mot potentiellement vide et correspond à un certain mot $u$. Au moment de la production de $c_0$, le motif $m$ vaut $u$ et $m$ est remplacé par le caractère $t_i$ en cours de lecture. Comme ce caractère est le premier du motif associé au prochain code produit, i.e. $c_1$, on sait que $t_i=x$. On sait alors que le motif $ux$ doit être inséré dans le dictionnaire. Ainsi, on effectue les mêmes opérations sur le dictionnaire que l'algorithme de compression, mais avec un temps de retard.
+
+**Exemple :**
+||97|97|98||257|256|257|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|$\bold i$|0|1|2|3|4|5|
+|$\bold u$|$a$|$a$|$b$|$ab$|$aa$|$ab$||
+
+Dictionnaire :
+- (aa,256)
+- (ab,257)
+- (ba,258)
+- (aba,259)
+- (aaa,260)
+
+Sortie : $aababaaab$
+
+**Problème :**
+Comme on construit le dictionnaire avec un temps de retard, il est possible que le dernier code lu ne soit pas encore dans le dictionnaire.
+
+**Exemple n°1 :**
+$t=aaa$
+
+|$\bold i$|0|1|2|
+|:-:|:-:|:-:|:-:|
+|$\bold m$|$a$|$a$|$aa$|
+|**Sortie**|97||256|
+
+Dictionnaire :
+- (aa,256)
+
+**Exemple n°2 :**
+||97|256|
+|:-:|:-:|:-:|
+|$\bold i$|0|1|
+|$\bold u$|$a$||
+
+Dictionnaire : $\varnothing$
+
+Sortie : $a$?
+
+**Remarque :**
+Le code qui pose problème vaut nécessairement la taille du dictionnaire donc correspond au dernier code inséré dans le dictionnaire par l'algorithme de compression à ce stade de la lecture.
+
+**Solution :**
+En remarquant les notations pécédentes, $c_1=|d|$ est le code inséré dans le dictionnaire par l'algorithme de compression au moment de la production de $c_0$. Donc le motif associé à $c_1$ s'écrit $ux$ où $u$ est associé à $c_0$ et $x$ la lettre lue à ce moment. Or, comme l'algorithme de compression repart du motif $m=x$ au moment de la production de $c_0$, $x$ est la première lettre du motif associé à $c_1$, i.e. $ux$. Comme $u$ est non vide, $x$ est donc aussi la première lettre de $u$ et on peut reconstruire le motif $ux$ associé à $c_1$.
+
+**Algorithme :**
+- $d\leftarrow$ dictionnaire construit à partir de la table ASCII
+- Produire $\mathrm d(c_0)$ en sortie
+- Pour $i$ de 1 à m-1 :
+  - Si $c_i<|d|$ :
+    - Produire $\mathrm d(c_i)$ en sortie
+    - $x\leftarrow$ première lettre de $\mathrm d(c_i)$
+  - Sinon (on sait que $c_i=|d|$) :
+    - $x\leftarrow$ première lettre de $\mathrm d(c_{i-1})$
+    - Produire $\mathrm d(c_{i-1})x$ en sortie
+  - Ajouter $\mathrm d(c_{i-1})x$ au dictionnaire
+
+**Code :**
+$c_0,\dots,c_{m-1}$
